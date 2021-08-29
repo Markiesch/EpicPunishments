@@ -1,0 +1,148 @@
+package com.markiesch.utils;
+
+import com.markiesch.EpicPunishments;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.logging.Level;
+
+import static org.bukkit.Bukkit.getServer;
+
+
+public class PlayerStorage {
+    private final EpicPunishments plugin;
+    private FileConfiguration dataConfig = null;
+    private File configFile = null;
+
+    public PlayerStorage(EpicPunishments plugin) {
+        this.plugin = plugin;
+        // saves/initializes the config
+        saveDefaultConfig();
+    }
+
+    public void reloadConfig() {
+        // Create the data file if it doesn't exist already
+        if (configFile == null) configFile = new File(plugin.getDataFolder(), "data.yml");
+        dataConfig = YamlConfiguration.loadConfiguration(configFile);
+        InputStream defaultStream = plugin.getResource("data.yml");
+
+        if (defaultStream != null) {
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
+            dataConfig.setDefaults(defaultConfig);
+        }
+    }
+
+    public FileConfiguration getConfig() {
+        if (dataConfig == null) reloadConfig();
+        return dataConfig;
+    }
+
+    public void saveConfig() {
+        if (dataConfig == null || configFile == null) return;
+
+        try {
+            this.getConfig().save(configFile);
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, e);
+        }
+    }
+
+    public void saveDefaultConfig() {
+        if (configFile == null) configFile = new File(plugin.getDataFolder(), "data.yml");
+
+        if (!configFile.exists()) plugin.saveResource("data.yml", false);
+    }
+
+    public void createPlayerProfile(UUID uuid) {
+        if (getConfig().contains(uuid.toString())) return;
+        List<String> emptyPunishments = new ArrayList<>();
+        getConfig().set(uuid + ".infractions", emptyPunishments);
+        saveConfig();
+        getServer().getConsoleSender().sendMessage("Successfully Registered " + Bukkit.getOfflinePlayer(uuid).getName());
+    }
+
+    public boolean playerRegistered(UUID uuid) {
+        return getConfig().getConfigurationSection(uuid.toString()) != null;
+    }
+
+    public void createPunishment(UUID target, UUID issuer, PunishTypes type, String reason, Long duration) {
+        if (getConfig().contains(target.toString())) createPlayerProfile(target);
+        Player oTarget = Bukkit.getPlayer(target);
+        if (reason.isEmpty()) reason = "none";
+
+        if (type.equals(PunishTypes.KICK)) {
+            if (oTarget != null) {
+                String kickMessage = plugin.getConfig().getString("messages.kickMessage");
+                if (kickMessage != null) {
+                    kickMessage = kickMessage.replace("[reason]", reason);
+                }
+                oTarget.kickPlayer(plugin.changeColor(kickMessage));
+            } else {
+                Player oIssuer = Bukkit.getPlayer(issuer);
+                if (oIssuer != null) oIssuer.sendMessage("§cThat player is not online. Warned instead!");
+                type = PunishTypes.WARN;
+            }
+        }
+
+        if (type.equals(PunishTypes.BAN)) {
+            if (oTarget != null) {
+                if (duration == 0L) {
+                    String kickMessage = plugin.getConfig().getString("messages.permanentlyBanMessage");
+                    if (kickMessage != null) {
+                        kickMessage = kickMessage
+                                .replace("[duration]", TimeUtils.makeReadable(duration))
+                                .replace("[reason]", reason);
+                    }
+                    oTarget.kickPlayer(kickMessage);
+                } else {
+                    plugin.getConfig().getString("messages.temporarilyBanMessage");
+                    oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + " §cfrom this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
+                }
+
+                oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
+            }
+        }
+
+        List<String> punishments = getConfig().getStringList(target + ".infractions");
+        long currentTime = System.currentTimeMillis();
+        if (duration == 0L) currentTime = 0L;
+        long expires = currentTime + duration;
+        String[] punishment = {
+                issuer.toString(),
+                type.toString(),
+                reason,
+                duration.toString(),
+                Long.toString(expires)
+        };
+
+        punishments.add(String.join(";", punishment));
+        getConfig().set(target + ".infractions", punishments);
+        saveConfig();
+    }
+
+    public boolean isPlayerBanned(UUID uuid) {
+        List<String> infractions = getConfig().getStringList(uuid + ".infractions");
+        for (String infraction : infractions) {
+            String type = infraction.split(";")[1];
+            if (!type.equalsIgnoreCase("ban")) continue;
+            long duration = Long.parseLong(infraction.split(";")[3]);
+            if (duration == 0L) return true;
+            long currentTime = System.currentTimeMillis();
+            long expires = Long.parseLong(infraction.split(";")[4]);
+            if (currentTime < expires) return true;
+        }
+        return false;
+    }
+
+    public boolean isMuted(UUID uuid) {
+        return getConfig().getBoolean(uuid + ".muted");
+    }
+}

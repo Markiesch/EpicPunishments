@@ -1,0 +1,9 @@
+Cheating:
+  type: 'ban'
+  reason: 'Cheating through the use of unfair game advantages'
+Boosting:
+  type: 'ban'
+  reason: 'Boosting your account to improve your stats'
+Swearing:
+  type: 'mute'
+  reason: 'Acting in a manner that is extremely disrespectful to members within the community'

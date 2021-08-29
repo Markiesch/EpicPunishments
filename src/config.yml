@@ -1,0 +1,38 @@
+messages:
+  # [target] shows the username of the command issuer
+  # [command] shows the command input
+  commandSpy: '&cCSpy &7[target]: [command]'
+  # [target] shows the username of the user that placed down the sign
+  # [command] shows the sign content
+  signSpy: '&cSignSpy &7[target]: [content]'
+
+  kickMessage: "§cYou have been kicked!\n\n§7Reason: §f[reason]\n§7Find out more: §fwww.example.com"
+  temporarilyBanMessage: "§cYou are temporarily banned for §f[duration]§cfrom this server!\n\n§7Reason: §f[reason]\n§7Find out more: §e§nwww.example.com"
+  permanentlyBanMessage: "§cYou are permanently banned from this server!\n\n§7Reason: §f[reason]\n§7Find out more: §e§nwww.example.com"
+
+mainMenu:
+  # When TRUE it will generate a border around the main menu
+  addFiller: false
+  # Sets the filler item (Default: LIGHT_GRAY_STAINED_GLASS_PANE)
+  fillerItem: 'GRAY_STAINED_GLASS_PANE'
+
+  # When TRUE it will generate a close button to the main menu (default: true)
+  addClose: true
+  closeItem: 'NETHER_STAR'
+  closeName: '&cClose Menu'
+
+  # Sets the name and lore of each skull
+  # Available placeholders:
+  # [playerName] show the player name
+  # [UUID] show the player UUID
+  # [playerFirstJoin] shows the date when the player first joined the server
+  headName: '&c&l[playerName]'
+  headLore:
+    - '&7Click to view player'
+    - ''
+    - '&7UUID: &c[playerUUID]'
+    - '&7Joined at: &c[playerFirstJoin]'
+  nextPageItem: 'ARROW'
+  nextPageName: '&cNext Page'
+  prevPageItem: 'ARROW'
+  prevPageName: '&cPrevious Page'

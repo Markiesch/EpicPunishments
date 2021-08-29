@@ -1,0 +1,16 @@
+main: com.markiesch.EpicPunishments
+name: EpicPunishments
+version: 1.0.0
+api-version: 1.17
+author: Markiesch
+
+commands:
+  epicPunishments:
+    description: Main command to open
+    aliases: [punish, ep]
+  ban:
+    description: Bans the mentioned player
+  kick:
+    description: Kicks the mentioned player
+  mute:
+    description: Mutes the mentioned player
