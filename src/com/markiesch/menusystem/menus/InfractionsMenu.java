@@ -8,6 +8,7 @@ import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,11 +36,19 @@ public class InfractionsMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e) {
+        if (e.getCurrentItem() == null) return;
+        Player player = (Player) e.getWhoClicked();
 
+        if (e.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
+            new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
+        }
     }
 
     @Override
     public void setMenuItems() {
+        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", 1, "§7Click to go back");
+        inventory.setItem(49, back);
+
         int maxTemplatesPerPage = 14;
         int page = 0;
         int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
@@ -70,8 +79,5 @@ public class InfractionsMenu extends Menu {
                 inventory.setItem(slots[i], infraction);
             }
         }
-
-//        plugin.getPlayerStorage().getConfig().getStringList(target.getUniqueId() + ".infractions").forEach(punishment -> {
-//        });
     }
 }
