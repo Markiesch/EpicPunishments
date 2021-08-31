@@ -14,3 +14,5 @@ commands:
     description: Kicks the mentioned player
   mute:
     description: Mutes the mentioned player
+  template:
+    description: Manage templates through commands
