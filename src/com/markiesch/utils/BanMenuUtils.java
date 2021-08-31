@@ -11,6 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BanMenuUtils {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
@@ -21,23 +22,35 @@ public class BanMenuUtils {
         if (player.getName() == null) return;
         if (player.getPlayer() == null) return;
 
-        meta.setDisplayName(plugin.changeColor(plugin.getConfig().getString("mainMenu.headName").replace("[playerName]", player.getName())));
+        meta.setDisplayName("§b§l" + player.getName());
+
         ArrayList<String> lore = new ArrayList<>();
 
         Date date = new Date(player.getFirstPlayed());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = sdf.format(date);
 
-        if (player.getName() == null) return;
+        lore.add("§bLeft Click §7to manage player");
+        lore.add("§bRight Click §7to teleport");
+        lore.add("");
 
-        for (String i : plugin.getConfig().getStringList("mainMenu.headLore")) {
-            lore.add(plugin.changeColor(i
-                    .replace("[playerName]", player.getName())
-                    .replace("[playerDisplayName]", player.getPlayer().getDisplayName())
-                    .replace("[playerUUID]", player.getUniqueId().toString())
-                    .replace("[playerFirstJoin]", formattedDate)
-            ));
+        List<String> infractions = plugin.getPlayerStorage().getPunishments(player.getUniqueId());
+
+        if (infractions.size() < 1) {
+            lore.add("§a✔ §7didn't received any punishments yet");
+        } else {
+            lore.add("§6✔ §7had received " + infractions.size() + " punishments");
         }
+
+        if (plugin.getPlayerStorage().isPlayerBanned(player.getUniqueId())) {
+            lore.add("§6✔ §7" + player.getName() + " is §abanned §7on §e" + plugin.getServer().getName());
+        } else {
+            lore.add("§a✔ §a" + player.getName() + " §7is not §ebanned");
+        }
+
+        lore.add("");
+        lore.add("§7Joined at: " + formattedDate);
+
         meta.setLore(lore);
         meta.setOwningPlayer(player);
         meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, player.getUniqueId().toString());
