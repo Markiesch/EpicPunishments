@@ -33,7 +33,7 @@ public class PunishTabCompleter implements TabCompleter {
                 return players;
             }
             if (args.length == 2) {
-                List<String> templates = new ArrayList<>(Objects.requireNonNull(plugin.getConfig().getConfigurationSection("templates")).getKeys(false));
+                List<String> templates = new ArrayList<>(Objects.requireNonNull(plugin.getTemplateStorage().getConfig().getConfigurationSection("")).getKeys(false));
                 for (String template : templates) {
                     if (template.toLowerCase().startsWith(args[1].toLowerCase())) {
                         result.add(template);
@@ -44,16 +44,10 @@ public class PunishTabCompleter implements TabCompleter {
         }
 
         if (args.length == 1) {
-            result.add("templates");
+            result.add("reload");
             return result;
         }
 
-        if (args[0].equalsIgnoreCase("templates")) {
-            result.add("create");
-            result.add("delete");
-
-            return result;
-        }
         return null;
     }
 }

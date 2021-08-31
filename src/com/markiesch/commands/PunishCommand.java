@@ -10,8 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
 public class PunishCommand implements CommandExecutor {
     private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
 

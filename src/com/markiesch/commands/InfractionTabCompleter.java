@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class InfractionTabCompleter implements TabCompleter {
     private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);

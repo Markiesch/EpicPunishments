@@ -82,23 +82,11 @@ public class PlayerSelectorMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        boolean addFiller = plugin.getConfig().getBoolean("mainMenu.addFiller");
-        boolean addClose = plugin.getConfig().getBoolean("mainMenu.addClose");
+        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, "§c§lClose Menu", 1, "§7Click to close menu");
+        inventory.setItem(49, closeButton);
 
-        if (addFiller) generateFiller();
-        if (addClose) generateCloseButton();
-        ItemStack templates = new ItemStack(Material.ANVIL);
-        ItemMeta templatesMeta = templates.getItemMeta();
-        if (templatesMeta != null) {
-            templatesMeta.setDisplayName(plugin.changeColor("§b§lTemplates"));
-            ArrayList<String> lore = new ArrayList<>();
-            lore.add(plugin.changeColor("§7Click to manage templates"));
-            templatesMeta.setLore(lore);
-            templates.setItemMeta(templatesMeta);
-        }
-
+        ItemStack templates = ItemUtils.createItem(Material.ANVIL, "§b§lTemplates", 1, "§7Click to manage templates");
         inventory.setItem(52, templates);
-
 
         int[] headSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
         List<OfflinePlayer> players = new ArrayList<>();
@@ -133,26 +121,5 @@ public class PlayerSelectorMenu extends Menu {
             onLastPage = false;
             inventory.setItem(53, nextPage);
         }
-    }
-
-    public void generateFiller() {
-        ItemStack filler = new ItemStack(getConfigItem("mainMenu.fillerItem", "LIGHT_GRAY_STAINED_GLASS_PANE"), 1);
-        ItemMeta fillerMeta = filler.getItemMeta();
-        if (fillerMeta != null) {
-            fillerMeta.setDisplayName("§f");
-            filler.setItemMeta(fillerMeta);
-        }
-        int[] filterSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 50, 51, 52, 53};
-        for (int filterSlot : filterSlots) inventory.setItem(filterSlot, filler);
-    }
-
-    public void generateCloseButton() {
-        closeButton = new ItemStack(getConfigItem("mainMenu.closeItem", "LIGHT_GRAY_STAINED_GLASS_PANE"), 1);
-        ItemMeta closeButtonMeta = closeButton.getItemMeta();
-        if (closeButtonMeta != null) {
-            closeButtonMeta.setDisplayName(getConfigItemName("mainMenu.closeName","&c&lClose Menu"));
-            closeButton.setItemMeta(closeButtonMeta);
-        }
-        inventory.setItem(49, closeButton);
     }
 }

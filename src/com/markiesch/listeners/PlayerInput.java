@@ -5,6 +5,7 @@ import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.utils.InputUtils;
+import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,10 +27,11 @@ public class PlayerInput implements Listener {
         e.setCancelled(true);
         edit.cancel();
         Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> {
+            PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(p);
             if (edit.getChat().equals(InputTypes.TEMPLATE_NAME)) {
-                new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(p), message).open();
+                playerMenuUtility.setReason("none");
+                new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(p), message.replace(" ", "_")).open();
             } else if (edit.getChat().equals(InputTypes.TEMPLATE_REASON)) {
-                PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(p);
                 String templateName = playerMenuUtility.getTemplateName();
                 playerMenuUtility.setReason(message);
                 new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(p), templateName).open();

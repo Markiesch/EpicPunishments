@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 public class TemplatesMenu extends Menu implements Listener {
@@ -51,12 +50,8 @@ public class TemplatesMenu extends Menu implements Listener {
         if (clickedItem.equals(Material.PAPER)) {
             ItemMeta meta = e.getCurrentItem().getItemMeta();
             if (e.getClick().toString().equalsIgnoreCase("DROP")) {
-                String template;
-
                 if (meta != null) {
-                    template = ChatColor.stripColor(meta.getDisplayName());
-                    plugin.getTemplateStorage().getConfig().set(template, null);
-                    plugin.getTemplateStorage().saveConfig();
+                    plugin.getTemplateStorage().removeTemplate(meta.getDisplayName());
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> {
                         new TemplatesMenu(playerMenuUtility, 0);

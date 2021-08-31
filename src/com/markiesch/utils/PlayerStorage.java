@@ -128,6 +128,10 @@ public class PlayerStorage {
         saveConfig();
     }
 
+    public List<String> getPunishments(UUID target) {
+        return getConfig().getStringList(target + ".infractions");
+    }
+
     public boolean isPlayerBanned(UUID uuid) {
         List<String> infractions = getConfig().getStringList(uuid + ".infractions");
         for (String infraction : infractions) {

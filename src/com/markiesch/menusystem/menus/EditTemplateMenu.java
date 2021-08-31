@@ -81,8 +81,6 @@ public class EditTemplateMenu extends Menu implements Listener {
 
     @Override
     public void setMenuItems() {
-        System.out.println("Settings up menu items...");
-
         String reason = playerMenuUtility.getReason();
         if (reason == null) reason = "None";
 
@@ -110,7 +108,6 @@ public class EditTemplateMenu extends Menu implements Listener {
         ItemMeta typeMeta = typeItem.getItemMeta();
 
         if (typeMeta != null) {
-            System.out.println("ItemMeta is not null...");
             typeMeta.setDisplayName("§c§l" + this.type);
             List<String> lore = new ArrayList<>();
             lore.add("§7Click to toggle type");
