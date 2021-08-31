@@ -95,7 +95,11 @@ public class TemplatesMenu extends Menu implements Listener {
             return;
         }
         ArrayList<String> templates = new ArrayList<>(configurationSection.getKeys(false));
-        if (templates.isEmpty()) return;
+        if (templates.isEmpty()) {
+            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", 1, "§7There are no templates yet!");
+            inventory.setItem(22, noTemplates);
+            return;
+        }
         for (int i = 0; i < maxTemplatesPerPage; i++) {
             int index = maxTemplatesPerPage * page + i;
             if (index >= templates.size()) break;
