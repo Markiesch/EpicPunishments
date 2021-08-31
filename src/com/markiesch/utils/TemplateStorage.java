@@ -3,6 +3,7 @@ package com.markiesch.utils;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -70,6 +71,13 @@ public class TemplateStorage {
 
         getConfig().set(name + ".type", type);
         getConfig().set(name + ".reason", reason);
+        saveConfig();
+    }
+
+    public void removeTemplate(String template) {
+        if (template == null) return;
+        template = ChatColor.stripColor(template);
+        getConfig().set(template, null);
         saveConfig();
     }
 }
