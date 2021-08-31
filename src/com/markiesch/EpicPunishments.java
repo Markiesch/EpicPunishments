@@ -72,9 +72,11 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("ban")).setExecutor(new BanCommand());
         Objects.requireNonNull(getCommand("kick")).setExecutor(new KickCommand());
         Objects.requireNonNull(getCommand("mute")).setExecutor(new MuteCommand());
+        Objects.requireNonNull(getCommand("template")).setExecutor(new TemplateCommand());
         Objects.requireNonNull(getCommand("ban")).setTabCompleter(new InfractionTabCompleter());
         Objects.requireNonNull(getCommand("kick")).setTabCompleter(new InfractionTabCompleter());
         Objects.requireNonNull(getCommand("mute")).setTabCompleter(new InfractionTabCompleter());
+        Objects.requireNonNull(getCommand("template")).setTabCompleter(new TemplateTabCompleter());
 
         getServer().getConsoleSender().sendMessage(changeColor("&aEpicPunishments is now enabled"));
     }
