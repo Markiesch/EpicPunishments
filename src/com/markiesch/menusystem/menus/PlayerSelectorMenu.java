@@ -14,17 +14,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import static com.markiesch.utils.BanMenuUtils.generatePlayerMeta;
-import static com.markiesch.utils.BanMenuUtils.getConfigItem;
 import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class PlayerSelectorMenu extends Menu {
@@ -34,7 +29,6 @@ public class PlayerSelectorMenu extends Menu {
     int maxPages;
     boolean onLastPage = true;
 
-    public ItemStack closeButton;
     public PlayerSelectorMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
         page = currentPage;
@@ -52,10 +46,9 @@ public class PlayerSelectorMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent e) {
-        // Return when the player doesn't click on an item
         if (e.getCurrentItem() == null) return;
         Player p = (Player) e.getWhoClicked();
-        if (e.getCurrentItem().getType() == Material.PLAYER_HEAD) {
+        if (e.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
             OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(
                                 Objects.requireNonNull(
                                 Objects.requireNonNull(
@@ -63,7 +56,6 @@ public class PlayerSelectorMenu extends Menu {
                                 .get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING))));
 
             if (e.getClick().toString().equalsIgnoreCase("right") && p.hasPermission("bangui.teleport")) {
-                // on right click Teleport to player
                 if (target.getPlayer() != null && target.getPlayer().isOnline()) {
                     p.setGameMode(GameMode.SPECTATOR);
                     p.teleport(target.getPlayer().getLocation());
@@ -77,7 +69,7 @@ public class PlayerSelectorMenu extends Menu {
         if (e.getSlot() == 45 && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), --page).open();
         if (e.getSlot() == 53 && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), ++page).open();
         if (e.getSlot() == 52) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(p), 0).open();
-        if (e.getCurrentItem().getType() == Material.matchMaterial(closeButton.getType().toString())) p.closeInventory();
+        if (e.getCurrentItem().getType().equals(Material.NETHER_STAR)) p.closeInventory();
     }
 
     @Override
@@ -100,10 +92,34 @@ public class PlayerSelectorMenu extends Menu {
             for (int i = 0; i < headSlots.length; i++) {
                 int index = headSlots.length * page + i;
                 if (index >= players.size()) break;
-                if (players.get(index) != null) {
-                    ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD, 1);
-                    SkullMeta meta = (SkullMeta) playerHead.getItemMeta();
-                    generatePlayerMeta(meta, players.get(index), playerHead);
+
+                OfflinePlayer target = players.get(index);
+
+                if (target != null) {
+                    Date date = new Date(target.getFirstPlayed());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formattedDate = sdf.format(date);
+                    List<String> infractionsList = plugin.getPlayerStorage().getPunishments(target.getUniqueId());
+
+                    ItemStack playerHead = ItemUtils.createItem(
+                            Material.PLAYER_HEAD,
+                            "§b§l" + target.getName(),
+                            1,
+                            "§bLeft Click §7to manage player",
+                            "§bRight Click §7to teleport",
+                            "",
+                            (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
+                            (plugin.getPlayerStorage().isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                            "",
+                            "§7Joined at: " + formattedDate
+                    );
+
+                    SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
+                    if (playerMeta != null) {
+                        playerMeta.setOwningPlayer(target);
+                        playerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, target.getUniqueId().toString());
+                        playerHead.setItemMeta(playerMeta);
+                    }
                     inventory.setItem(headSlots[i], playerHead);
                 }
             }

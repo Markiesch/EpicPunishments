@@ -8,6 +8,7 @@ import com.markiesch.utils.PunishTypes;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -16,9 +17,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import java.util.ArrayList;
 
-import static com.markiesch.utils.BanMenuUtils.generatePlayerMeta;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 public class PunishMenu extends Menu implements Listener {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
@@ -77,10 +81,33 @@ public class PunishMenu extends Menu implements Listener {
 
     @Override
     public void setMenuItems() {
-        if (target == null) return;
-        ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD, 1);
-        SkullMeta player_meta = (SkullMeta) playerHead.getItemMeta();
-        generatePlayerMeta(player_meta, target, playerHead);
+        if (target == null) {
+            playerMenuUtility.getOwner().sendMessage("Couldn't find player. Closing menu...");
+            playerMenuUtility.getOwner().closeInventory();
+            return;
+        }
+
+        Date date = new Date(target.getFirstPlayed());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = sdf.format(date);
+        List<String> infractionsList = plugin.getPlayerStorage().getPunishments(target.getUniqueId());
+
+        ItemStack playerHead = ItemUtils.createItem(
+                Material.PLAYER_HEAD,
+                "§b§l" + target.getName(),
+                1,
+                "§bLeft Click §7to manage player",
+                "§bRight Click §7to teleport",
+                "",
+                (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
+                (plugin.getPlayerStorage().isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                "",
+                "§7Joined at: " + formattedDate
+                );
+
+        SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
+        if (playerMeta != null) playerMeta.setOwningPlayer(target);
+        playerHead.setItemMeta(playerMeta);
         inventory.setItem(13, playerHead);
 
         ItemStack infractions = ItemUtils.createItem(Material.FLOWER_BANNER_PATTERN, "§c§lInfractions", 1, "§7Click to view infractions");
@@ -105,9 +132,9 @@ public class PunishMenu extends Menu implements Listener {
             int index = maxTemplatesPerPage * page + i;
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
-                String type = plugin.getConfig().getString("templates." + templates.get(i) + ".type");
+                String type = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".type");
                 if (type != null) type = type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase();
-                String reason = plugin.getConfig().getString("templates." + templates.get(i) + ".reason");
+                String reason = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".reason");
                 ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + templates.get(i), 1, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
                 inventory.setItem(slots[i], template);
             }
