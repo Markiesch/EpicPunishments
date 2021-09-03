@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.UUID;
 
 public class TemplatesMenu extends Menu implements Listener {
@@ -103,7 +104,7 @@ public class TemplatesMenu extends Menu implements Listener {
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
                 String type = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".type");
-                String templateType = type != null ? type.toUpperCase() : "None";
+                String templateType = type != null ? type.toUpperCase(Locale.US) : "None";
                 String reason = plugin.getConfig().getString("templates." + templates.get(i) + ".reason");
                 String templateReason = reason != null ? reason : "None";
                 ItemStack template = ItemUtils.createItem(Material.PAPER, "§6§l" + templates.get(i), 1,

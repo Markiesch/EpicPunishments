@@ -8,10 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class PunishTabCompleter implements TabCompleter {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
@@ -26,7 +23,7 @@ public class PunishTabCompleter implements TabCompleter {
             if (configSection == null) return result;
             configSection.getKeys(false).forEach(uuid -> {
                 String name = Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName();
-                if (name != null && name.toLowerCase().startsWith(args[0].toLowerCase())) {
+                if (name != null && name.toLowerCase(Locale.US).startsWith(args[0].toLowerCase(Locale.US))) {
                     players.add(name);
                 }
             });
@@ -35,7 +32,7 @@ public class PunishTabCompleter implements TabCompleter {
         if (args.length == 2) {
             List<String> templates = new ArrayList<>(Objects.requireNonNull(plugin.getTemplateStorage().getConfig().getConfigurationSection("")).getKeys(false));
             for (String template : templates)
-                if (template.toLowerCase().startsWith(args[1].toLowerCase())) result.add(template);
+                if (template.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US))) result.add(template);
             return result;
         }
 

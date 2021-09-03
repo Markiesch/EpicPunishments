@@ -15,10 +15,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
+
 public class InfractionsMenu extends Menu {
     private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     public OfflinePlayer target;
-    int page = 0;
+    int page;
+    int maxPages;
+    boolean onLastPage = true;
 
     public InfractionsMenu(PlayerMenuUtility playerMenuUtility, OfflinePlayer player, int page) {
         super(playerMenuUtility);
@@ -41,9 +45,10 @@ public class InfractionsMenu extends Menu {
         if (e.getCurrentItem() == null) return;
         Player player = (Player) e.getWhoClicked();
 
-        if (e.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
-            new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
-        }
+
+        if (e.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page).open();
+        if (e.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page).open();
+        if (e.getCurrentItem().getType().equals(Material.OAK_SIGN)) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
     }
 
     @Override
@@ -78,6 +83,19 @@ public class InfractionsMenu extends Menu {
                         "§e" + issuer.getName());
                 inventory.setItem(slots[i], infraction);
             }
+        }
+
+        maxPages = infractions.size() / slots.length;
+
+        if (page >= 1) {
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), 1, "§7Click to visit page " + page);
+            inventory.setItem(45, prevPage);
+        }
+
+        if (page < maxPages) {
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), 1, "§7Click to visit page " + (page + 2));
+            onLastPage = false;
+            inventory.setItem(53, nextPage);
         }
     }
 }

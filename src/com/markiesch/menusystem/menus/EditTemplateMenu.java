@@ -98,10 +98,10 @@ public class EditTemplateMenu extends Menu implements Listener {
         inventory.setItem(13, template);
 
         Material type = Material.PAPER;
-        if (this.type.equalsIgnoreCase("BAN")) type = Material.OAK_DOOR;
-        if (this.type.equalsIgnoreCase("KICK")) type = Material.ENDER_EYE;
-        if (this.type.equalsIgnoreCase("WARN")) type = Material.PAPER;
-        if (this.type.equalsIgnoreCase("MUTE")) type = Material.STRING;
+        if ("BAN".equalsIgnoreCase(this.type)) type = Material.OAK_DOOR;
+        if ("KICK".equalsIgnoreCase(this.type)) type = Material.ENDER_EYE;
+        if ("WARN".equalsIgnoreCase(this.type)) type = Material.PAPER;
+        if ("MUTE".equalsIgnoreCase(this.type)) type = Material.STRING;
 
         ItemStack typeItem = new ItemStack(type);
         ItemMeta typeMeta = typeItem.getItemMeta();

@@ -7,6 +7,7 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class TemplateTabCompleter implements TabCompleter {
@@ -24,13 +25,13 @@ public class TemplateTabCompleter implements TabCompleter {
         if (args.length == 2) {
             List<String> templates = new ArrayList<>(Objects.requireNonNull(plugin.getTemplateStorage().getConfig().getConfigurationSection("")).getKeys(false));
             for (String template : templates) {
-                if (template.toLowerCase().startsWith(args[1].toLowerCase())) {
+                if (template.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US))) {
                     result.add(template);
                 }
             }
             return result;
         }
 
-        return null;
+        return result;
     }
 }

@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class InfractionTabCompleter implements TabCompleter {
@@ -22,10 +23,10 @@ public class InfractionTabCompleter implements TabCompleter {
         if (args.length == 1) {
             List<String> players = new ArrayList<>();
             ConfigurationSection configSection = config.getConfigurationSection("");
-            if (configSection == null) return null;
+            if (configSection == null) return result;
             configSection.getKeys(false).forEach(uuid -> {
                 String name = Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName();
-                if (name != null && name.toLowerCase().startsWith(args[0].toLowerCase()))
+                if (name != null && name.toLowerCase(Locale.US).startsWith(args[0].toLowerCase(Locale.US)))
                     players.add(name);
             });
             return players;
@@ -45,6 +46,6 @@ public class InfractionTabCompleter implements TabCompleter {
             return result;
         }
 
-        return null;
+        return result;
     }
 }

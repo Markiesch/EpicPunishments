@@ -28,6 +28,10 @@ public class PlayerSelectorMenu extends Menu {
     int page;
     int maxPages;
     boolean onLastPage = true;
+    int prevPageSlot = 45;
+    int nextPageSlot = 53;
+    int templateSlot = 52;
+    int closeSlot = 49;
 
     public PlayerSelectorMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
@@ -66,19 +70,19 @@ public class PlayerSelectorMenu extends Menu {
             return;
         }
 
-        if (e.getSlot() == 45 && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), --page).open();
-        if (e.getSlot() == 53 && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), ++page).open();
-        if (e.getSlot() == 52) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(p), 0).open();
-        if (e.getCurrentItem().getType().equals(Material.NETHER_STAR)) p.closeInventory();
+        if (e.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), --page).open();
+        if (e.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), ++page).open();
+        if (e.getSlot() == templateSlot) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(p), 0).open();
+        if (e.getSlot() == closeSlot) p.closeInventory();
     }
 
     @Override
     public void setMenuItems() {
         ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, "§c§lClose Menu", 1, "§7Click to close menu");
-        inventory.setItem(49, closeButton);
+        inventory.setItem(closeSlot, closeButton);
 
         ItemStack templates = ItemUtils.createItem(Material.ANVIL, "§b§lTemplates", 1, "§7Click to manage templates");
-        inventory.setItem(52, templates);
+        inventory.setItem(templateSlot, templates);
 
         int[] headSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
         List<OfflinePlayer> players = new ArrayList<>();
@@ -97,7 +101,7 @@ public class PlayerSelectorMenu extends Menu {
 
                 if (target != null) {
                     Date date = new Date(target.getFirstPlayed());
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                     String formattedDate = sdf.format(date);
                     List<String> infractionsList = plugin.getPlayerStorage().getPunishments(target.getUniqueId());
 
@@ -108,7 +112,7 @@ public class PlayerSelectorMenu extends Menu {
                             "§bLeft Click §7to manage player",
                             "§bRight Click §7to teleport",
                             "",
-                            (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
+                            (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
                             (plugin.getPlayerStorage().isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
                             "",
                             "§7Joined at: " + formattedDate
@@ -129,13 +133,13 @@ public class PlayerSelectorMenu extends Menu {
 
         if (page >= 1) {
             ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), 1, "§7Click to visit page " + page);
-            inventory.setItem(45, prevPage);
+            inventory.setItem(prevPageSlot, prevPage);
         }
 
         if (page < maxPages) {
             ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), 1, "§7Click to visit page " + (page + 2));
             onLastPage = false;
-            inventory.setItem(53, nextPage);
+            inventory.setItem(nextPageSlot, nextPage);
         }
     }
 }

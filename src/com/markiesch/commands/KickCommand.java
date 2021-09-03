@@ -22,7 +22,8 @@ public class KickCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length < 1) {
+        int minArgs = 1;
+        if (args.length < minArgs) {
             sender.sendMessage("§7Usage: §e/kick <target> (reason)");
             return true;
         }
@@ -30,19 +31,16 @@ public class KickCommand implements CommandExecutor {
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            sender.sendMessage(args[0] + " is not online");
+            sender.sendMessage("§c" + args[0] + " is not online!");
             return true;
         }
 
         List<String> arguments = Arrays.asList(args);
 
         String reason = "none";
-        if (!(args.length < 2)) {
-            player.sendMessage("Test");
-            reason = String.join(" ", arguments.subList(1, arguments.size()));
-        }
+        if (args.length >= 2) reason = String.join(" ", arguments.subList(1, arguments.size()));
         plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.KICK, reason, 0L);
-        sender.sendMessage("§7Successfully kicked §a" + target.getName() + " §7Reason: §e" + (reason.equals("") ? "none" : reason));
+        sender.sendMessage("§7Successfully kicked §a" + target.getName() + " §7Reason: §e" + reason);
         return true;
     }
 }

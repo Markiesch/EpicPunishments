@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class PunishMenu extends Menu implements Listener {
@@ -64,7 +65,7 @@ public class PunishMenu extends Menu implements Listener {
 
             String type = plugin.getTemplateStorage().getConfig().getString(name + ".type");
             if (type == null) type = "WARN";
-            PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase());
+            PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase(Locale.US));
             String reason = plugin.getTemplateStorage().getConfig().getString(name + ".reason");
             if (reason == null || reason.isEmpty()) reason = "none";
             String configDuration = plugin.getTemplateStorage().getConfig().getString(name + ".duration");
@@ -83,7 +84,7 @@ public class PunishMenu extends Menu implements Listener {
     @Override
     public void setMenuItems() {
         if (target == null) {
-            playerMenuUtility.getOwner().sendMessage("Couldn't find player. Closing menu...");
+            playerMenuUtility.getOwner().sendMessage("§cCouldn't find player. Closing menu...");
             playerMenuUtility.getOwner().closeInventory();
             return;
         }
@@ -132,7 +133,7 @@ public class PunishMenu extends Menu implements Listener {
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
                 String type = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".type");
-                if (type != null) type = type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase();
+                if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
                 String reason = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".reason");
                 ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + templates.get(i), 1, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
                 inventory.setItem(slots[i], template);

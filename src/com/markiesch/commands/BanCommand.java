@@ -24,7 +24,8 @@ public class BanCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length < 2) {
+        int minArgs = 2;
+        if (args.length < minArgs) {
             sender.sendMessage("§7Usage: §e/ban <target> <duration | permanent> (reason)");
             return true;
         }
@@ -42,7 +43,7 @@ public class BanCommand implements CommandExecutor {
         List<String> arguments = Arrays.asList(args);
         String reason = String.join(" ", arguments.subList(2, arguments.size()));
         plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.BAN, reason, duration);
-        sender.sendMessage("§7Successfully banned §a" + target.getName() + " §7Reason: §e" + (reason.equals("") ? "none" : reason));
+        sender.sendMessage("§7Successfully banned §a" + target.getName() + " §7Reason: §e" + reason);
         return true;
     }
 }

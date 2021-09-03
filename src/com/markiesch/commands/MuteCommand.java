@@ -24,7 +24,8 @@ public class MuteCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length < 1) {
+        int minArgs = 1;
+        if (args.length < minArgs) {
             sender.sendMessage("§7Usage: §e/mute <target> (reason)");
             return true;
         }
@@ -38,13 +39,13 @@ public class MuteCommand implements CommandExecutor {
 
         List<String> arguments = Arrays.asList(args);
         String reason = "none";
-        if (!(args.length < 2)) {
+        if (args.length >= 2) {
             player.sendMessage("Test");
             reason = String.join(" ", arguments.subList(1, arguments.size()));
         }
 
         plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, 0L);
-        sender.sendMessage("§7Successfully muted §a" + target.getName() + " §7Reason: §e" + (reason.equals("") ? "none" : reason));
+        sender.sendMessage("§7Successfully muted §a" + target.getName() + " §7Reason: §e" + reason);
         return true;
     }
 }
