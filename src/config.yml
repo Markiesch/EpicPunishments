@@ -6,6 +6,8 @@ messages:
   # [command] shows the sign content
   signSpy: '&cSignSpy &7[target]: [content]'
 
+  # [reason] shows the reason of the punishment
+  # [duration] shows the duration of the punishment (only when temporarily)
   kickMessage: "§cYou have been kicked!\n\n§7Reason: §f[reason]\n§7Find out more: §fwww.example.com"
   temporarilyBanMessage: "§cYou are temporarily banned for §f[duration]§cfrom this server!\n\n§7Reason: §f[reason]\n§7Find out more: §e§nwww.example.com"
   permanentlyBanMessage: "§cYou are permanently banned from this server!\n\n§7Reason: §f[reason]\n§7Find out more: §e§nwww.example.com"

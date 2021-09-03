@@ -5,7 +5,6 @@ import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.utils.InputUtils;
-import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

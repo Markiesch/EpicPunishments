@@ -2,24 +2,16 @@ package com.markiesch.utils;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.PlayerMenuUtility;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
-
-import static org.bukkit.Bukkit.getServer;
-
 
 public class TemplateStorage {
     private final EpicPunishments plugin;

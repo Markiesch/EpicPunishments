@@ -3,7 +3,7 @@ package com.markiesch.menusystem;
 import org.bukkit.entity.Player;
 
 public class PlayerMenuUtility {
-    private Player owner;
+    private final Player owner;
     private String reason;
     private String templateName;
 
@@ -12,9 +12,6 @@ public class PlayerMenuUtility {
     }
     public Player getOwner() {
         return owner;
-    }
-    public void setOwner(Player owner) {
-        this.owner = owner;
     }
 
     public String getReason() {

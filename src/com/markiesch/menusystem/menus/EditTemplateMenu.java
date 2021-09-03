@@ -5,7 +5,6 @@ import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.InputUtils;
-import com.markiesch.utils.TemplateStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

@@ -16,7 +16,7 @@ public class SignSpy implements Listener {
         String lines = event.getLine(0) + " " + event.getLine(1) + " " + event.getLine(2) + " " + event.getLine(3);
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (onlinePlayer == player) break;
+            if (onlinePlayer.equals(player)) break;
             if (onlinePlayer.hasPermission("bangui.spy.sign")) {
                 String config = plugin.getConfig().getString("messages.signspy");
                 if (config == null) return true;

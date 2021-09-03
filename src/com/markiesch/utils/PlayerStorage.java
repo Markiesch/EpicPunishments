@@ -19,6 +19,7 @@ import static org.bukkit.Bukkit.getServer;
 
 public class PlayerStorage {
     private final EpicPunishments plugin;
+    long permanent = 0L;
     private FileConfiguration dataConfig = null;
     private File configFile = null;
 
@@ -35,8 +36,13 @@ public class PlayerStorage {
         InputStream defaultStream = plugin.getResource("data.yml");
 
         if (defaultStream != null) {
-            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
-            dataConfig.setDefaults(defaultConfig);
+            try {
+                YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
+                dataConfig.setDefaults(defaultConfig);
+                defaultStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -92,28 +98,25 @@ public class PlayerStorage {
             }
         }
 
-        if (type.equals(PunishTypes.BAN)) {
-            if (oTarget != null) {
-                if (duration == 0L) {
-                    String kickMessage = plugin.getConfig().getString("messages.permanentlyBanMessage");
-                    if (kickMessage != null) {
-                        kickMessage = kickMessage
-                                .replace("[duration]", TimeUtils.makeReadable(duration))
-                                .replace("[reason]", reason);
-                    }
-                    oTarget.kickPlayer(kickMessage);
-                } else {
-                    plugin.getConfig().getString("messages.temporarilyBanMessage");
-                    oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + " §cfrom this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
+        if (type.equals(PunishTypes.BAN) && oTarget != null) {
+            if (duration.equals(permanent)) {
+                String kickMessage = plugin.getConfig().getString("messages.permanentlyBanMessage");
+                if (kickMessage != null) {
+                    kickMessage = kickMessage
+                            .replace("[duration]", TimeUtils.makeReadable(duration))
+                            .replace("[reason]", reason);
                 }
-
-                oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
+                oTarget.kickPlayer(kickMessage);
+            } else {
+                plugin.getConfig().getString("messages.temporarilyBanMessage");
+                oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + " §cfrom this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
             }
+            oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
         }
 
         List<String> punishments = getConfig().getStringList(target + ".infractions");
         long currentTime = System.currentTimeMillis();
-        if (duration == 0L) currentTime = 0L;
+        if (duration.equals(permanent)) currentTime = permanent;
         long expires = currentTime + duration;
         String[] punishment = {
                 issuer.toString(),
@@ -125,6 +128,18 @@ public class PlayerStorage {
 
         punishments.add(String.join(";", punishment));
         getConfig().set(target + ".infractions", punishments);
+        Player player = Bukkit.getPlayer(issuer);
+
+        String sType = type.toString().toLowerCase();
+
+        if (sType.equals("kick")) sType = "kicked";
+        if (sType.equals("warn")) sType = "warned";
+        if (sType.equals("mute")) sType = "muted";
+        if (sType.equals("ban")) sType = "banned";
+
+        if (player != null)
+            player.sendMessage("§7Successfully " + sType + " §a" + Bukkit.getOfflinePlayer(target).getName() + " §7Reason: §e" + reason);
+
         saveConfig();
     }
 
@@ -136,9 +151,9 @@ public class PlayerStorage {
         List<String> infractions = getConfig().getStringList(uuid + ".infractions");
         for (String infraction : infractions) {
             String type = infraction.split(";")[1];
-            if (!type.equalsIgnoreCase("ban")) continue;
-            long duration = Long.parseLong(infraction.split(";")[3]);
-            if (duration == 0L) return true;
+            if (!"ban".equalsIgnoreCase(type)) continue;
+            Long duration = Long.parseLong(infraction.split(";")[3]);
+            if (duration.equals(permanent)) return true;
             long currentTime = System.currentTimeMillis();
             long expires = Long.parseLong(infraction.split(";")[4]);
             if (currentTime < expires) return true;

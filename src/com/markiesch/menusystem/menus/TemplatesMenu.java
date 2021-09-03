@@ -53,9 +53,7 @@ public class TemplatesMenu extends Menu implements Listener {
                 if (meta != null) {
                     plugin.getTemplateStorage().removeTemplate(meta.getDisplayName());
 
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> {
-                        new TemplatesMenu(playerMenuUtility, 0);
-                    }, 5L);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> new TemplatesMenu(playerMenuUtility, 0), 5L);
 
 
                 } else {

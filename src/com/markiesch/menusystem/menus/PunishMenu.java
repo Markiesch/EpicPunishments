@@ -8,7 +8,6 @@ import com.markiesch.utils.PunishTypes;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -54,7 +53,7 @@ public class PunishMenu extends Menu implements Listener {
         }
 
         if (e.getCurrentItem().getType().equals(Material.FLOWER_BANNER_PATTERN)) {
-            new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(p), target).open();
+            new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(p), target, 0).open();
             return;
         }
 
@@ -63,14 +62,16 @@ public class PunishMenu extends Menu implements Listener {
             if (meta == null) return;
             String name = ChatColor.stripColor(meta.getDisplayName());
 
-            String type = plugin.getConfig().getString("templates." + name + ".type");
+            String type = plugin.getTemplateStorage().getConfig().getString(name + ".type");
             if (type == null) type = "WARN";
             PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase());
-            String reason = plugin.getConfig().getString("templates." + name + ".reason");
-            String configDuration = plugin.getConfig().getString("templates." + name + ".duration");
+            String reason = plugin.getTemplateStorage().getConfig().getString(name + ".reason");
+            if (reason == null || reason.isEmpty()) reason = "none";
+            String configDuration = plugin.getTemplateStorage().getConfig().getString(name + ".duration");
             long duration = 0L;
             if (configDuration != null) duration = TimeUtils.parseTime(configDuration);
             Player issuer = playerMenuUtility.getOwner();
+            issuer.closeInventory();
             plugin.getPlayerStorage().createPunishment(target.getUniqueId(), issuer.getUniqueId(), punishType, reason, duration);
         }
 
@@ -96,8 +97,6 @@ public class PunishMenu extends Menu implements Listener {
                 Material.PLAYER_HEAD,
                 "§b§l" + target.getName(),
                 1,
-                "§bLeft Click §7to manage player",
-                "§bRight Click §7to teleport",
                 "",
                 (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
                 (plugin.getPlayerStorage().isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),

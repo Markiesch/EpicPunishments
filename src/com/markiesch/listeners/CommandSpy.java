@@ -18,7 +18,7 @@ public class CommandSpy implements Listener {
         String message = event.getMessage();
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (onlinePlayer == player) break;
+            if (onlinePlayer.equals(player)) break;
             if (onlinePlayer.hasPermission("bangui.spy.command")) {
                 onlinePlayer.sendMessage(plugin.changeColor("&cCSpy &7" + player.getDisplayName() + ": " + message));
             }
