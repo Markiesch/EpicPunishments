@@ -70,10 +70,10 @@ public class EditTemplateMenu extends Menu implements Listener {
             ItemMeta meta = item.getItemMeta();
             if (meta == null) return;
             String name = ChatColor.stripColor(meta.getDisplayName());
-            if (name.equalsIgnoreCase("BAN")) type = "KICK";
-            if (name.equalsIgnoreCase("KICK")) type = "WARN";
-            if (name.equalsIgnoreCase("WARN")) type = "MUTE";
-            if (name.equalsIgnoreCase("MUTE")) type = "BAN";
+            if ("BAN".equalsIgnoreCase(name)) type = "KICK";
+            if ("KICK".equalsIgnoreCase(name)) type = "WARN";
+            if ("WARN".equalsIgnoreCase(name)) type = "MUTE";
+            if ("MUTE".equalsIgnoreCase(name)) type = "BAN";
             setMenuItems();
         }
     }

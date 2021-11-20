@@ -18,9 +18,9 @@ public class PunishTabCompleter implements TabCompleter {
 
         if (args.length == 1) {
             result.add("reload");
-            List<String> players = new ArrayList<>();
             ConfigurationSection configSection = config.getConfigurationSection("");
             if (configSection == null) return result;
+            List<String> players = new ArrayList<>();
             configSection.getKeys(false).forEach(uuid -> {
                 String name = Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName();
                 if (name != null && name.toLowerCase(Locale.US).startsWith(args[0].toLowerCase(Locale.US))) {

@@ -27,7 +27,7 @@ public class TemplateCommand implements CommandExecutor {
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("create")) {
+        if ("create".equalsIgnoreCase(args[0])) {
             if (args.length >= 2) {
                 new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(player), args[1]).open();
                 return true;
@@ -42,7 +42,7 @@ public class TemplateCommand implements CommandExecutor {
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("delete")) {
+        if ("delete".equalsIgnoreCase(args[0])) {
             plugin.getTemplateStorage().removeTemplate(args[1]);
             player.sendMessage("§7Successfully deleted §a" + args[1]);
             return true;

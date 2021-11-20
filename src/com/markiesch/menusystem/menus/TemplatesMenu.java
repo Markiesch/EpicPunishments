@@ -50,19 +50,6 @@ public class TemplatesMenu extends Menu implements Listener {
 
         if (clickedItem.equals(Material.PAPER)) {
             ItemMeta meta = e.getCurrentItem().getItemMeta();
-            if (e.getClick().toString().equalsIgnoreCase("DROP")) {
-                if (meta != null) {
-                    plugin.getTemplateStorage().removeTemplate(meta.getDisplayName());
-
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> new TemplatesMenu(playerMenuUtility, 0), 5L);
-
-
-                } else {
-                    player.sendMessage("§cCouldn't delete the selected template!");
-                }
-                return;
-            }
-
             String template;
             if (meta != null) {
                 template = ChatColor.stripColor(meta.getDisplayName());
@@ -70,7 +57,6 @@ public class TemplatesMenu extends Menu implements Listener {
             } else {
                 player.sendMessage("§cThere was an error trying to resolve the template name");
             }
-
         }
 
         if (clickedItem.equals(Material.ANVIL))
@@ -108,7 +94,7 @@ public class TemplatesMenu extends Menu implements Listener {
                 String reason = plugin.getConfig().getString("templates." + templates.get(i) + ".reason");
                 String templateReason = reason != null ? reason : "None";
                 ItemStack template = ItemUtils.createItem(Material.PAPER, "§6§l" + templates.get(i), 1,
-                        "§bPress Q §7to §cdelete", "", "§7Type: §e" + templateType, "§7Reason: §e" + templateReason);
+                        "§bLeft Click §7to manage template", "", "§7Type: §e" + templateType, "§7Reason: §e" + templateReason);
                 inventory.setItem(slots[i], template);
             }
         }

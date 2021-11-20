@@ -132,10 +132,10 @@ public class PlayerStorage {
 
         String sType = type.toString().toLowerCase();
 
-        if (sType.equals("kick")) sType = "kicked";
-        if (sType.equals("warn")) sType = "warned";
-        if (sType.equals("mute")) sType = "muted";
-        if (sType.equals("ban")) sType = "banned";
+        if ("kick".equals(sType)) sType = "kicked";
+        if ("warn".equals(sType)) sType = "warned";
+        if ("mute".equals(sType)) sType = "muted";
+        if ("ban".equals(sType)) sType = "banned";
 
         if (player != null)
             player.sendMessage("§7Successfully " + sType + " §a" + Bukkit.getOfflinePlayer(target).getName() + " §7Reason: §e" + reason);
@@ -162,6 +162,16 @@ public class PlayerStorage {
     }
 
     public boolean isMuted(UUID uuid) {
-        return getConfig().getBoolean(uuid + ".muted");
+        List<String> infractions = getConfig().getStringList(uuid + ".infractions");
+        for (String infraction : infractions) {
+            String type = infraction.split(";")[1];
+            if (!"mute".equalsIgnoreCase(type)) continue;
+            Long duration = Long.parseLong(infraction.split(";")[3]);
+            if (duration.equals(permanent)) return true;
+            long currentTime = System.currentTimeMillis();
+            long expires = Long.parseLong(infraction.split(";")[4]);
+            if (currentTime < expires) return true;
+        }
+        return false;
     }
 }

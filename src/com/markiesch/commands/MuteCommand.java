@@ -45,7 +45,6 @@ public class MuteCommand implements CommandExecutor {
         }
 
         plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, 0L);
-        sender.sendMessage("§7Successfully muted §a" + target.getName() + " §7Reason: §e" + reason);
         return true;
     }
 }

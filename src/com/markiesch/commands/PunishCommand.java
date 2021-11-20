@@ -18,13 +18,18 @@ public class PunishCommand implements CommandExecutor {
         if (!(sender instanceof Player)) return true;
         Player player = (Player) sender;
 
+
         if (args.length == 0) {
+            if (!player.hasPermission("epicpunishments.gui")) {
+                player.sendMessage("§7You do not have §cpermissions §7to use this command!");
+                return true;
+            }
             new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("reload")) {
-            if (!player.hasPermission("epicPunishments.reload")) {
+        if ("reload".equalsIgnoreCase(args[0])) {
+            if (!player.hasPermission("epicpunishments.reload")) {
                 player.sendMessage("§cYou do not have permissions to run this command!");
                 return true;
             }
@@ -40,6 +45,10 @@ public class PunishCommand implements CommandExecutor {
             return true;
         }
 
+        if (!player.hasPermission("epicpunishments.gui")) {
+            player.sendMessage("§7You do not have §cpermissions §7to use this command!");
+            return true;
+        }
         // Open menu of defined player
         OfflinePlayer target = Bukkit.getPlayer(args[0]);
         if (target == null) {

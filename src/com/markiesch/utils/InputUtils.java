@@ -33,6 +33,7 @@ public class InputUtils {
 
     public void cancel() {
         Bukkit.getScheduler().cancelTask(this.taskId);
+        plugin.getEditor().remove(player.getUniqueId());
     }
 
     public InputTypes getChat() {

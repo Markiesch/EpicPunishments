@@ -18,7 +18,7 @@ public class KickCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
         if (!player.hasPermission("epicpunishments.kick")) {
-            player.sendMessage("§7You do not have &cpermissions §7to execute this command!");
+            player.sendMessage("§7You do not have §cpermissions §7to execute this command!");
             return true;
         }
 

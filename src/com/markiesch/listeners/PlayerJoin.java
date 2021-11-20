@@ -34,7 +34,7 @@ public class PlayerJoin implements Listener {
 
         for (String infraction : infractions) {
             String type = infraction.split(";")[1];
-            if (!type.equalsIgnoreCase("ban")) continue;
+            if (!"ban".equalsIgnoreCase(type)) continue;
             long currentTime = System.currentTimeMillis();
             long duration = Long.parseLong(infraction.split(";")[4]) - currentTime;
             if (duration > highestDuration) highestDuration = duration;
@@ -48,7 +48,7 @@ public class PlayerJoin implements Listener {
 
         for (String infraction : infractions) {
             String type = infraction.split(";")[1];
-            if (!type.equalsIgnoreCase("ban")) continue;
+            if (!"ban".equalsIgnoreCase(type)) continue;
             long currentTime = System.currentTimeMillis();
             long expires = Long.parseLong(infraction.split(";")[4]) - currentTime;
             String configReason = infraction.split(";")[2];
