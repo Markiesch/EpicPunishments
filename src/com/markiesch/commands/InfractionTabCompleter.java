@@ -2,9 +2,7 @@ package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -13,13 +11,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class InfractionTabCompleter implements TabCompleter {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
-    FileConfiguration config = plugin.getPlayerStorage().getConfig();
+public class InfractionTabCompleter {
+    static EpicPunishments plugin = EpicPunishments.getInstance();
+    static FileConfiguration config = plugin.getPlayerStorage().getConfig();
 
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    public static List<String> onTabComplete(String[] args, boolean addTime) {
         List<String> result = new ArrayList<>();
-
         if (args.length == 1) {
             List<String> players = new ArrayList<>();
             ConfigurationSection configSection = config.getConfigurationSection("");
@@ -32,7 +29,7 @@ public class InfractionTabCompleter implements TabCompleter {
             return players;
         }
 
-        if (args.length == 2) {
+        if (args.length == 2 && addTime) {
             if (args[1].length() > 0) {
                 result.add(args[1] + "s");
                 result.add(args[1] + "m");
@@ -45,6 +42,8 @@ public class InfractionTabCompleter implements TabCompleter {
             }
             return result;
         }
+
+        result.add("(reason)");
 
         return result;
     }

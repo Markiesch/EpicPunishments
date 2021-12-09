@@ -13,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
@@ -60,23 +59,18 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         this.TemplateStorage = new TemplateStorage(this);
         instance = this;
         this.saveDefaultConfig();
-        // Register commands and Listeners
         getServer().getPluginManager().registerEvents(new CommandSpy(), this);
         getServer().getPluginManager().registerEvents(new SignSpy(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInput(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
-        Objects.requireNonNull(getCommand("epicPunishments")).setExecutor(new PunishCommand());
-        Objects.requireNonNull(getCommand("epicPunishments")).setTabCompleter(new PunishTabCompleter());
-        Objects.requireNonNull(getCommand("ban")).setExecutor(new BanCommand());
-        Objects.requireNonNull(getCommand("kick")).setExecutor(new KickCommand());
-        Objects.requireNonNull(getCommand("mute")).setExecutor(new MuteCommand());
-        Objects.requireNonNull(getCommand("template")).setExecutor(new TemplateCommand());
-        Objects.requireNonNull(getCommand("ban")).setTabCompleter(new InfractionTabCompleter());
-        Objects.requireNonNull(getCommand("kick")).setTabCompleter(new InfractionTabCompleter());
-        Objects.requireNonNull(getCommand("mute")).setTabCompleter(new InfractionTabCompleter());
-        Objects.requireNonNull(getCommand("template")).setTabCompleter(new TemplateTabCompleter());
+
+        new KickCommand();
+        new MuteCommand();
+        new PunishCommand();
+        new TemplatesCommand();
+        new BanCommand();
 
         getServer().getConsoleSender().sendMessage(changeColor("&aEpicPunishments is now enabled"));
     }

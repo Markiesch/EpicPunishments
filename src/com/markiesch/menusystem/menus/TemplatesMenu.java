@@ -6,7 +6,6 @@ import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.ItemUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -73,6 +72,10 @@ public class TemplatesMenu extends Menu implements Listener {
         ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", 1, "§7Click to create a new template");
         inventory.setItem(52, newTemplate);
 
+        generateTemplates();
+    }
+
+    private void generateTemplates() {
         int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
         ConfigurationSection configurationSection = plugin.getTemplateStorage().getConfig().getConfigurationSection("");
         if (configurationSection == null) {
@@ -90,11 +93,13 @@ public class TemplatesMenu extends Menu implements Listener {
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
                 String type = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".type");
-                String templateType = type != null ? type.toUpperCase(Locale.US) : "None";
-                String reason = plugin.getConfig().getString("templates." + templates.get(i) + ".reason");
-                String templateReason = reason != null ? reason : "None";
-                ItemStack template = ItemUtils.createItem(Material.PAPER, "§6§l" + templates.get(i), 1,
-                        "§bLeft Click §7to manage template", "", "§7Type: §e" + templateType, "§7Reason: §e" + templateReason);
+                if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
+                String reason = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".reason");
+                reason = reason != null && reason.length() > 13 ? reason.substring(0, 10) + "..."  : reason;
+
+                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + templates.get(i), 1,
+                        "§bLeft Click §7to manage template", "", "§7Type: §a" + type, "§7Reason: §a" + (reason != null ? reason : "None"));
+
                 inventory.setItem(slots[i], template);
             }
         }

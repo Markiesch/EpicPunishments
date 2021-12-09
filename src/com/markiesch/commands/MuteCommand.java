@@ -9,42 +9,52 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class MuteCommand implements CommandExecutor {
+public class MuteCommand {
     EpicPunishments plugin = EpicPunishments.getInstance();
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = (Player) sender;
-        if (!player.hasPermission("epicpunishments.mute")) {
-            player.sendMessage("§7You do not have §cpermissions §7to execute this command!");
-            return true;
-        }
+    public MuteCommand() {
+        new CommandBase("mute", 1, -1, true) {
+            @Override
+            public boolean onCommand(CommandSender sender, String[] args) {
+                Player player = (Player) sender;
 
-        int minArgs = 1;
-        if (args.length < minArgs) {
-            sender.sendMessage("§7Usage: §e/mute <target> (reason)");
-            return true;
-        }
+                OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+                UUID tUUID = target.getUniqueId();
+                if (target.getPlayer() == null && !plugin.getPlayerStorage().playerRegistered(tUUID)) {
+                    sender.sendMessage("§cCould not find " + args[0]);
+                    return true;
+                }
 
-        OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
-        UUID tUUID = target.getUniqueId();
-        if (!target.hasPlayedBefore() && !plugin.getPlayerStorage().playerRegistered(tUUID)) {
-            player.sendMessage("§cCould not find " + args[0]);
-            return true;
-        }
+                if (target.getPlayer().equals(sender)) {
+                    sender.sendMessage("§cYou cannot mute yourself");
+                }
 
-        List<String> arguments = Arrays.asList(args);
-        String reason = "none";
-        if (args.length >= 2) {
-            player.sendMessage("Test");
-            reason = String.join(" ", arguments.subList(1, arguments.size()));
-        }
+                if (target.getPlayer().hasPermission("epicpunishments.mute.bypass")) {
+                    sender.sendMessage("§cYou cannot punish this player!");
+                    return true;
+                }
 
-        plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, 0L);
-        return true;
+                List<String> arguments = Arrays.asList(args);
+                String reason = "none";
+                if (args.length >= 2) {
+                    sender.sendMessage("Test");
+                    reason = String.join(" ", arguments.subList(1, arguments.size()));
+                }
+
+                plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, 0L);
+                return true;
+            }
+
+            public String getUsage() { return "§7Usage: §e/mute <target> (reason)"; }
+            public String getPermission() { return "epicpunishments.mute"; }
+            public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+                return sender.hasPermission(getPermission()) ? InfractionTabCompleter.onTabComplete(args, true) : new ArrayList<>();
+            }
+        };
     }
 }

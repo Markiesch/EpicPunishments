@@ -2,18 +2,21 @@ package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.UUID;
 
-public class PunishTabCompleter implements TabCompleter {
-    private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
-    FileConfiguration config = plugin.getPlayerStorage().getConfig();
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+public class PunishTabCompleter {
+    static EpicPunishments plugin = EpicPunishments.getInstance();
+    static FileConfiguration config = plugin.getPlayerStorage().getConfig();
+
+    public static List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> result = new ArrayList<>();
 
         if (args.length == 1) {
