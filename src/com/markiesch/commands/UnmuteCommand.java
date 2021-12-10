@@ -1,14 +1,12 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.utils.PunishTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,9 +26,10 @@ public class UnmuteCommand {
                     return true;
                 }
 
-//                if (target.getPlayer().equals(sender)) {
-//                    sender.sendMessage("§cYou cannot unmute yourself");
-//                }
+                if (target.getPlayer().equals(sender)) {
+                    sender.sendMessage("§cYou cannot unmute yourself");
+                    return true;
+                }
 
                 plugin.getPlayerStorage().unMute(target.getUniqueId());
                 return true;
