@@ -7,10 +7,15 @@ import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -20,6 +25,7 @@ import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 public class InfractionsMenu extends Menu {
     private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     public OfflinePlayer target;
+    private NamespacedKey dataKey = new NamespacedKey(plugin, "infraction");
     int page;
     int maxPages;
     boolean onLastPage = true;
@@ -45,6 +51,15 @@ public class InfractionsMenu extends Menu {
         if (e.getCurrentItem() == null) return;
         Player player = (Player) e.getWhoClicked();
 
+        if (e.getCurrentItem().getType().equals(Material.PAPER) && e.getClick().equals(ClickType.DROP)) {
+            ItemMeta meta = e.getCurrentItem().getItemMeta();
+            if (meta != null) {
+                String data = meta.getPersistentDataContainer().get(dataKey, PersistentDataType.STRING);
+                plugin.getPlayerStorage().removeInfraction(target.getUniqueId(), data);
+                inventory.remove(Material.PAPER);
+                setMenuItems();
+            }
+        }
 
         if (e.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page).open();
         if (e.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page).open();
@@ -72,15 +87,13 @@ public class InfractionsMenu extends Menu {
                 long duration = Long.parseLong(data[3]);
 
                 ItemStack infraction = ItemUtils.createItem(Material.PAPER, "§6§l" + type, 1,
-                        "",
-                        "§7reason",
-                        "§e" + reason,
-                        "",
-                        "§7Duration",
-                        "§e" + TimeUtils.makeReadable(duration),
-                        "",
-                        "§7Issuer",
-                        "§e" + issuer.getName());
+                        "", "§7reason", "§e" + reason, "", "§7Duration", "§e" + TimeUtils.makeReadable(duration), "", "§7Issuer", "§e" + issuer.getName());
+                ItemMeta meta = infraction.getItemMeta();
+                if (meta != null) {
+                    meta.getPersistentDataContainer().set(dataKey, PersistentDataType.STRING, infractions.get(index));
+                    infraction.setItemMeta(meta);
+                }
+
                 inventory.setItem(slots[i], infraction);
             }
         }
