@@ -17,8 +17,6 @@ public class UnmuteCommand {
         new CommandBase("unmute", 1, -1, true) {
             @Override
             public boolean onCommand(CommandSender sender, String[] args) {
-                Player player = (Player) sender;
-
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 UUID tUUID = target.getUniqueId();
                 if (target.getPlayer() == null && !plugin.getPlayerStorage().playerRegistered(tUUID)) {
