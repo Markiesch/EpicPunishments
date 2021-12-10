@@ -9,14 +9,14 @@ import org.bukkit.inventory.InventoryHolder;
 public class MenuListener implements Listener {
 
     @EventHandler
-    public void onMenuClick(InventoryClickEvent e) {
-        InventoryHolder holder = e.getInventory().getHolder();
+    public void onMenuClick(InventoryClickEvent event) {
+        InventoryHolder holder = event.getInventory().getHolder();
 
         if (holder instanceof Menu) {
-            if (e.getCurrentItem() == null) return;
-            e.setCancelled(true);
+            if (event.getCurrentItem() == null) return;
+            event.setCancelled(true);
             Menu menu = (Menu) holder;
-            menu.handleMenu(e);
+            menu.handleMenu(event);
         }
     }
 }
