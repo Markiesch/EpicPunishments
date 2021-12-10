@@ -180,10 +180,39 @@ public class PlayerStorage {
         List<String> infractions = getPunishments(target);
         List<String> newInfractions = infractions.stream().filter(infraction -> {
             String type  = infraction.split(";")[1];
-            return !"mute".equalsIgnoreCase(type);
+            return (!"mute".equalsIgnoreCase(type) && isActivePunishment(infraction));
         }).collect(Collectors.toList());
 
         getConfig().set(target + ".infractions", newInfractions);
         saveConfig();
+    }
+
+    public void unBan(UUID target) {
+        List<String> infractions = getPunishments(target);
+        List<String> newInfractions = infractions.stream().filter(infraction -> {
+            String type  = infraction.split(";")[1];
+            return (!"ban".equalsIgnoreCase(type) && isActivePunishment(infraction));
+        }).collect(Collectors.toList());
+
+        getConfig().set(target + ".infractions", newInfractions);
+        saveConfig();
+    }
+
+    public boolean isActivePunishment(String infraction) {
+        long currentTime = System.currentTimeMillis();
+        Long duration = Long.parseLong(infraction.split(";")[3]);
+        if (duration.equals(permanent)) return true;
+
+        long expires = Long.parseLong(infraction.split(";")[4]);
+        return currentTime < expires;
+    }
+
+    public void removeInfraction(UUID target, String data) {
+        List<String> infractions = getPunishments(target);
+        List<String> newInfractions = infractions.stream().filter(infraction -> !infraction.equals(data)).collect(Collectors.toList());
+
+        getConfig().set(target + ".infractions", newInfractions);
+        saveConfig();
+        System.out.println("done saving");
     }
 }
