@@ -5,8 +5,6 @@ import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.menusystem.menus.TemplatesMenu;
 import com.markiesch.utils.InputUtils;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
