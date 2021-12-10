@@ -4,8 +4,6 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PunishTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,6 +30,7 @@ public class MuteCommand {
 
                 if (target.getPlayer().equals(sender)) {
                     sender.sendMessage("§cYou cannot mute yourself");
+                    return true;
                 }
 
                 if (target.getPlayer().hasPermission("epicpunishments.mute.bypass")) {
