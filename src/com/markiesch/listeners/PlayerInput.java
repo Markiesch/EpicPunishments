@@ -17,23 +17,23 @@ public class PlayerInput implements Listener {
     private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
 
     @EventHandler
-    public void onInput(AsyncPlayerChatEvent e) {
-        Player p = e.getPlayer();
-        UUID uuid = p.getUniqueId();
+    public void onInput(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
         if (!plugin.getEditor().containsKey(uuid)) return;
-        InputUtils edit = plugin.getEditor().get(e.getPlayer().getUniqueId());
-        String message = e.getMessage();
-        e.setCancelled(true);
+        InputUtils edit = plugin.getEditor().get(event.getPlayer().getUniqueId());
+        String message = event.getMessage();
+        event.setCancelled(true);
         edit.cancel();
         Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> {
-            PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(p);
+            PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
             if (edit.getChat().equals(InputTypes.TEMPLATE_NAME)) {
                 playerMenuUtility.setReason("none");
-                new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(p), message.replace(" ", "_")).open();
+                new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(player), message.replace(" ", "_")).open();
             } else if (edit.getChat().equals(InputTypes.TEMPLATE_REASON)) {
                 String templateName = playerMenuUtility.getTemplateName();
                 playerMenuUtility.setReason(message);
-                new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(p), templateName).open();
+                new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(player), templateName).open();
             }
         }, 5L);
     }

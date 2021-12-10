@@ -13,9 +13,9 @@ public class PlayerJoin implements Listener {
     private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        plugin.getPlayerStorage().createPlayerProfile(e.getPlayer().getUniqueId());
-        Player player = e.getPlayer();
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        plugin.getPlayerStorage().createPlayerProfile(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
 
         if (plugin.getPlayerStorage().isPlayerBanned(player.getUniqueId())) {
             List<String> infractions = plugin.getPlayerStorage().getConfig().getStringList(player.getUniqueId() + ".infractions");
