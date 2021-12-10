@@ -9,5 +9,7 @@ messages:
   # [reason] shows the reason of the punishment
   # [duration] shows the duration of the punishment (only when temporarily)
   kickMessage: "§cYou have been kicked!\n\n§7Reason: §f[reason]\n§7Find out more: §fwww.example.com"
+  temporarilyMute: "§c———————————————————————————\n§c§lHey! §cYou are still muted for [duration]!\n&cReason: [reason]\n§7Find out more here: §cwww.example.com/faq#muted\n§c———————————————————————————"
+  permanentlyMute: "§c———————————————————————————\n§c§lHey! §cYou are currently muted!\n&cReason: [reason]\n§7Find out more here: §cwww.example.com/faq#muted\n§c———————————————————————————"
   temporarilyBanMessage: "§cYou are temporarily banned for §f[duration]§cfrom this server!\n\n§7Reason: §f[reason]\n§7Find out more: §e§nwww.example.com"
   permanentlyBanMessage: "§cYou are permanently banned from this server!\n\n§7Reason: §f[reason]\n§7Find out more: §e§nwww.example.com"
