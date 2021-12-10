@@ -2,7 +2,6 @@ package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
