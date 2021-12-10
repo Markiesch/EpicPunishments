@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -173,5 +174,16 @@ public class PlayerStorage {
             if (currentTime < expires) return true;
         }
         return false;
+    }
+
+    public void unMute(UUID target) {
+        List<String> infractions = getPunishments(target);
+        List<String> newInfractions = infractions.stream().filter(infraction -> {
+            String type  = infraction.split(";")[1];
+            return !"mute".equalsIgnoreCase(type);
+        }).collect(Collectors.toList());
+
+        getConfig().set(target + ".infractions", newInfractions);
+        saveConfig();
     }
 }
