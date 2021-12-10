@@ -7,7 +7,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class TemplateTabCompleter {
     static EpicPunishments plugin = EpicPunishments.getInstance();
