@@ -71,6 +71,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         new PunishCommand();
         new TemplatesCommand();
         new BanCommand();
+        new UnmuteCommand();
 
         getServer().getConsoleSender().sendMessage(changeColor("&aEpicPunishments is now enabled"));
     }
