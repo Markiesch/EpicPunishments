@@ -7,15 +7,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
-    private final EpicPunishments plugin = EpicPunishments.getInstance();
+    EpicPunishments plugin = EpicPunishments.getInstance();
 
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent e) {
-        Player player = e.getPlayer();
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
         boolean isMuted = plugin.getPlayerStorage().isMuted(player.getUniqueId());
         if (!isMuted) return;
 
-        e.setCancelled(true);
-        player.sendMessage("§c———————————————————————————\n§c§lHey! §cYou are currently muted!\n§7Find out more here: §cwww.example.com/faq#muted\n§c———————————————————————————");
+        event.setCancelled(true);
+        String message = plugin.getConfig().getString("messages.temporarilyMute");
+        if (message == null) return;
+        player.sendMessage(message);
     }
 }
