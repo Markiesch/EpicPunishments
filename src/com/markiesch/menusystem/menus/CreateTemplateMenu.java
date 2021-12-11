@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.UUID;
 
 public class CreateTemplateMenu extends Menu implements Listener {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
     private final String name;
     private final String reason;
     private String type = "KICK";

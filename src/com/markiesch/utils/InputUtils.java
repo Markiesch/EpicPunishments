@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class InputUtils {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
 
     private final InputTypes chat;
     private int taskId;

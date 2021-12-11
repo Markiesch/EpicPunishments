@@ -23,7 +23,7 @@ import java.util.*;
 import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class PlayerSelectorMenu extends Menu {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
     FileConfiguration config = plugin.getPlayerStorage().getConfig();
     int page;
     int maxPages;

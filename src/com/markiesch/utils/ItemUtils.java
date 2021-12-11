@@ -14,14 +14,14 @@ public class ItemUtils {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
 
-        if (meta != null) {
-            List<String> loreList = new ArrayList<>(Arrays.asList(lore));
-            // For removing "Effects" from banner pattern
-            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-            meta.setLore(loreList);
-            meta.setDisplayName(name);
-            item.setItemMeta(meta);
-        }
+        if (meta == null) return item;
+
+        List<String> loreList = new ArrayList<>(Arrays.asList(lore));
+        // For removing "Effects" from banner pattern
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.setLore(loreList);
+        meta.setDisplayName(name);
+        item.setItemMeta(meta);
         return item;
     }
 }

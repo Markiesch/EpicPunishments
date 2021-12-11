@@ -15,7 +15,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.UUID;
 
 public class PlayerInput implements Listener {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
 
     @EventHandler
     public void onInput(AsyncPlayerChatEvent event) {

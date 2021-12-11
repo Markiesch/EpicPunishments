@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class PlayerJoin implements Listener {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

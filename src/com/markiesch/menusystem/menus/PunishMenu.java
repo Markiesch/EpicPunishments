@@ -3,10 +3,7 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
-import com.markiesch.utils.BanMenuUtils;
-import com.markiesch.utils.ItemUtils;
-import com.markiesch.utils.PunishTypes;
-import com.markiesch.utils.TimeUtils;
+import com.markiesch.utils.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -14,7 +11,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -27,7 +23,7 @@ import java.util.Locale;
 
 
 public class PunishMenu extends Menu implements Listener {
-    private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
     public OfflinePlayer target;
     int maxTemplatesPerPage = 14;
     int page = 0;
@@ -47,30 +43,30 @@ public class PunishMenu extends Menu implements Listener {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-        if (e.getCurrentItem() == null) return;
-        Player p = (Player) e.getWhoClicked();
-        if (e.getCurrentItem().getType().equals(Material.REDSTONE_BLOCK)) {
-            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), 0).open();
+    public void handleMenu(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null) return;
+        Player player = (Player) event.getWhoClicked();
+        if (event.getCurrentItem().getType().equals(Material.REDSTONE_BLOCK)) {
+            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
             return;
         }
 
-        if (e.getCurrentItem().getType().equals(Material.FLOWER_BANNER_PATTERN)) {
-            new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(p), target, 0).open();
+        if (event.getCurrentItem().getType().equals(Material.FLOWER_BANNER_PATTERN)) {
+            new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, 0).open();
             return;
         }
 
-        if (e.getCurrentItem().getType().equals(Material.PAPER)) {
-            ItemMeta meta = e.getCurrentItem().getItemMeta();
+        if (event.getCurrentItem().getType().equals(Material.PAPER)) {
+            ItemMeta meta = event.getCurrentItem().getItemMeta();
             if (meta == null) return;
             String name = ChatColor.stripColor(meta.getDisplayName());
 
-            String type = plugin.getTemplateStorage().getConfig().getString(name + ".type");
+            String type = TemplateStorage.getConfig().getString(name + ".type");
             if (type == null) type = "WARN";
             PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase(Locale.US));
-            String reason = plugin.getTemplateStorage().getConfig().getString(name + ".reason");
+            String reason = TemplateStorage.getConfig().getString(name + ".reason");
             if (reason == null || reason.isEmpty()) reason = "none";
-            String configDuration = plugin.getTemplateStorage().getConfig().getString(name + ".duration");
+            String configDuration = TemplateStorage.getConfig().getString(name + ".duration");
             long duration = 0L;
             if (configDuration != null) duration = TimeUtils.parseTime(configDuration);
             Player issuer = playerMenuUtility.getOwner();
@@ -78,8 +74,8 @@ public class PunishMenu extends Menu implements Listener {
             plugin.getPlayerStorage().createPunishment(target.getUniqueId(), issuer.getUniqueId(), punishType, reason, duration);
         }
 
-        if (e.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
-            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), 0).open();
+        if (event.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
+            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
         }
     }
 
@@ -103,7 +99,7 @@ public class PunishMenu extends Menu implements Listener {
 
     private void generateTemplates() {
         int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
-        ConfigurationSection configurationSection = plugin.getTemplateStorage().getConfig().getConfigurationSection("");
+        ConfigurationSection configurationSection = TemplateStorage.getConfig().getConfigurationSection("");
         if (configurationSection == null) {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
             return;
@@ -114,10 +110,11 @@ public class PunishMenu extends Menu implements Listener {
             int index = maxTemplatesPerPage * page + i;
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
-                String type = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".type");
+                String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
+                String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
                 if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
-                String reason = plugin.getTemplateStorage().getConfig().getString(templates.get(i) + ".reason");
-                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + templates.get(i), 1, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
+                String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
+                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, 1, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
                 inventory.setItem(slots[i], template);
             }
         }

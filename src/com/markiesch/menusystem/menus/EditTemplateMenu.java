@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class EditTemplateMenu extends Menu implements Listener {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
     private String name = null;
     private String reason = null;
     private String type = "KICK";

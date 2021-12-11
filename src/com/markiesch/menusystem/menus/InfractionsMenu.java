@@ -23,9 +23,9 @@ import java.util.UUID;
 import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class InfractionsMenu extends Menu {
-    private final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
     public OfflinePlayer target;
-    private NamespacedKey dataKey = new NamespacedKey(plugin, "infraction");
+    private final NamespacedKey dataKey = new NamespacedKey(plugin, "infraction");
     int page;
     int maxPages;
     boolean onLastPage = true;

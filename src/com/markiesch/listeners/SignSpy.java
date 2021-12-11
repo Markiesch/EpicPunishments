@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
 public class SignSpy implements Listener {
-    private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    EpicPunishments plugin = EpicPunishments.getInstance();
     @EventHandler
     public boolean onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
