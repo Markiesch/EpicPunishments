@@ -23,11 +23,6 @@ public class UnmuteCommand {
                     return true;
                 }
 
-                if (target.getPlayer().equals(sender)) {
-                    sender.sendMessage("§cYou cannot unmute yourself");
-                    return true;
-                }
-
                 plugin.getPlayerStorage().unMute(target.getUniqueId());
                 return true;
             }
