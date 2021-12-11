@@ -22,15 +22,9 @@ public class BanCommand {
                 Player player = (Player) sender;
 
                 OfflinePlayer target = Bukkit.getPlayer(args[0]);
-                if (target == null) {
-                    target = Bukkit.getOfflinePlayer(args[0]);
-                }
+                if (target == null) target = Bukkit.getOfflinePlayer(args[0]);
 
                 long duration = TimeUtils.parseTime(args[1]);
-
-                player.sendMessage(args[1]);
-                player.sendMessage(duration + "");
-
                 List<String> arguments = Arrays.asList(args);
                 String reason = String.join(" ", arguments.subList(2, arguments.size()));
                 plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.BAN, reason, duration);
