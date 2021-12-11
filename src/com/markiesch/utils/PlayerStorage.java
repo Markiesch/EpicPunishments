@@ -76,9 +76,7 @@ public class PlayerStorage {
         getServer().getConsoleSender().sendMessage("Successfully Registered " + Bukkit.getOfflinePlayer(uuid).getName());
     }
 
-    public boolean playerRegistered(UUID uuid) {
-        return getConfig().getConfigurationSection(uuid.toString()) != null;
-    }
+    public boolean playerRegistered(UUID uuid) { return getConfig().getConfigurationSection(uuid.toString()) != null; }
 
     public void createPunishment(UUID target, UUID issuer, PunishTypes type, String reason, Long duration) {
         if (getConfig().contains(target.toString())) createPlayerProfile(target);
@@ -117,7 +115,6 @@ public class PlayerStorage {
 
         List<String> punishments = getConfig().getStringList(target + ".infractions");
         long currentTime = System.currentTimeMillis();
-        if (duration.equals(permanent)) currentTime = permanent;
         long expires = currentTime + duration;
         String[] punishment = {
                 issuer.toString(),
