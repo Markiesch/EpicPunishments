@@ -2,6 +2,7 @@ package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PunishTypes;
+import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -28,28 +29,19 @@ public class MuteCommand {
                     return true;
                 }
 
-                if (target.getPlayer().equals(sender)) {
-                    sender.sendMessage("§cYou cannot mute yourself");
-                    return true;
-                }
-
-                if (target.getPlayer().hasPermission("epicpunishments.mute.bypass")) {
-                    sender.sendMessage("§cYou cannot punish this player!");
-                    return true;
-                }
-
-                List<String> arguments = Arrays.asList(args);
+                long duration = args.length >= 2 ? TimeUtils.parseTime(args[1]) : 0L;
+                System.out.println(duration);
                 String reason = "none";
                 if (args.length >= 2) {
-                    sender.sendMessage("Test");
-                    reason = String.join(" ", arguments.subList(1, arguments.size()));
+                    List<String> arguments = Arrays.asList(args);
+                    reason = String.join(" ", arguments.subList(2, arguments.size()));
                 }
 
-                plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, 0L);
+                plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, duration);
                 return true;
             }
 
-            public String getUsage() { return "§7Usage: §e/mute <target> (reason)"; }
+            public String getUsage() { return "§7Usage: §e/mute <target> (duration) (reason)"; }
             public String getPermission() { return "epicpunishments.mute"; }
             public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
                 return sender.hasPermission(getPermission()) ? InfractionTabCompleter.onTabComplete(args, true) : new ArrayList<>();
