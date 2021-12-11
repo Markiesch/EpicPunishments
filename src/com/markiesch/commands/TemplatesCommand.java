@@ -5,11 +5,13 @@ import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.menusystem.menus.TemplatesMenu;
 import com.markiesch.utils.InputUtils;
+import com.markiesch.utils.TemplateStorage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TemplatesCommand {
     EpicPunishments plugin = EpicPunishments.getInstance();
@@ -26,15 +28,15 @@ public class TemplatesCommand {
                     return true;
                 }
 
-                if ("create".equalsIgnoreCase(args[0])) {
-                    if (args.length >= 2) {
-                        new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(player), args[1]).open();
-                        return true;
-                    }
-
-                    plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
-                    return true;
-                }
+//                if ("create".equalsIgnoreCase(args[0])) {
+//                    if (args.length >= 2) {
+//                        new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(player), args[1]).open();
+//                        return true;
+//                    }
+//
+//                    plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
+//                    return true;
+//                }
 
                 if (args.length < 2) {
                     player.sendMessage("§7Usage: §e/templates <delete|create|edit> <name>");
@@ -42,7 +44,13 @@ public class TemplatesCommand {
                 }
 
                 if ("delete".equalsIgnoreCase(args[0])) {
-                    plugin.getTemplateStorage().removeTemplate(args[1]);
+                    UUID uuid = TemplateStorage.getUUIDFromName(args[1]);
+                    if (uuid == null) {
+                        player.sendMessage("§cThe given template could not be found...");
+                        return true;
+                    }
+
+                    TemplateStorage.removeTemplate(uuid);
                     player.sendMessage("§7Successfully deleted §a" + args[1]);
                     return true;
                 }

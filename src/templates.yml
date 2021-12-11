@@ -1,9 +1,12 @@
-Cheating:
-  type: 'ban'
-  reason: 'Cheating through the use of unfair game advantages'
-Boosting:
-  type: 'ban'
-  reason: 'Boosting your account to improve your stats'
-Swearing:
-  type: 'mute'
-  reason: 'Acting in a manner that is extremely disrespectful to members within the community'
+3ddf0823-5a90-11ec-a3ff-94c6917328e0:
+  name: Cheating
+  type: BAN
+  reason: Cheating through the use of unfair game advantages
+442a0e04-5a90-11ec-a3ff-94c6917328e0:
+  name: Boosting
+  type: BAN
+  reason: "Boosting your account to improve your stats"
+48cbf7c5-5a90-11ec-a3ff-94c6917328e0:
+  name: test
+  type: KICK
+  reason: "Acting in a manner that is extremely disrespectful to members within the community"
