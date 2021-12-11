@@ -31,14 +31,14 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         return this.editor;
     }
 
-    public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
+    public static PlayerMenuUtility getPlayerMenuUtility(Player player) {
         PlayerMenuUtility playerMenuUtility;
 
-        if (playerMenuUtilityMap.containsKey(p)) {
-            return playerMenuUtilityMap.get(p);
+        if (playerMenuUtilityMap.containsKey(player)) {
+            return playerMenuUtilityMap.get(player);
         } else {
-            playerMenuUtility = new PlayerMenuUtility(p);
-            playerMenuUtilityMap.put(p, playerMenuUtility);
+            playerMenuUtility = new PlayerMenuUtility(player);
+            playerMenuUtilityMap.put(player, playerMenuUtility);
             return playerMenuUtility;
         }
     }
