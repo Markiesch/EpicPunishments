@@ -1,5 +1,5 @@
 package com.markiesch.menusystem;
 
 public enum InputTypes {
-    TEMPLATE_NAME, TEMPLATE_REASON
+    CREATE_TEMPLATE_NAME, CREATE_TEMPLATE_REASON, EDIT_TEMPLATE_NAME, EDIT_TEMPLATE_REASON
 }
