@@ -71,9 +71,7 @@ public class PunishMenu extends Menu implements Listener {
             String reason = TemplateStorage.getConfig().getString(uuid + ".reason");
             if (reason == null) reason = "none";
 
-            String configDuration = TemplateStorage.getConfig().getString(uuid + ".duration");
-            long duration = 0L;
-            if (configDuration != null) duration = TimeUtils.parseTime(configDuration);
+            long duration = TemplateStorage.getConfig().getLong(uuid + ".duration");
 
             player.closeInventory();
             PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), punishType, reason, duration);
@@ -93,10 +91,10 @@ public class PunishMenu extends Menu implements Listener {
             return;
         }
 
-        ItemStack infractions = ItemUtils.createItem(Material.FLOWER_BANNER_PATTERN, "§c§lInfractions", 1, "§7Click to view infractions");
+        ItemStack infractions = ItemUtils.createItem(Material.FLOWER_BANNER_PATTERN, "§c§lInfractions", "§7Click to view infractions");
         inventory.setItem(52, infractions);
 
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", 1, "§7Click to go back");
+        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
 
         generateTemplates();
@@ -120,7 +118,7 @@ public class PunishMenu extends Menu implements Listener {
                 String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
                 String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
                 if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
-                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, 1, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
+                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
 
                 ItemMeta meta = template.getItemMeta();
                 String uuid = templates.get(index);
@@ -141,7 +139,7 @@ public class PunishMenu extends Menu implements Listener {
         List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
 
         ItemStack playerHead = ItemUtils.createItem(
-                Material.PLAYER_HEAD,"§b§l" + target.getName(),1,"",
+                Material.PLAYER_HEAD, "§b§l" + target.getName(), "",
                 (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
                 (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
                 "", "§7Joined at: " + formattedDate);
