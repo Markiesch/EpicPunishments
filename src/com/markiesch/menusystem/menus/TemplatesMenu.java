@@ -50,7 +50,6 @@ public class TemplatesMenu extends Menu implements Listener {
         Material clickedItem = event.getCurrentItem().getType();
 
         if (clickedItem.equals(Material.PAPER)) {
-
             ItemMeta meta = event.getCurrentItem().getItemMeta();
             if (meta != null) {
                 String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING);
@@ -89,7 +88,6 @@ public class TemplatesMenu extends Menu implements Listener {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
             return;
         }
-//        ArrayList<String> templates = new ArrayList<>(configurationSection.getKeys(false));
         List<String> templates = new ArrayList<>(configurationSection.getKeys(false));
 
 

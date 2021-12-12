@@ -4,8 +4,8 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.*;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,19 +60,24 @@ public class PunishMenu extends Menu implements Listener {
         if (event.getCurrentItem().getType().equals(Material.PAPER)) {
             ItemMeta meta = event.getCurrentItem().getItemMeta();
             if (meta == null) return;
-            String name = ChatColor.stripColor(meta.getDisplayName());
 
-            String type = TemplateStorage.getConfig().getString(name + ".type");
+            String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING);
+            if (uuid == null) return;
+
+            String type = TemplateStorage.getConfig().getString(uuid + ".type");
             if (type == null) type = "WARN";
             PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase(Locale.US));
-            String reason = TemplateStorage.getConfig().getString(name + ".reason");
-            if (reason == null || reason.isEmpty()) reason = "none";
-            String configDuration = TemplateStorage.getConfig().getString(name + ".duration");
+
+            String reason = TemplateStorage.getConfig().getString(uuid + ".reason");
+            if (reason == null) reason = "none";
+
+            String configDuration = TemplateStorage.getConfig().getString(uuid + ".duration");
             long duration = 0L;
             if (configDuration != null) duration = TimeUtils.parseTime(configDuration);
-            Player issuer = playerMenuUtility.getOwner();
-            issuer.closeInventory();
-            PlayerStorage.createPunishment(target.getUniqueId(), issuer.getUniqueId(), punishType, reason, duration);
+
+            player.closeInventory();
+            PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), punishType, reason, duration);
+            return;
         }
 
         if (event.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
@@ -112,10 +118,18 @@ public class PunishMenu extends Menu implements Listener {
             if (templates.get(index) != null) {
                 String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
                 String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
-                if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
                 String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
+                if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
                 ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, 1, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
+
+                ItemMeta meta = template.getItemMeta();
+                String uuid = templates.get(index);
+                if (meta != null && uuid != null) {
+                    meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING, uuid);
+                    template.setItemMeta(meta);
+                }
                 inventory.setItem(slots[i], template);
+
             }
         }
     }
