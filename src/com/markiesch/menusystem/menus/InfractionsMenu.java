@@ -48,28 +48,29 @@ public class InfractionsMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-        if (e.getCurrentItem() == null) return;
-        Player player = (Player) e.getWhoClicked();
+    public void handleMenu(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null) return;
+        Player player = (Player) event.getWhoClicked();
 
-        if (e.getCurrentItem().getType().equals(Material.PAPER) && e.getClick().equals(ClickType.DROP)) {
-            ItemMeta meta = e.getCurrentItem().getItemMeta();
+        if (event.getCurrentItem().getType().equals(Material.PAPER) && event.getClick().equals(ClickType.DROP)) {
+            ItemMeta meta = event.getCurrentItem().getItemMeta();
             if (meta != null) {
                 String data = meta.getPersistentDataContainer().get(dataKey, PersistentDataType.STRING);
                 PlayerStorage.removeInfraction(target.getUniqueId(), data);
                 inventory.remove(Material.PAPER);
                 setMenuItems();
+                return;
             }
         }
 
-        if (e.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page).open();
-        if (e.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page).open();
-        if (e.getCurrentItem().getType().equals(Material.OAK_SIGN)) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
+        if (event.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page).open();
+        if (event.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page).open();
+        if (event.getSlot() == 49) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
     }
 
     @Override
     public void setMenuItems() {
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", 1, "§7Click to go back");
+        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
 
         int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
@@ -87,8 +88,8 @@ public class InfractionsMenu extends Menu {
                 String reason = data[2];
                 long duration = Long.parseLong(data[3]);
 
-                ItemStack infraction = ItemUtils.createItem(Material.PAPER, "§9§l" + type, 1,
-                        "§bPress Q §7to revoke punishment", "", "§7reason §a" + reason, "§7Duration §a" + TimeUtils.makeReadable(duration), "§7Issuer §a" + issuer.getName());
+                ItemStack infraction = ItemUtils.createItem(Material.PAPER, "§9§l" + type,
+                        "§bPress Q §7to revoke punishment", "", "§7reason: §a" + reason, "§7Duration: §a" + TimeUtils.makeReadable(duration), "§7Issuer: §a" + issuer.getName());
                 ItemMeta meta = infraction.getItemMeta();
                 if (meta != null) {
                     meta.getPersistentDataContainer().set(dataKey, PersistentDataType.STRING, infractions.get(index));
@@ -102,12 +103,12 @@ public class InfractionsMenu extends Menu {
         maxPages = infractions.size() / slots.length;
 
         if (page >= 1) {
-            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), 1, "§7Click to visit page " + page);
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
             inventory.setItem(45, prevPage);
         }
 
         if (page < maxPages) {
-            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), 1, "§7Click to visit page " + (page + 2));
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), "§7Click to visit page " + (page + 2));
             onLastPage = false;
             inventory.setItem(53, nextPage);
         }
