@@ -17,7 +17,6 @@ import java.util.UUID;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
     public PlayerStorage PlayerStorage;
-    public TemplateStorage TemplateStorage;
     private static EpicPunishments instance;
 
     public static EpicPunishments getInstance() {
@@ -46,7 +45,6 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     public PlayerStorage getPlayerStorage() {
         return PlayerStorage;
     }
-    public TemplateStorage getTemplateStorage() { return TemplateStorage; }
 
     public String changeColor(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
@@ -55,10 +53,12 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        this.PlayerStorage = new PlayerStorage(this);
-        this.TemplateStorage = new TemplateStorage(this);
         instance = this;
+
+        this.PlayerStorage = new PlayerStorage(this);
+        TemplateStorage.saveDefaultConfig();
         this.saveDefaultConfig();
+
         getServer().getPluginManager().registerEvents(new CommandSpy(), this);
         getServer().getPluginManager().registerEvents(new SignSpy(), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
@@ -68,10 +68,11 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
         new KickCommand();
         new MuteCommand();
+        new UnmuteCommand();
+        new BanCommand();
+        new UnbanCommand();
         new PunishCommand();
         new TemplatesCommand();
-        new BanCommand();
-        new UnmuteCommand();
 
         getServer().getConsoleSender().sendMessage(changeColor("&aEpicPunishments is now enabled"));
     }
