@@ -5,6 +5,7 @@ import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,11 @@ public class UnbanCommand {
                 UUID tUUID = target.getUniqueId();
                 if (target.getPlayer() == null && !PlayerStorage.playerRegistered(tUUID)) {
                     sender.sendMessage("§cCould not find " + args[0]);
+                    return true;
+                }
+
+                if (!PlayerStorage.isPlayerBanned(target.getUniqueId())) {
+                    sender.sendMessage("§e" + target.getName() + " §7is not banned!");
                     return true;
                 }
 
