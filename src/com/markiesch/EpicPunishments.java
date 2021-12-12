@@ -59,6 +59,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
 
         new KickCommand();
+        new WarnCommand();
         new MuteCommand();
         new UnmuteCommand();
         new BanCommand();

@@ -110,6 +110,11 @@ public class PlayerStorage {
             oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
         }
 
+        if (type.equals(PunishTypes.WARN) && oTarget != null && oTarget.isOnline()) {
+            String message = plugin.getConfig().getString("messages.warnMessage");
+            if (message != null) oTarget.sendMessage(message.replace("[reason]", reason));
+        }
+
         List<String> punishments = getConfig().getStringList(target + ".infractions");
         long currentTime = System.currentTimeMillis();
         long expires = currentTime + duration;
@@ -132,9 +137,7 @@ public class PlayerStorage {
         if ("mute".equals(sType)) sType = "muted";
         if ("ban".equals(sType)) sType = "banned";
 
-        if (player != null)
-            player.sendMessage("§7Successfully " + sType + " §a" + Bukkit.getOfflinePlayer(target).getName() + " §7Reason: §e" + reason);
-
+        if (player != null) player.sendMessage("§7Successfully " + sType + " §a" + Bukkit.getOfflinePlayer(target).getName() + " §7Reason: §e" + reason);
         saveConfig();
     }
 
