@@ -59,13 +59,14 @@ public class TemplateStorage {
         saveConfig();
     }
 
-    public static boolean editTemplate(UUID uuid, String name, String reason, String type) {
+    public static boolean editTemplate(UUID uuid, String name, String reason, String type, long duration) {
         ConfigurationSection section = getConfig().getConfigurationSection(uuid.toString());
         if (section == null) return false;
 
         section.set("name", name);
         section.set("reason", reason);
         section.set("type", type);
+        section.set("duration", duration);
 
         saveConfig();
         return true;

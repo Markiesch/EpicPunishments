@@ -41,11 +41,6 @@ public class TemplatesCommand {
                     return true;
                 }
 
-                if (args.length < 2) {
-                    player.sendMessage("§7Usage: §e/templates <delete|create|edit> <name>");
-                    return true;
-                }
-
                 if ("delete".equalsIgnoreCase(args[0])) {
                     UUID uuid = TemplateStorage.getUUIDFromName(args[1]);
                     if (uuid == null) {

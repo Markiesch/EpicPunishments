@@ -57,6 +57,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
             TemplateStorage.addTemplate(name, reason, type);
             player.closeInventory();
             player.sendMessage("§7Successfully §acreated §7 the template with the name of §e" + name);
+            playerMenuUtility.reset();
             return;
         }
 
@@ -77,16 +78,16 @@ public class CreateTemplateMenu extends Menu implements Listener {
         String reason = this.reason;
         if (reason == null) reason = "None";
 
-        ItemStack template = ItemUtils.createItem(Material.PAPER, "§c§l" + name, 1, "", "§cType: §7" + type, "§cReason: §7" + reason);
+        ItemStack template = ItemUtils.createItem(Material.PAPER, "§c§l" + name, "", "§cType: §7" + type, "§cReason: §7" + reason);
         inventory.setItem(13, template);
 
-        ItemStack typeItem = ItemUtils.createItem(getType(), "§c§l" + type, 1, "§7Click to toggle type");
+        ItemStack typeItem = ItemUtils.createItem(getType(), "§c§l" + type, "§7Click to toggle type");
         inventory.setItem(19, typeItem);
 
-        ItemStack reasonItem = ItemUtils.createItem(Material.WRITABLE_BOOK, "§c§lReason", 1, "§7Click to insert reason", "", "§7Reason set: §c" + reason);
+        ItemStack reasonItem = ItemUtils.createItem(Material.WRITABLE_BOOK, "§c§lReason", "§7Click to insert reason", "", "§7Reason set: §c" + reason);
         inventory.setItem(25, reasonItem);
 
-        ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§c§lCreate Template", 1, "§7Click to confirm settings", "", "§7Reason set: §c" + reason);
+        ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§c§lCreate Template", "§7Click to confirm settings", "", "§7Reason set: §c" + reason);
         inventory.setItem(40, createItem);
     }
 
