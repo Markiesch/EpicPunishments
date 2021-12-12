@@ -96,16 +96,14 @@ public class PlayerStorage {
 
         if (type.equals(PunishTypes.BAN) && oTarget != null) {
             if (duration.equals(permanent)) {
-                String kickMessage = plugin.getConfig().getString("messages.permanentlyBanMessage");
+                String kickMessage = plugin.getConfig().getString("messages.permBanMessage");
                 if (kickMessage != null) {
-                    kickMessage = kickMessage
-                            .replace("[duration]", TimeUtils.makeReadable(duration))
-                            .replace("[reason]", reason);
+                    kickMessage = kickMessage.replace("[reason]", reason);
                 }
                 oTarget.kickPlayer(kickMessage);
             } else {
-                plugin.getConfig().getString("messages.temporarilyBanMessage");
-                oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + " §cfrom this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
+                plugin.getConfig().getString("messages.tempBanMessage");
+                oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + "§c from this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
             }
             oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
         }

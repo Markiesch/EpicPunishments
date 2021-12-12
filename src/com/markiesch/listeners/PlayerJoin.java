@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.sql.Time;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +37,7 @@ public class PlayerJoin implements Listener {
     }
 
     public static String getBan(List<String> infractions) {
+        System.out.println("checking ban.....");
         long currentTime = System.currentTimeMillis();
         long highestDuration = 0L;
         String punishment = null;
@@ -46,14 +46,19 @@ public class PlayerJoin implements Listener {
             String type = infraction.split(";")[1];
             if (!"ban".equalsIgnoreCase(type)) continue;
             long duration = Long.parseLong(infraction.split(";")[3]);
-            if (Long.parseLong(infraction.split(";")[4]) - currentTime < 0) continue;
             if (duration == 0L) return infraction;
+            if (Long.parseLong(infraction.split(";")[4]) - currentTime < 0) {
+                continue;
+            }
+            System.out.println(duration);
+
             if (duration > highestDuration) {
                 punishment = infraction;
                 highestDuration = duration;
             }
         }
 
+        System.out.println(punishment);
         return punishment;
     }
 }
