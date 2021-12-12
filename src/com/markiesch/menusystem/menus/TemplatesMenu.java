@@ -8,7 +8,6 @@ import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TemplateStorage;
 import com.markiesch.utils.TimeUtils;
-import org.apache.logging.log4j.core.util.UuidUtil;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -23,11 +22,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
+
 public class TemplatesMenu extends Menu implements Listener {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     int page;
-    int maxTemplatesPerPage = 28;
+    int maxPages;
     boolean onLastPage = true;
+    int prevPageSlot = 45;
+    int nextPageSlot = 53;
 
     public TemplatesMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
@@ -64,11 +67,10 @@ public class TemplatesMenu extends Menu implements Listener {
             }
         }
 
-        if (clickedItem.equals(Material.ANVIL))
-            plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
-
-        if (clickedItem.equals(Material.OAK_SIGN))
-            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+        if (event.getSlot() == prevPageSlot && page != 0) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), --page).open();
+        if (event.getSlot() == nextPageSlot && !onLastPage) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), ++page).open();
+        if (clickedItem.equals(Material.ANVIL)) plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
+        if (clickedItem.equals(Material.OAK_SIGN)) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
     }
     @Override
     public void setMenuItems() {
@@ -82,7 +84,8 @@ public class TemplatesMenu extends Menu implements Listener {
     }
 
     private void generateTemplates() {
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+        int[] slots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
+        int maxTemplatesPerPage = slots.length;
         ConfigurationSection configurationSection = TemplateStorage.getConfig().getConfigurationSection("");
         if (configurationSection == null) {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
@@ -121,6 +124,20 @@ public class TemplatesMenu extends Menu implements Listener {
 
                 inventory.setItem(slots[i], template);
             }
+        }
+
+
+        maxPages = templates.size() / slots.length;
+
+        if (page >= 1) {
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
+            inventory.setItem(prevPageSlot, prevPage);
+        }
+
+        if (page < maxPages) {
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), "§7Click to visit page " + (page + 2));
+            onLastPage = false;
+            inventory.setItem(nextPageSlot, nextPage);
         }
     }
 }

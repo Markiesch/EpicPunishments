@@ -50,31 +50,31 @@ public class PlayerSelectorMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-        if (e.getCurrentItem() == null) return;
-        Player p = (Player) e.getWhoClicked();
-        if (e.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
+    public void handleMenu(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null) return;
+        Player player = (Player) event.getWhoClicked();
+        if (event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
             OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(
                                 Objects.requireNonNull(
                                 Objects.requireNonNull(
-                                e.getCurrentItem().getItemMeta()).getPersistentDataContainer()
+                                event.getCurrentItem().getItemMeta()).getPersistentDataContainer()
                                 .get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING))));
 
-            if ("right".equalsIgnoreCase(e.getClick().toString()) && p.hasPermission("bangui.teleport")) {
+            if ("right".equalsIgnoreCase(event.getClick().toString()) && player.hasPermission("bangui.teleport")) {
                 if (target.getPlayer() != null && target.getPlayer().isOnline()) {
-                    p.setGameMode(GameMode.SPECTATOR);
-                    p.teleport(target.getPlayer().getLocation());
+                    player.setGameMode(GameMode.SPECTATOR);
+                    player.teleport(target.getPlayer().getLocation());
                 }
             } else {
-                new PunishMenu(EpicPunishments.getPlayerMenuUtility(p), target).open();
+                new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
             }
             return;
         }
 
-        if (e.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), --page).open();
-        if (e.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(p), ++page).open();
-        if (e.getSlot() == templateSlot) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(p), 0).open();
-        if (e.getSlot() == closeSlot) p.closeInventory();
+        if (event.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), --page).open();
+        if (event.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), ++page).open();
+        if (event.getSlot() == templateSlot) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+        if (event.getSlot() == closeSlot) player.closeInventory();
     }
 
     @Override
