@@ -26,9 +26,9 @@ public class InputUtils {
         player.closeInventory();
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(EpicPunishments.getInstance(), () -> {
             if (player.isOnline() && !player.isDead()) {
-                player.sendTitle(plugin.changeColor(title), plugin.changeColor(subtitle), 0, 26, 0);
+                player.sendTitle(plugin.changeColor(title), plugin.changeColor(subtitle), 0, 51, 0);
             }
-        }, 0L, 25L);
+        }, 0L, 50L);
     }
 
     public void cancel() {
