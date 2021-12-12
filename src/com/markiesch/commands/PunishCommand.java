@@ -66,7 +66,7 @@ public class PunishCommand {
             public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
                 List<String> result = new ArrayList<>();
                 if (!sender.hasPermission(getPermission())) return result;
-                return PunishTabCompleter.onTabComplete(sender, args);
+                return PunishTabCompleter.onTabComplete(args);
             }
         };
     }

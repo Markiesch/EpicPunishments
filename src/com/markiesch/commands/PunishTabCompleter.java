@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.TemplateStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,7 +17,7 @@ public class PunishTabCompleter {
     static EpicPunishments plugin = EpicPunishments.getInstance();
     static FileConfiguration config = plugin.getPlayerStorage().getConfig();
 
-    public static List<String> onTabComplete(CommandSender sender, String[] args) {
+    public static List<String> onTabComplete(String[] args) {
         List<String> result = new ArrayList<>();
 
         if (args.length == 1) {
@@ -33,7 +34,7 @@ public class PunishTabCompleter {
             return players;
         }
         if (args.length == 2) {
-            List<String> templates = new ArrayList<>(Objects.requireNonNull(plugin.getTemplateStorage().getConfig().getConfigurationSection("")).getKeys(false));
+            List<String> templates = new ArrayList<>(Objects.requireNonNull(TemplateStorage.getConfig().getConfigurationSection("")).getKeys(false));
             for (String template : templates)
                 if (template.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US))) result.add(template);
             return result;
