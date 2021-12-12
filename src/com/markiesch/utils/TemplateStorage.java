@@ -1,13 +1,10 @@
 package com.markiesch.utils;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.PlayerMenuUtility;
 import org.apache.logging.log4j.core.util.UuidUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,15 +14,10 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class TemplateStorage {
-    private static EpicPunishments plugin;
+//    static EpicPunishments plugin = EpicPunishments.getInstance();
+    private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     private static FileConfiguration dataConfig = null;
     private static File configFile = null;
-
-    public TemplateStorage(EpicPunishments plugin) {
-        TemplateStorage.plugin = plugin;
-        // saves/initializes the config
-        saveDefaultConfig();
-    }
 
     public static void reloadConfig() {
         // Create the data file if it doesn't exist already
