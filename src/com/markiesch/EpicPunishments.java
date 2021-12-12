@@ -11,9 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
     private static EpicPunishments instance;
@@ -21,10 +20,10 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         return instance;
     }
 
-    private static final HashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
-    private final Map<UUID, InputUtils> editor = new HashMap<>();
+    private static final ConcurrentHashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, InputUtils> editor = new ConcurrentHashMap<>();
 
-    public Map<UUID, InputUtils> getEditor() {
+    public ConcurrentHashMap<UUID, InputUtils> getEditor() {
         return this.editor;
     }
 

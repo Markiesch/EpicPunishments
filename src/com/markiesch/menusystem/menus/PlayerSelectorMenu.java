@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +24,6 @@ import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class PlayerSelectorMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
-    FileConfiguration config = PlayerStorage.getConfig();
     int page;
     int maxPages;
     boolean onLastPage = true;
@@ -85,13 +83,12 @@ public class PlayerSelectorMenu extends Menu {
         ItemStack templates = ItemUtils.createItem(Material.ANVIL, "§b§lTemplates", "§7Click to manage templates");
         inventory.setItem(templateSlot, templates);
 
-        int[] headSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-        List<OfflinePlayer> players = new ArrayList<>();
-        ConfigurationSection configSection = config.getConfigurationSection("");
+        ConfigurationSection configSection = PlayerStorage.getConfig().getConfigurationSection("");
         if (configSection == null) return;
-        for (String uuid : configSection.getKeys(false)) {
-            players.add(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
-        }
+
+        List<OfflinePlayer> players = new ArrayList<>();
+        for (String uuid : configSection.getKeys(false)) players.add(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
+        int[] headSlots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
 
         if (!players.isEmpty()) {
             for (int i = 0; i < headSlots.length; i++) {

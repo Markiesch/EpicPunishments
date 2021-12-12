@@ -85,14 +85,14 @@ public class TemplatesMenu extends Menu implements Listener {
     }
 
     private void generateTemplates() {
-        int[] slots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
         ConfigurationSection configurationSection = TemplateStorage.getConfig().getConfigurationSection("");
         if (configurationSection == null) {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
             return;
         }
-        List<String> templates = new ArrayList<>(configurationSection.getKeys(false));
 
+        int[] slots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
+        List<String> templates = new ArrayList<>(configurationSection.getKeys(false));
 
         if (templates.isEmpty()) {
             ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", "§7There are no templates yet!");

@@ -17,9 +17,10 @@ public class InfractionTabCompleter {
     public static List<String> onTabComplete(String[] args, boolean addTime) {
         List<String> result = new ArrayList<>();
         if (args.length == 1) {
-            List<String> players = new ArrayList<>();
             ConfigurationSection configSection = config.getConfigurationSection("");
             if (configSection == null) return result;
+
+            List<String> players = new ArrayList<>();
             configSection.getKeys(false).forEach(uuid -> {
                 String name = Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName();
                 if (name != null && name.toLowerCase(Locale.US).startsWith(args[0].toLowerCase(Locale.US)))

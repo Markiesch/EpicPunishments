@@ -19,8 +19,6 @@ public class MuteCommand {
         new CommandBase("mute", 1, -1, true) {
             @Override
             public boolean onCommand(CommandSender sender, String[] args) {
-                Player player = (Player) sender;
-
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 UUID tUUID = target.getUniqueId();
                 if (target.getPlayer() == null && !PlayerStorage.playerRegistered(tUUID)) {
@@ -35,6 +33,7 @@ public class MuteCommand {
                     reason = String.join(" ", arguments.subList(2, arguments.size()));
                 }
 
+                Player player = (Player) sender;
                 PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, duration);
                 return true;
             }

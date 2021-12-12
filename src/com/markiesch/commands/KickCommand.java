@@ -16,16 +16,14 @@ public class KickCommand {
         new CommandBase("kick", 1, -1, true) {
             @Override
             public boolean onCommand(CommandSender sender, String[] args) {
-                Player player = (Player) sender;
-
                 Player target = Bukkit.getPlayer(args[0]);
-
                 if (target == null) {
                     sender.sendMessage("§c" + args[0] + " is not online!");
                     return true;
                 }
 
                 List<String> arguments = Arrays.asList(args);
+                Player player = (Player) sender;
 
                 String reason = "none";
                 if (args.length >= 2) reason = String.join(" ", arguments.subList(1, arguments.size()));

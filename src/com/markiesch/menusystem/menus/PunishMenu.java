@@ -102,12 +102,13 @@ public class PunishMenu extends Menu implements Listener {
     }
 
     private void generateTemplates() {
-        int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
         ConfigurationSection configurationSection = TemplateStorage.getConfig().getConfigurationSection("");
         if (configurationSection == null) {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
             return;
         }
+
+        int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
         ArrayList<String> templates = new ArrayList<>(configurationSection.getKeys(false));
         if (templates.isEmpty()) return;
         for (int i = 0; i < maxTemplatesPerPage; i++) {
@@ -134,13 +135,13 @@ public class PunishMenu extends Menu implements Listener {
 
     private void generatePlayerHead() {
         Date date = new Date(target.getFirstPlayed());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         String formattedDate = sdf.format(date);
         List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
 
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD, "§b§l" + target.getName(), "",
-                (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
+                (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
                 (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
                 "", "§7Joined at: " + formattedDate);
 

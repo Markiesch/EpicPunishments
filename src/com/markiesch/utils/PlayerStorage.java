@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -124,7 +125,7 @@ public class PlayerStorage {
         getConfig().set(target + ".infractions", punishments);
         Player player = Bukkit.getPlayer(issuer);
 
-        String sType = type.toString().toLowerCase();
+        String sType = type.toString().toLowerCase(Locale.US);
 
         if ("kick".equals(sType)) sType = "kicked";
         if ("warn".equals(sType)) sType = "warned";
@@ -192,12 +193,11 @@ public class PlayerStorage {
     }
 
     public static boolean isActivePunishment(String infraction) {
-        long currentTime = System.currentTimeMillis();
         Long duration = Long.parseLong(infraction.split(";")[3]);
         if (duration.equals(permanent)) return true;
 
         long expires = Long.parseLong(infraction.split(";")[4]);
-        return currentTime < expires;
+        return System.currentTimeMillis() < expires;
     }
 
     public static void removeInfraction(UUID target, String data) {
