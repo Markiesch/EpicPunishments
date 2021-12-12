@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,8 +12,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class InfractionTabCompleter {
-    static EpicPunishments plugin = EpicPunishments.getInstance();
-    static FileConfiguration config = plugin.getPlayerStorage().getConfig();
+    static FileConfiguration config = PlayerStorage.getConfig();
 
     public static List<String> onTabComplete(String[] args, boolean addTime) {
         List<String> result = new ArrayList<>();

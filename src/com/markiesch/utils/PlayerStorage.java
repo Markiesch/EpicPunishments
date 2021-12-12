@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -19,18 +21,12 @@ import static org.bukkit.Bukkit.getServer;
 
 
 public class PlayerStorage {
-    private final EpicPunishments plugin;
-    long permanent = 0L;
-    private FileConfiguration dataConfig = null;
-    private File configFile = null;
+    static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    static long permanent = 0L;
+    static FileConfiguration dataConfig = null;
+    static File configFile = null;
 
-    public PlayerStorage(EpicPunishments plugin) {
-        this.plugin = plugin;
-        // saves/initializes the config
-        saveDefaultConfig();
-    }
-
-    public void reloadConfig() {
+    public static void reloadConfig() {
         // Create the data file if it doesn't exist already
         if (configFile == null) configFile = new File(plugin.getDataFolder(), "data.yml");
         dataConfig = YamlConfiguration.loadConfiguration(configFile);
@@ -47,28 +43,28 @@ public class PlayerStorage {
         }
     }
 
-    public FileConfiguration getConfig() {
+    public static FileConfiguration getConfig() {
         if (dataConfig == null) reloadConfig();
         return dataConfig;
     }
 
-    public void saveConfig() {
+    public static void saveConfig() {
         if (dataConfig == null || configFile == null) return;
 
         try {
-            this.getConfig().save(configFile);
+            getConfig().save(configFile);
         } catch (IOException e) {
             plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, e);
         }
     }
 
-    public void saveDefaultConfig() {
+    public static void saveDefaultConfig() {
         if (configFile == null) configFile = new File(plugin.getDataFolder(), "data.yml");
 
         if (!configFile.exists()) plugin.saveResource("data.yml", false);
     }
 
-    public void createPlayerProfile(UUID uuid) {
+    public static void createPlayerProfile(UUID uuid) {
         if (getConfig().contains(uuid.toString())) return;
         List<String> emptyPunishments = new ArrayList<>();
         getConfig().set(uuid + ".infractions", emptyPunishments);
@@ -76,9 +72,9 @@ public class PlayerStorage {
         getServer().getConsoleSender().sendMessage("Successfully Registered " + Bukkit.getOfflinePlayer(uuid).getName());
     }
 
-    public boolean playerRegistered(UUID uuid) { return getConfig().getConfigurationSection(uuid.toString()) != null; }
+    public static boolean playerRegistered(UUID uuid) { return getConfig().getConfigurationSection(uuid.toString()) != null; }
 
-    public void createPunishment(UUID target, UUID issuer, PunishTypes type, String reason, Long duration) {
+    public static void createPunishment(UUID target, UUID issuer, PunishTypes type, String reason, Long duration) {
         if (getConfig().contains(target.toString())) createPlayerProfile(target);
         Player oTarget = Bukkit.getPlayer(target);
         if (reason.isEmpty()) reason = "none";
@@ -141,11 +137,11 @@ public class PlayerStorage {
         saveConfig();
     }
 
-    public List<String> getPunishments(UUID target) {
+    public static List<String> getPunishments(UUID target) {
         return getConfig().getStringList(target + ".infractions");
     }
 
-    public boolean isPlayerBanned(UUID uuid) {
+    public static boolean isPlayerBanned(UUID uuid) {
         List<String> infractions = getConfig().getStringList(uuid + ".infractions");
         for (String infraction : infractions) {
             String type = infraction.split(";")[1];
@@ -159,7 +155,7 @@ public class PlayerStorage {
         return false;
     }
 
-    public boolean isMuted(UUID uuid) {
+    public static boolean isMuted(UUID uuid) {
         List<String> infractions = getConfig().getStringList(uuid + ".infractions");
         for (String infraction : infractions) {
             String type = infraction.split(";")[1];
@@ -173,7 +169,7 @@ public class PlayerStorage {
         return false;
     }
 
-    public void unMute(UUID target) {
+    public static void unMute(UUID target) {
         List<String> infractions = getPunishments(target);
         List<String> newInfractions = infractions.stream().filter(infraction -> {
             String type  = infraction.split(";")[1];
@@ -184,7 +180,7 @@ public class PlayerStorage {
         saveConfig();
     }
 
-    public void unBan(UUID target) {
+    public static void unBan(UUID target) {
         List<String> infractions = getPunishments(target);
         List<String> newInfractions = infractions.stream().filter(infraction -> {
             String type  = infraction.split(";")[1];
@@ -195,7 +191,7 @@ public class PlayerStorage {
         saveConfig();
     }
 
-    public boolean isActivePunishment(String infraction) {
+    public static boolean isActivePunishment(String infraction) {
         long currentTime = System.currentTimeMillis();
         Long duration = Long.parseLong(infraction.split(";")[3]);
         if (duration.equals(permanent)) return true;
@@ -204,7 +200,7 @@ public class PlayerStorage {
         return currentTime < expires;
     }
 
-    public void removeInfraction(UUID target, String data) {
+    public static void removeInfraction(UUID target, String data) {
         List<String> infractions = getPunishments(target);
         List<String> newInfractions = infractions.stream().filter(infraction -> !infraction.equals(data)).collect(Collectors.toList());
 

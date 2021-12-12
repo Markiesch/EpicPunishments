@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.PunishTypes;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
@@ -13,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BanCommand {
-    EpicPunishments plugin = EpicPunishments.getInstance();
-
     public BanCommand() {
         new CommandBase("ban", 2, -1, true) {
             @Override
@@ -27,7 +26,7 @@ public class BanCommand {
                 long duration = TimeUtils.parseTime(args[1]);
                 List<String> arguments = Arrays.asList(args);
                 String reason = String.join(" ", arguments.subList(2, arguments.size()));
-                plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.BAN, reason, duration);
+                PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.BAN, reason, duration);
                 sender.sendMessage("§7Successfully banned §a" + target.getName() + " §7Reason: §e" + reason);
                 return true;
             }

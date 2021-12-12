@@ -16,9 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
-    public PlayerStorage PlayerStorage;
     private static EpicPunishments instance;
-
     public static EpicPunishments getInstance() {
         return instance;
     }
@@ -42,10 +40,6 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         }
     }
 
-    public PlayerStorage getPlayerStorage() {
-        return PlayerStorage;
-    }
-
     public String changeColor(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
@@ -54,8 +48,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
-
-        this.PlayerStorage = new PlayerStorage(this);
+        PlayerStorage.saveDefaultConfig();
         TemplateStorage.saveDefaultConfig();
         this.saveDefaultConfig();
 

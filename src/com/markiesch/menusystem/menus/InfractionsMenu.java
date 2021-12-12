@@ -4,6 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.ItemUtils;
+import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -55,7 +56,7 @@ public class InfractionsMenu extends Menu {
             ItemMeta meta = e.getCurrentItem().getItemMeta();
             if (meta != null) {
                 String data = meta.getPersistentDataContainer().get(dataKey, PersistentDataType.STRING);
-                plugin.getPlayerStorage().removeInfraction(target.getUniqueId(), data);
+                PlayerStorage.removeInfraction(target.getUniqueId(), data);
                 inventory.remove(Material.PAPER);
                 setMenuItems();
             }
@@ -72,7 +73,7 @@ public class InfractionsMenu extends Menu {
         inventory.setItem(49, back);
 
         int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-        ArrayList<String> infractions = new ArrayList<>(plugin.getPlayerStorage().getConfig().getStringList(target.getUniqueId() + ".infractions"));
+        ArrayList<String> infractions = new ArrayList<>(PlayerStorage.getConfig().getStringList(target.getUniqueId() + ".infractions"));
         if (infractions.isEmpty()) return;
 
         for (int i = 0; i < slots.length; i++) {

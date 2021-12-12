@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.PunishTypes;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
@@ -14,8 +15,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class MuteCommand {
-    EpicPunishments plugin = EpicPunishments.getInstance();
-
     public MuteCommand() {
         new CommandBase("mute", 1, -1, true) {
             @Override
@@ -24,7 +23,7 @@ public class MuteCommand {
 
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 UUID tUUID = target.getUniqueId();
-                if (target.getPlayer() == null && !plugin.getPlayerStorage().playerRegistered(tUUID)) {
+                if (target.getPlayer() == null && !PlayerStorage.playerRegistered(tUUID)) {
                     sender.sendMessage("§cCould not find " + args[0]);
                     return true;
                 }
@@ -37,7 +36,7 @@ public class MuteCommand {
                     reason = String.join(" ", arguments.subList(2, arguments.size()));
                 }
 
-                plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, duration);
+                PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.MUTE, reason, duration);
                 return true;
             }
 

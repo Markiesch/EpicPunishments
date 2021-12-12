@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.PunishTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -11,8 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class KickCommand {
-    EpicPunishments plugin = EpicPunishments.getInstance();
-
     public KickCommand() {
         new CommandBase("kick", 1, -1, true) {
             @Override
@@ -30,7 +29,7 @@ public class KickCommand {
 
                 String reason = "none";
                 if (args.length >= 2) reason = String.join(" ", arguments.subList(1, arguments.size()));
-                plugin.getPlayerStorage().createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.KICK, reason, 0L);
+                PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.KICK, reason, 0L);
                 sender.sendMessage("§7Successfully kicked §a" + target.getName() + " §7Reason: §e" + reason);
 
                 return true;

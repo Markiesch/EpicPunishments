@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.TemplateStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -14,8 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class PunishTabCompleter {
-    static EpicPunishments plugin = EpicPunishments.getInstance();
-    static FileConfiguration config = plugin.getPlayerStorage().getConfig();
+    static FileConfiguration config = PlayerStorage.getConfig();
 
     public static List<String> onTabComplete(String[] args) {
         List<String> result = new ArrayList<>();

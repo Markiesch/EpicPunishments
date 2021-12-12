@@ -3,6 +3,7 @@ package com.markiesch.commands;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.menus.PunishMenu;
 import com.markiesch.menusystem.menus.PlayerSelectorMenu;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -52,7 +53,7 @@ public class PunishCommand {
                     target = Bukkit.getOfflinePlayer(args[0]);
                 }
 
-                if (plugin.getPlayerStorage().getConfig().contains(target.getUniqueId().toString())) {
+                if (PlayerStorage.getConfig().contains(target.getUniqueId().toString())) {
                     new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
                 } else {
                     player.sendMessage("§cCouldn't link that username to any UUID!");
@@ -70,6 +71,4 @@ public class PunishCommand {
             }
         };
     }
-
-
 }

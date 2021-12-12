@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -10,19 +11,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class UnbanCommand {
-    EpicPunishments plugin = EpicPunishments.getInstance();
-
     public UnbanCommand() {
         new CommandBase("unban", 1, 1, true) {
             public boolean onCommand(CommandSender sender, String[] args) {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 UUID tUUID = target.getUniqueId();
-                if (target.getPlayer() == null && !plugin.getPlayerStorage().playerRegistered(tUUID)) {
+                if (target.getPlayer() == null && !PlayerStorage.playerRegistered(tUUID)) {
                     sender.sendMessage("§cCould not find " + args[0]);
                     return true;
                 }
 
-                plugin.getPlayerStorage().unBan(target.getUniqueId());
+                PlayerStorage.unBan(target.getUniqueId());
                 sender.sendMessage("§7Successfully unbanned §a" + target.getName());
                 return true;
             }

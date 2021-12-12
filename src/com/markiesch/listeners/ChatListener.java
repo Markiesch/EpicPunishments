@@ -1,6 +1,7 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +13,7 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        boolean isMuted = plugin.getPlayerStorage().isMuted(player.getUniqueId());
+        boolean isMuted = PlayerStorage.isMuted(player.getUniqueId());
         if (!isMuted) return;
 
         event.setCancelled(true);

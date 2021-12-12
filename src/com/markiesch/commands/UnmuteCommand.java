@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -18,12 +19,12 @@ public class UnmuteCommand {
             public boolean onCommand(CommandSender sender, String[] args) {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 UUID tUUID = target.getUniqueId();
-                if (target.getPlayer() == null && !plugin.getPlayerStorage().playerRegistered(tUUID)) {
+                if (target.getPlayer() == null && !PlayerStorage.playerRegistered(tUUID)) {
                     sender.sendMessage("§cCould not find " + args[0]);
                     return true;
                 }
 
-                plugin.getPlayerStorage().unMute(target.getUniqueId());
+                PlayerStorage.unMute(target.getUniqueId());
                 return true;
             }
 

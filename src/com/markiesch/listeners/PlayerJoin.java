@@ -1,6 +1,7 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,11 +18,11 @@ public class PlayerJoin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        plugin.getPlayerStorage().createPlayerProfile(player.getUniqueId());
+        PlayerStorage.createPlayerProfile(player.getUniqueId());
 
-        if (!plugin.getPlayerStorage().isPlayerBanned(player.getUniqueId())) return;
+        if (!PlayerStorage.isPlayerBanned(player.getUniqueId())) return;
 
-        List<String> infractions = plugin.getPlayerStorage().getConfig().getStringList(player.getUniqueId() + ".infractions");
+        List<String> infractions = PlayerStorage.getConfig().getStringList(player.getUniqueId() + ".infractions");
         long duration = getBanDuration(infractions);
         String reason = getReasonByDuration(infractions, duration);
         String message = plugin.getConfig().getString("messages." + (duration == 0L ? "permBanMessage" : "tempBanMessage"));

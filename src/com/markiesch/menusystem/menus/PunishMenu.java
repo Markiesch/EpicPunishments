@@ -71,7 +71,7 @@ public class PunishMenu extends Menu implements Listener {
             if (configDuration != null) duration = TimeUtils.parseTime(configDuration);
             Player issuer = playerMenuUtility.getOwner();
             issuer.closeInventory();
-            plugin.getPlayerStorage().createPunishment(target.getUniqueId(), issuer.getUniqueId(), punishType, reason, duration);
+            PlayerStorage.createPunishment(target.getUniqueId(), issuer.getUniqueId(), punishType, reason, duration);
         }
 
         if (event.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
@@ -124,12 +124,12 @@ public class PunishMenu extends Menu implements Listener {
         Date date = new Date(target.getFirstPlayed());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = sdf.format(date);
-        List<String> infractionsList = plugin.getPlayerStorage().getPunishments(target.getUniqueId());
+        List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
 
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD,"§b§l" + target.getName(),1,"",
                 (infractionsList.size() < 1 ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
-                (plugin.getPlayerStorage().isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
                 "", "§7Joined at: " + formattedDate);
 
         SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();

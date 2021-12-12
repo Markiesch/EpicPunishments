@@ -4,6 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.ItemUtils;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class PlayerSelectorMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
-    FileConfiguration config = plugin.getPlayerStorage().getConfig();
+    FileConfiguration config = PlayerStorage.getConfig();
     int page;
     int maxPages;
     boolean onLastPage = true;
@@ -103,7 +104,7 @@ public class PlayerSelectorMenu extends Menu {
                     Date date = new Date(target.getFirstPlayed());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                     String formattedDate = sdf.format(date);
-                    List<String> infractionsList = plugin.getPlayerStorage().getPunishments(target.getUniqueId());
+                    List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
 
                     ItemStack playerHead = ItemUtils.createItem(
                             Material.PLAYER_HEAD,
@@ -113,7 +114,7 @@ public class PlayerSelectorMenu extends Menu {
                             "§bRight Click §7to teleport",
                             "",
                             (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
-                            (plugin.getPlayerStorage().isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                            (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
                             "",
                             "§7Joined at: " + formattedDate
                     );

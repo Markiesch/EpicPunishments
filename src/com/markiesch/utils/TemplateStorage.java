@@ -14,7 +14,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class TemplateStorage {
-//    static EpicPunishments plugin = EpicPunishments.getInstance();
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     private static FileConfiguration dataConfig = null;
     private static File configFile = null;
