@@ -2,6 +2,7 @@ package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.InputTypes;
+import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.menusystem.menus.TemplatesMenu;
 import com.markiesch.utils.InputUtils;
@@ -28,15 +29,17 @@ public class TemplatesCommand {
                     return true;
                 }
 
-//                if ("create".equalsIgnoreCase(args[0])) {
-//                    if (args.length >= 2) {
-//                        new EditTemplateMenu(EpicPunishments.getPlayerMenuUtility(player), args[1]).open();
-//                        return true;
-//                    }
-//
-//                    plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
-//                    return true;
-//                }
+                if ("create".equalsIgnoreCase(args[0])) {
+                    if (args.length >= 2) {
+                        PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
+                        playerMenuUtility.setTemplateName(args[1]);
+                        new EditTemplateMenu(playerMenuUtility).open();
+                        return true;
+                    }
+
+                    plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
+                    return true;
+                }
 
                 if (args.length < 2) {
                     player.sendMessage("§7Usage: §e/templates <delete|create|edit> <name>");
@@ -50,7 +53,11 @@ public class TemplatesCommand {
                         return true;
                     }
 
-                    TemplateStorage.removeTemplate(uuid);
+                    if (!TemplateStorage.removeTemplate(uuid)) {
+                        player.sendMessage("§cFailed to delete " + args[1]);
+                        return true;
+                    }
+
                     player.sendMessage("§7Successfully deleted §a" + args[1]);
                     return true;
                 }
@@ -64,7 +71,7 @@ public class TemplatesCommand {
             public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
                 List<String> result = new ArrayList<>();
                 if (!sender.hasPermission(getPermission())) return result;
-                return TemplateTabCompleter.onTabComplete(sender, args);
+                return TemplateTabCompleter.onTabComplete(args);
             }
         };
     }
