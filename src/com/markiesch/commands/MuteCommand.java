@@ -29,7 +29,6 @@ public class MuteCommand {
                 }
 
                 long duration = args.length >= 2 ? TimeUtils.parseTime(args[1]) : 0L;
-                System.out.println(duration);
                 String reason = "none";
                 if (args.length >= 2) {
                     List<String> arguments = Arrays.asList(args);
