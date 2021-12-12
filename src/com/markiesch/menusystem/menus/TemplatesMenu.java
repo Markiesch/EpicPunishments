@@ -7,6 +7,7 @@ import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TemplateStorage;
+import com.markiesch.utils.TimeUtils;
 import org.apache.logging.log4j.core.util.UuidUtil;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
@@ -54,8 +55,7 @@ public class TemplatesMenu extends Menu implements Listener {
             if (meta != null) {
                 String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING);
                 if (uuid == null) return;
-                playerMenuUtility.setReason(null);
-                playerMenuUtility.setTemplateName(null);
+                playerMenuUtility.reset();
 
                 playerMenuUtility.setUUID(UUID.fromString(uuid));
                 new EditTemplateMenu(playerMenuUtility).open();
@@ -72,10 +72,10 @@ public class TemplatesMenu extends Menu implements Listener {
     }
     @Override
     public void setMenuItems() {
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", 1, "§7Click to go back");
+        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
 
-        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", 1, "§7Click to create a new template");
+        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", "§7Click to create a new template");
         inventory.setItem(52, newTemplate);
 
         generateTemplates();
@@ -92,7 +92,7 @@ public class TemplatesMenu extends Menu implements Listener {
 
 
         if (templates.isEmpty()) {
-            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", 1, "§7There are no templates yet!");
+            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", "§7There are no templates yet!");
             inventory.setItem(22, noTemplates);
             return;
         }
@@ -102,14 +102,15 @@ public class TemplatesMenu extends Menu implements Listener {
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
 
-                String type = TemplateStorage.getConfig().getString(templates.get(i) + ".type");
+                String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
                 if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
-                String reason = TemplateStorage.getConfig().getString(templates.get(i) + ".reason");
+                String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
                 reason = reason != null && reason.length() > 30 ? reason.substring(0, 27) + "..."  : reason;
-                String name = TemplateStorage.getConfig().getString(templates.get(i) + ".name");
+                String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
+                long duration = TemplateStorage.getConfig().getLong(templates.get(index) + ".duration");
 
-                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, 1,
-                        "§bLeft Click §7to manage template", "", "§7Type: §a" + type, "§7Reason: §a" + (reason != null ? reason : "None"));
+                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name,
+                        "§bLeft Click §7to manage template", "", "§7Type: §a" + type, "§7Reason: §a" + (reason != null ? reason : "None"), "§7Duration: §a" + TimeUtils.makeReadable(duration));
 
                 ItemMeta meta = template.getItemMeta();
                 String uuid = templates.get(index);
