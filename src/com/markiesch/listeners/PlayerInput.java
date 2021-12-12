@@ -6,6 +6,7 @@ import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.menus.CreateTemplateMenu;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.utils.InputUtils;
+import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,6 +38,9 @@ public class PlayerInput implements Listener {
                 new EditTemplateMenu(playerMenuUtility).open();
             } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_REASON)) {
                 playerMenuUtility.setReason(message);
+                new EditTemplateMenu(playerMenuUtility).open();
+            } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_DURATION)) {
+                playerMenuUtility.setDuration(TimeUtils.parseTime(message.replace(" ", "")));
                 new EditTemplateMenu(playerMenuUtility).open();
             }
         }, 5L);
