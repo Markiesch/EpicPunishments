@@ -40,6 +40,7 @@ public class TimeUtils {
 
     private static long convert(long value, char unit) {
         return switch (unit) {
+            case 'y' -> value * 1000L * 60L * 60L * 24L * 365;
             case 'd' -> value * 1000L * 60L * 60L * 24L;
             case 'h' -> value * 1000L * 60L * 60L;
             case 'm' -> value * 1000L * 60L;
