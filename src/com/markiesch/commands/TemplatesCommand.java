@@ -3,6 +3,7 @@ package com.markiesch.commands;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.PlayerMenuUtility;
+import com.markiesch.menusystem.menus.CreateTemplateMenu;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
 import com.markiesch.menusystem.menus.TemplatesMenu;
 import com.markiesch.utils.InputUtils;
@@ -34,7 +35,7 @@ public class TemplatesCommand {
                 if ("create".equalsIgnoreCase(args[0])) {
                     if (args.length >= 2) {
                         playerMenuUtility.setTemplateName(args[1]);
-                        new EditTemplateMenu(playerMenuUtility).open();
+                        new CreateTemplateMenu(playerMenuUtility).open();
                         return true;
                     }
 
