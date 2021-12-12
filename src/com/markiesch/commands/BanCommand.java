@@ -1,6 +1,5 @@
 package com.markiesch.commands;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.PunishTypes;
 import com.markiesch.utils.TimeUtils;
@@ -27,7 +26,6 @@ public class BanCommand {
                 List<String> arguments = Arrays.asList(args);
                 String reason = String.join(" ", arguments.subList(2, arguments.size()));
                 PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.BAN, reason, duration);
-                sender.sendMessage("§7Successfully banned §a" + target.getName() + " §7Reason: §e" + reason);
                 return true;
             }
             @Override

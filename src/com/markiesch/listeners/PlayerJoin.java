@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,14 +20,13 @@ public class PlayerJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PlayerStorage.createPlayerProfile(player.getUniqueId());
-
         if (!PlayerStorage.isPlayerBanned(player.getUniqueId())) return;
 
-        List<String> infractions = PlayerStorage.getConfig().getStringList(player.getUniqueId() + ".infractions");
-        long duration = getBanDuration(infractions);
-        String reason = getReasonByDuration(infractions, duration);
-        String message = plugin.getConfig().getString("messages." + (duration == 0L ? "permBanMessage" : "tempBanMessage"));
-        if (message != null) message = message.replace("[reason]", reason).replace("[duration]", TimeUtils.makeReadable(duration) + "");
+        String[] ban = getBan(PlayerStorage.getPunishments(player.getUniqueId())).split(";");
+        String reason = ban[2];
+        String duration = Long.parseLong(ban[3]) == 0L ? "Permanent" : TimeUtils.makeReadable(Long.parseLong(ban[4]) - System.currentTimeMillis());
+        String message = plugin.getConfig().getString("messages." + (duration.equals("Permanent") ? "permBanMessage" : "tempBanMessage"));
+        if (message != null) message = message.replace("[reason]", reason).replace("[duration]", duration);
         player.kickPlayer(message);
     }
 
@@ -37,32 +37,23 @@ public class PlayerJoin implements Listener {
         plugin.getEditor().get(uuid).cancel();
     }
 
-    public static long getBanDuration(List<String> infractions) {
+    public static String getBan(List<String> infractions) {
+        long currentTime = System.currentTimeMillis();
         long highestDuration = 0L;
+        String punishment = null;
 
         for (String infraction : infractions) {
             String type = infraction.split(";")[1];
             if (!"ban".equalsIgnoreCase(type)) continue;
-            long currentTime = System.currentTimeMillis();
-            long duration = Long.parseLong(infraction.split(";")[4]) - currentTime;
-            if (duration > highestDuration) highestDuration = duration;
+            long duration = Long.parseLong(infraction.split(";")[3]);
+            if (Long.parseLong(infraction.split(";")[4]) - currentTime < 0) continue;
+            if (duration == 0L) return infraction;
+            if (duration > highestDuration) {
+                punishment = infraction;
+                highestDuration = duration;
+            }
         }
-        return highestDuration;
-    }
 
-    public static String getReasonByDuration(List<String> infractions, long duration) {
-        String reason = "none";
-        long highestDuration = 0L;
-
-        for (String infraction : infractions) {
-            String type = infraction.split(";")[1];
-            if (!"ban".equalsIgnoreCase(type)) continue;
-            long currentTime = System.currentTimeMillis();
-            long expires = Long.parseLong(infraction.split(";")[4]) - currentTime;
-            String configReason = infraction.split(";")[2];
-            if (expires < 0) return configReason;
-            if (expires > highestDuration && expires == duration) reason = configReason;
-        }
-        return reason;
+        return punishment;
     }
 }

@@ -28,8 +28,6 @@ public class KickCommand {
                 String reason = "none";
                 if (args.length >= 2) reason = String.join(" ", arguments.subList(1, arguments.size()));
                 PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), PunishTypes.KICK, reason, 0L);
-                sender.sendMessage("§7Successfully kicked §a" + target.getName() + " §7Reason: §e" + reason);
-
                 return true;
             }
 
