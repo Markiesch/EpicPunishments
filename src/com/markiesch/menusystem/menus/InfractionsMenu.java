@@ -87,8 +87,8 @@ public class InfractionsMenu extends Menu {
                 String reason = data[2];
                 long duration = Long.parseLong(data[3]);
 
-                ItemStack infraction = ItemUtils.createItem(Material.PAPER, "§6§l" + type, 1,
-                        "", "§7reason", "§e" + reason, "", "§7Duration", "§e" + TimeUtils.makeReadable(duration), "", "§7Issuer", "§e" + issuer.getName());
+                ItemStack infraction = ItemUtils.createItem(Material.PAPER, "§9§l" + type, 1,
+                        "§bPress Q §7to revoke punishment", "", "§7reason §a" + reason, "§7Duration §a" + TimeUtils.makeReadable(duration), "§7Issuer §a" + issuer.getName());
                 ItemMeta meta = infraction.getItemMeta();
                 if (meta != null) {
                     meta.getPersistentDataContainer().set(dataKey, PersistentDataType.STRING, infractions.get(index));

@@ -105,7 +105,7 @@ public class TemplatesMenu extends Menu implements Listener {
                 String type = TemplateStorage.getConfig().getString(templates.get(i) + ".type");
                 if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
                 String reason = TemplateStorage.getConfig().getString(templates.get(i) + ".reason");
-                reason = reason != null && reason.length() > 13 ? reason.substring(0, 10) + "..."  : reason;
+                reason = reason != null && reason.length() > 30 ? reason.substring(0, 27) + "..."  : reason;
                 String name = TemplateStorage.getConfig().getString(templates.get(i) + ".name");
 
                 ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, 1,
