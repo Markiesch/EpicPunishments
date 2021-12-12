@@ -1,7 +1,6 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,11 +24,9 @@ public class PlayerJoin implements Listener {
         List<String> infractions = plugin.getPlayerStorage().getConfig().getStringList(player.getUniqueId() + ".infractions");
         long duration = getBanDuration(infractions);
         String reason = getReasonByDuration(infractions, duration);
-        if (duration == 0L) {
-            player.kickPlayer("§cYou are permanently banned from this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
-        } else {
-            player.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + " §cfrom this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
-        }
+        String message = plugin.getConfig().getString("messages." + (duration == 0L ? "permBanMessage" : "tempBanMessage"));
+        if (message != null) message = message.replace("[reason]", reason).replace("[duration]", TimeUtils.makeReadable(duration) + "");
+        player.kickPlayer(message);
     }
 
     @EventHandler
