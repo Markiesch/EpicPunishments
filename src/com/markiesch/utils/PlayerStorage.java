@@ -206,6 +206,5 @@ public class PlayerStorage {
 
         getConfig().set(target + ".infractions", newInfractions);
         saveConfig();
-        System.out.println("done saving");
     }
 }
