@@ -23,8 +23,10 @@ public class TemplateTabCompleter {
             ConfigurationSection config = TemplateStorage.getConfig().getConfigurationSection("");
             if (config == null) return result;
             List<String> templates = new ArrayList<>(config.getKeys(false));
-            for (String template : templates)
-                if (template.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US))) result.add(template);
+            for (String template : templates) {
+                String templateName = TemplateStorage.getConfig().getString(template + ".name");
+                if (templateName != null && templateName.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US))) result.add(templateName);
+            }
             return result;
         }
 
