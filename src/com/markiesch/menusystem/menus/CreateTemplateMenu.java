@@ -31,12 +31,6 @@ public class CreateTemplateMenu extends Menu implements Listener {
         super(playerMenuUtility);
         this.name = playerMenuUtility.getTemplateName();
         this.reason = playerMenuUtility.getReason();
-
-        ConfigurationSection section = TemplateStorage.getConfig().getConfigurationSection(name);
-        if (section != null) {
-            playerMenuUtility.getOwner().sendMessage("§cA template with this name already exist");
-            playerMenuUtility.getOwner().closeInventory();
-        }
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -56,7 +50,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
             String reason = playerMenuUtility.getReason();
             TemplateStorage.addTemplate(name, reason, type);
             playerMenuUtility.reset();
-            player.sendMessage("§7Successfully §acreated §7 the template with the name of §e" + name);
+            player.sendMessage("§7Successfully§a created§7 the template with the name of §e" + name);
             new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
             return;
         }
