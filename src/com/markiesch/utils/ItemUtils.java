@@ -10,6 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ItemUtils {
+    public static ItemStack createItem(Material material, String name, String... lore) {
+        return createItem(material, name, 1, lore);
+    }
+
     public static ItemStack createItem(Material material, String name, int amount, String... lore) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
