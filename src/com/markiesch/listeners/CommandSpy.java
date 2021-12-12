@@ -13,13 +13,13 @@ public class CommandSpy implements Listener {
     @EventHandler
     public boolean onPreCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (player.hasPermission("bangui.spy.command.bypass")) return true;
+        if (player.hasPermission("epicpunishments.spy.command.bypass")) return true;
 
         String message = event.getMessage();
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (onlinePlayer.equals(player)) break;
-            if (onlinePlayer.hasPermission("bangui.spy.command")) {
+            if (onlinePlayer.hasPermission("epicpunishments.spy.command")) {
                 onlinePlayer.sendMessage(plugin.changeColor("&cCSpy &7" + player.getDisplayName() + ": " + message));
             }
         }

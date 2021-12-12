@@ -17,7 +17,7 @@ public class SignSpy implements Listener {
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (onlinePlayer.equals(player)) break;
-            if (onlinePlayer.hasPermission("bangui.spy.sign")) {
+            if (onlinePlayer.hasPermission("epicpunishments.spy.sign")) {
                 String config = plugin.getConfig().getString("messages.signspy");
                 if (config == null) return true;
                 String message = config.replace("[target]", player.getName()).replace("[content]", "" + lines);

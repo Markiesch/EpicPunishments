@@ -58,7 +58,7 @@ public class PlayerSelectorMenu extends Menu {
                                 event.getCurrentItem().getItemMeta()).getPersistentDataContainer()
                                 .get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING))));
 
-            if ("right".equalsIgnoreCase(event.getClick().toString()) && player.hasPermission("bangui.teleport")) {
+            if ("right".equalsIgnoreCase(event.getClick().toString()) && player.hasPermission("epicpunishments.teleport")) {
                 if (target.getPlayer() != null && target.getPlayer().isOnline()) {
                     player.setGameMode(GameMode.SPECTATOR);
                     player.teleport(target.getPlayer().getLocation());
