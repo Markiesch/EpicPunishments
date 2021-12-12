@@ -65,8 +65,7 @@ public class PunishCommand {
             public String getUsage() { return ""; }
             public String getPermission() { return "epicpunishments.punish"; }
             public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-                List<String> result = new ArrayList<>();
-                if (!sender.hasPermission(getPermission())) return result;
+                if (!sender.hasPermission(getPermission())) return new ArrayList<>();
                 return PunishTabCompleter.onTabComplete(args);
             }
         };

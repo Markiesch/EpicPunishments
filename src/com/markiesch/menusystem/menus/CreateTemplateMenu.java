@@ -55,9 +55,9 @@ public class CreateTemplateMenu extends Menu implements Listener {
             String name = playerMenuUtility.getTemplateName();
             String reason = playerMenuUtility.getReason();
             TemplateStorage.addTemplate(name, reason, type);
-            player.closeInventory();
-            player.sendMessage("§7Successfully §acreated §7 the template with the name of §e" + name);
             playerMenuUtility.reset();
+            player.sendMessage("§7Successfully §acreated §7 the template with the name of §e" + name);
+            new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
             return;
         }
 

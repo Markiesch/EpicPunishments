@@ -87,6 +87,7 @@ public class EditTemplateMenu extends Menu implements Listener {
                 return;
             }
 
+            new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
             player.sendMessage("§7Successfully§a edited §7the template with the name of §e" + name);
             return;
         }

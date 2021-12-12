@@ -8,7 +8,8 @@ import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TemplateStorage;
 import com.markiesch.utils.TimeUtils;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -85,7 +86,6 @@ public class TemplatesMenu extends Menu implements Listener {
 
     private void generateTemplates() {
         int[] slots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
-        int maxTemplatesPerPage = slots.length;
         ConfigurationSection configurationSection = TemplateStorage.getConfig().getConfigurationSection("");
         if (configurationSection == null) {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
@@ -100,8 +100,8 @@ public class TemplatesMenu extends Menu implements Listener {
             return;
         }
 
-        for (int i = 0; i < maxTemplatesPerPage; i++) {
-            int index = maxTemplatesPerPage * page + i;
+        for (int i = 0; i < slots.length; i++) {
+            int index = slots.length * page + i;
             if (index >= templates.size()) break;
             if (templates.get(index) != null) {
 
