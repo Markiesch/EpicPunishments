@@ -1,7 +1,6 @@
 package com.markiesch.commands;
 
 import com.markiesch.utils.TemplateStorage;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;

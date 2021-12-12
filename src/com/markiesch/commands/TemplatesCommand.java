@@ -29,15 +29,29 @@ public class TemplatesCommand {
                     return true;
                 }
 
+                PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
+
                 if ("create".equalsIgnoreCase(args[0])) {
                     if (args.length >= 2) {
-                        PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
                         playerMenuUtility.setTemplateName(args[1]);
                         new EditTemplateMenu(playerMenuUtility).open();
                         return true;
                     }
 
                     plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
+                    return true;
+                }
+
+                if ("edit".equalsIgnoreCase(args[0])) {
+                    UUID uuid = TemplateStorage.getUUIDFromName(args[1]);
+                    if (uuid == null) {
+                        player.sendMessage("§cThe given template could not be found...");
+                        return true;
+                    }
+
+                    playerMenuUtility.reset();
+                    playerMenuUtility.setUUID(uuid);
+                    new EditTemplateMenu(playerMenuUtility).open();
                     return true;
                 }
 
