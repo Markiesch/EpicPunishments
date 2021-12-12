@@ -1,6 +1,5 @@
 package com.markiesch.commands;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class UnmuteCommand {
-    EpicPunishments plugin = EpicPunishments.getInstance();
-
     public UnmuteCommand() {
         new CommandBase("unmute", 1, -1, true) {
             @Override
@@ -24,7 +21,13 @@ public class UnmuteCommand {
                     return true;
                 }
 
+                if (!PlayerStorage.isMuted(target.getUniqueId())) {
+                    sender.sendMessage("§e" + target.getName() + " §7is not muted!");
+                    return true;
+                }
+
                 PlayerStorage.unMute(target.getUniqueId());
+                sender.sendMessage("§7Successfully unmuted §e" + target.getName());
                 return true;
             }
 
