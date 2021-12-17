@@ -27,11 +27,10 @@ import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class TemplatesMenu extends Menu implements Listener {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
-    int page;
-    int maxPages;
-    boolean onLastPage = true;
-    int prevPageSlot = 45;
-    int nextPageSlot = 53;
+    private int page;
+    private boolean onLastPage = true;
+    private final int prevPageSlot = 45;
+    private final int nextPageSlot = 53;
 
     public TemplatesMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
@@ -90,15 +89,14 @@ public class TemplatesMenu extends Menu implements Listener {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
             return;
         }
-
-        int[] slots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
         List<String> templates = new ArrayList<>(configurationSection.getKeys(false));
-
         if (templates.isEmpty()) {
             ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", "§7There are no templates yet!");
             inventory.setItem(22, noTemplates);
             return;
         }
+
+        int[] slots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
 
         for (int i = 0; i < slots.length; i++) {
             int index = slots.length * page + i;
@@ -126,9 +124,7 @@ public class TemplatesMenu extends Menu implements Listener {
             }
         }
 
-
-        maxPages = templates.size() / slots.length;
-
+        int maxPages = templates.size() / slots.length;
         if (page >= 1) {
             ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
             inventory.setItem(prevPageSlot, prevPage);
