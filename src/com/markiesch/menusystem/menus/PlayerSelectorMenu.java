@@ -14,11 +14,17 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.UUID;
 
 import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
@@ -51,12 +57,13 @@ public class PlayerSelectorMenu extends Menu {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
-            OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(
-                                Objects.requireNonNull(
-                                Objects.requireNonNull(
-                                event.getCurrentItem().getItemMeta()).getPersistentDataContainer()
-                                .get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING))));
+            ItemMeta meta = event.getCurrentItem().getItemMeta();
+            if (meta == null) return;
 
+            String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
+            if (uuid == null) return;
+
+            OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
             if ("right".equalsIgnoreCase(event.getClick().toString()) && player.hasPermission("epicpunishments.teleport")) {
                 if (target.getPlayer() != null && target.getPlayer().isOnline()) {
                     player.setGameMode(GameMode.SPECTATOR);
