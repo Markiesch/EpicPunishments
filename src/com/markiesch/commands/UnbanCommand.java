@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class UnbanCommand {
     public UnbanCommand() {
-        new CommandBase("unban", 1, 1, true) {
+        new CommandBase("unban", 1, 1, false) {
             public boolean onCommand(CommandSender sender, String[] args) {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
                 UUID tUUID = target.getUniqueId();

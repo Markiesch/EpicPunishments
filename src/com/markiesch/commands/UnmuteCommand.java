@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class UnmuteCommand {
     public UnmuteCommand() {
-        new CommandBase("unmute", 1, -1, true) {
+        new CommandBase("unmute", 1, 1, false) {
             @Override
             public boolean onCommand(CommandSender sender, String[] args) {
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
