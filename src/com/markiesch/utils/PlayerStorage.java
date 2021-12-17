@@ -25,11 +25,9 @@ public class PlayerStorage {
     static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     static long permanent = 0L;
     static FileConfiguration dataConfig = null;
-    static File configFile = null;
+    static File configFile = new File(plugin.getDataFolder(), "data.yml");
 
     public static void reloadConfig() {
-        // Create the data file if it doesn't exist already
-        if (configFile == null) configFile = new File(plugin.getDataFolder(), "data.yml");
         dataConfig = YamlConfiguration.loadConfiguration(configFile);
         InputStream defaultStream = plugin.getResource("data.yml");
 
@@ -60,8 +58,6 @@ public class PlayerStorage {
     }
 
     public static void saveDefaultConfig() {
-        if (configFile == null) configFile = new File(plugin.getDataFolder(), "data.yml");
-
         if (!configFile.exists()) plugin.saveResource("data.yml", false);
     }
 

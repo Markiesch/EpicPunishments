@@ -16,11 +16,10 @@ import java.util.logging.Level;
 public class TemplateStorage {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     private static FileConfiguration dataConfig = null;
-    private static File configFile = null;
+    static File configFile = new File(plugin.getDataFolder(), "templates.yml");
 
     public static void reloadConfig() {
         // Create the data file if it doesn't exist already
-        if (configFile == null) configFile = new File(plugin.getDataFolder(), "templates.yml");
         dataConfig = YamlConfiguration.loadConfiguration(configFile);
         InputStream defaultStream = plugin.getResource("templates.yml");
 
@@ -46,7 +45,6 @@ public class TemplateStorage {
     }
 
     public static void saveDefaultConfig() {
-        if (configFile == null) configFile = new File(plugin.getDataFolder(), "templates.yml");
         if (!configFile.exists()) plugin.saveResource("templates.yml", false);
     }
 
