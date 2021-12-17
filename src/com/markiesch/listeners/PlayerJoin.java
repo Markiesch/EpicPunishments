@@ -24,7 +24,7 @@ public class PlayerJoin implements Listener {
         String[] ban = getBan(PlayerStorage.getPunishments(player.getUniqueId())).split(";");
         String reason = ban[2];
         String duration = Long.parseLong(ban[3]) == 0L ? "Permanent" : TimeUtils.makeReadable(Long.parseLong(ban[4]) - System.currentTimeMillis());
-        String message = plugin.getConfig().getString("messages." + (duration.equals("Permanent") ? "permBanMessage" : "tempBanMessage"));
+        String message = plugin.getConfig().getString("messages." + ("Permanent".equalsIgnoreCase(duration) ? "permBanMessage" : "tempBanMessage"));
         if (message != null) message = message.replace("[reason]", reason).replace("[duration]", duration);
         player.kickPlayer(message);
     }
