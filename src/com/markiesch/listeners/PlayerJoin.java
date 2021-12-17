@@ -37,7 +37,6 @@ public class PlayerJoin implements Listener {
     }
 
     public static String getBan(List<String> infractions) {
-        System.out.println("checking ban.....");
         long currentTime = System.currentTimeMillis();
         long highestDuration = 0L;
         String punishment = null;
@@ -47,18 +46,13 @@ public class PlayerJoin implements Listener {
             if (!"ban".equalsIgnoreCase(type)) continue;
             long duration = Long.parseLong(infraction.split(";")[3]);
             if (duration == 0L) return infraction;
-            if (Long.parseLong(infraction.split(";")[4]) - currentTime < 0) {
-                continue;
-            }
-            System.out.println(duration);
+            if (Long.parseLong(infraction.split(";")[4]) - currentTime < 0) continue;
 
             if (duration > highestDuration) {
                 punishment = infraction;
                 highestDuration = duration;
             }
         }
-
-        System.out.println(punishment);
         return punishment;
     }
 }
