@@ -24,13 +24,12 @@ import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class PlayerSelectorMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
-    int page;
-    int maxPages;
-    boolean onLastPage = true;
-    int prevPageSlot = 45;
-    int nextPageSlot = 53;
-    int templateSlot = 52;
-    int closeSlot = 49;
+    private int page;
+    private boolean onLastPage = true;
+    private final int prevPageSlot = 45;
+    private final int nextPageSlot = 53;
+    private final int templateSlot = 52;
+    private final int closeSlot = 49;
 
     public PlayerSelectorMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
@@ -126,7 +125,7 @@ public class PlayerSelectorMenu extends Menu {
             }
         }
 
-        maxPages = players.size() / headSlots.length;
+        int maxPages = players.size() / headSlots.length;
 
         if (page >= 1) {
             ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
