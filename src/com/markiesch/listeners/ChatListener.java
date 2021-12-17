@@ -43,7 +43,7 @@ public class ChatListener implements Listener {
             if (duration > highestDuration) {
                 punishment = infraction;
                 highestDuration = duration;
-            };
+            }
         }
 
         return punishment;
