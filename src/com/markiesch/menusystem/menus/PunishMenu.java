@@ -3,6 +3,7 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
+import com.markiesch.menusystem.SearchTypes;
 import com.markiesch.utils.*;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,35 +23,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class PunishMenu extends Menu implements Listener {
     EpicPunishments plugin = EpicPunishments.getInstance();
     public OfflinePlayer target;
     int maxTemplatesPerPage = 14;
     int page = 0;
+
     public PunishMenu(PlayerMenuUtility playerMenuUtility, OfflinePlayer player) {
         super(playerMenuUtility);
         target = player;
     }
 
-    @Override
     public String getMenuName() {
         return "Punish > " + target.getName();
     }
 
-    @Override
     public int getSlots() {
         return 54;
     }
 
-    @Override
     public void handleMenu(InventoryClickEvent event) {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
-        if (event.getCurrentItem().getType().equals(Material.REDSTONE_BLOCK)) {
-            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
-            return;
-        }
 
         if (event.getCurrentItem().getType().equals(Material.FLOWER_BANNER_PATTERN)) {
             new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, 0).open();
@@ -79,11 +73,10 @@ public class PunishMenu extends Menu implements Listener {
         }
 
         if (event.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
-            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL).open();
         }
     }
 
-    @Override
     public void setMenuItems() {
         if (target == null) {
             playerMenuUtility.getOwner().sendMessage("§cCouldn't find player. Closing menu...");
