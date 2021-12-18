@@ -4,6 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
+import com.markiesch.menusystem.SearchTypes;
 import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TemplateStorage;
@@ -37,17 +38,14 @@ public class TemplatesMenu extends Menu implements Listener {
         page = currentPage;
     }
 
-    @Override
     public String getMenuName() {
         return "Templates";
     }
 
-    @Override
     public int getSlots() {
         return 54;
     }
 
-    @Override
     public void handleMenu(InventoryClickEvent event) {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
@@ -70,9 +68,9 @@ public class TemplatesMenu extends Menu implements Listener {
         if (event.getSlot() == prevPageSlot && page != 0) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), --page).open();
         if (event.getSlot() == nextPageSlot && !onLastPage) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), ++page).open();
         if (clickedItem.equals(Material.ANVIL)) plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
-        if (clickedItem.equals(Material.OAK_SIGN)) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+        if (clickedItem.equals(Material.OAK_SIGN)) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL).open();
     }
-    @Override
+
     public void setMenuItems() {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
