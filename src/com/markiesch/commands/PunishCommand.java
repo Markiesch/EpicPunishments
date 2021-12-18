@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.menusystem.SearchTypes;
 import com.markiesch.menusystem.menus.PunishMenu;
 import com.markiesch.menusystem.menus.PlayerSelectorMenu;
 import com.markiesch.utils.PlayerStorage;
@@ -22,7 +23,7 @@ public class PunishCommand {
                 Player player = (Player) sender;
 
                 if (args.length == 0) {
-                    new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+                    new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL).open();
                     return true;
                 }
 
@@ -44,7 +45,7 @@ public class PunishCommand {
                 }
 
                 if (!player.hasPermission("epicpunishments.gui")) {
-                    player.sendMessage("§7You do not have §cpermissions §7to use this command!");
+                    player.sendMessage("§7You do not have§c permissions §7to use this command!");
                     return true;
                 }
                 // Open menu of defined player
