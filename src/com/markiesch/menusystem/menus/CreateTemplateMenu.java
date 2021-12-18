@@ -9,7 +9,6 @@ import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TemplateStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
