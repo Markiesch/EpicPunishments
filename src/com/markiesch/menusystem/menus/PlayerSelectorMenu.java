@@ -3,6 +3,7 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
+import com.markiesch.menusystem.SearchTypes;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
@@ -23,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
@@ -32,14 +33,18 @@ public class PlayerSelectorMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
     private int page;
     private boolean onLastPage = true;
-    private final int prevPageSlot = 45;
-    private final int nextPageSlot = 53;
-    private final int templateSlot = 52;
-    private final int closeSlot = 49;
+    static int prevPageSlot = 45;
+    static int nextPageSlot = 53;
+    static int templateSlot = 52;
+    static int closeSlot = 49;
+    static int filterSlot = 46;
+    static SearchTypes filter;
 
-    public PlayerSelectorMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
+
+    public PlayerSelectorMenu(PlayerMenuUtility playerMenuUtility, int currentPage, SearchTypes filterType) {
         super(playerMenuUtility);
         page = currentPage;
+        filter = filterType;
     }
 
     @Override
@@ -75,25 +80,29 @@ public class PlayerSelectorMenu extends Menu {
             return;
         }
 
-        if (event.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), --page).open();
-        if (event.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), ++page).open();
+        if (event.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), --page, filter).open();
+        if (event.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), ++page, filter).open();
         if (event.getSlot() == templateSlot) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
         if (event.getSlot() == closeSlot) player.closeInventory();
+        if (event.getSlot() == filterSlot) toggleFilter();
     }
 
     @Override
     public void setMenuItems() {
+        String nextFilter = "all";
+        if (filter.equals(SearchTypes.ALL)) nextFilter = "online";
+        else if (filter.equals(SearchTypes.ONLINE_ONLY)) nextFilter = "offline";
+
+        ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE, "§b§lVisibility", "§7Click to show §e" + nextFilter + " §7users");
+        inventory.setItem(filterSlot, filterItem);
+
         ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, "§c§lClose Menu", "§7Click to close menu");
         inventory.setItem(closeSlot, closeButton);
 
         ItemStack templates = ItemUtils.createItem(Material.ANVIL, "§b§lTemplates", "§7Click to manage templates");
         inventory.setItem(templateSlot, templates);
 
-        ConfigurationSection configSection = PlayerStorage.getConfig().getConfigurationSection("");
-        if (configSection == null) return;
-
-        List<OfflinePlayer> players = new ArrayList<>();
-        for (String uuid : configSection.getKeys(false)) players.add(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
+        List<OfflinePlayer> players = getPlayers();
         int[] headSlots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
 
         if (!players.isEmpty()) {
@@ -102,33 +111,32 @@ public class PlayerSelectorMenu extends Menu {
                 if (index >= players.size()) break;
 
                 OfflinePlayer target = players.get(index);
+                if (target == null) continue;
 
-                if (target != null) {
-                    Date date = new Date(target.getFirstPlayed());
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-                    String formattedDate = sdf.format(date);
-                    List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
+                Date date = new Date(target.getFirstPlayed());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                String formattedDate = sdf.format(date);
+                List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
 
-                    ItemStack playerHead = ItemUtils.createItem(
-                            Material.PLAYER_HEAD,
-                            "§b§l" + target.getName(),
-                            "§bLeft Click §7to manage player",
-                            "§bRight Click §7to teleport",
-                            "",
-                            (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
-                            (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
-                            "",
-                            "§7Joined at: " + formattedDate
-                    );
+                ItemStack playerHead = ItemUtils.createItem(
+                        Material.PLAYER_HEAD,
+                        "§b§l" + target.getName(),
+                        "§bLeft Click §7to manage player",
+                        "§bRight Click §7to teleport",
+                        "",
+                        (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
+                        (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                        "",
+                        "§7Joined at: " + formattedDate
+                );
 
-                    SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
-                    if (playerMeta != null) {
-                        playerMeta.setOwningPlayer(target);
-                        playerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, target.getUniqueId().toString());
-                        playerHead.setItemMeta(playerMeta);
-                    }
-                    inventory.setItem(headSlots[i], playerHead);
+                SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
+                if (playerMeta != null) {
+                    playerMeta.setOwningPlayer(target);
+                    playerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, target.getUniqueId().toString());
+                    playerHead.setItemMeta(playerMeta);
                 }
+                inventory.setItem(headSlots[i], playerHead);
             }
         }
 
@@ -144,5 +152,28 @@ public class PlayerSelectorMenu extends Menu {
             onLastPage = false;
             inventory.setItem(nextPageSlot, nextPage);
         }
+    }
+
+    public List<OfflinePlayer> getPlayers() {
+        List<OfflinePlayer> players = new ArrayList<>();
+
+        ConfigurationSection configSection = PlayerStorage.getConfig().getConfigurationSection("");
+        if (configSection == null) return players;
+
+        for (String uuid : configSection.getKeys(false)) players.add(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
+
+        if (filter.equals(SearchTypes.ONLINE_ONLY)) return players.stream().filter(OfflinePlayer::isOnline).collect(Collectors.toList());
+        if (filter.equals(SearchTypes.OFFLINE_ONLY)) return players.stream().filter(player -> !player.isOnline()).collect(Collectors.toList());
+
+        return players;
+    }
+
+    public void toggleFilter() {
+        if (filter.equals(SearchTypes.ALL)) filter = SearchTypes.ONLINE_ONLY;
+        else if (filter.equals(SearchTypes.ONLINE_ONLY)) filter = SearchTypes.OFFLINE_ONLY;
+        else if (filter.equals(SearchTypes.OFFLINE_ONLY)) filter = SearchTypes.ALL;
+
+        inventory.remove(Material.PLAYER_HEAD);
+        setMenuItems();
     }
 }
