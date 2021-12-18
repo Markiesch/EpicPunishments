@@ -37,17 +37,14 @@ public class InfractionsMenu extends Menu {
         this.page = page;
     }
 
-    @Override
     public String getMenuName() {
         return target.getName() + " > Infractions";
     }
 
-    @Override
     public int getSlots() {
         return 54;
     }
 
-    @Override
     public void handleMenu(InventoryClickEvent event) {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
@@ -68,7 +65,6 @@ public class InfractionsMenu extends Menu {
         if (event.getSlot() == 49) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
     }
 
-    @Override
     public void setMenuItems() {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
