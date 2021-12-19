@@ -101,28 +101,29 @@ public class PunishMenu extends Menu implements Listener {
             return;
         }
 
-        int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
         ArrayList<String> templates = new ArrayList<>(configurationSection.getKeys(false));
         if (templates.isEmpty()) return;
+
+        int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+
         for (int i = 0; i < maxTemplatesPerPage; i++) {
             int index = maxTemplatesPerPage * page + i;
             if (index >= templates.size()) break;
-            if (templates.get(index) != null) {
-                String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
-                String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
-                String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
-                if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
-                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
+            if (templates.get(index) == null) continue;
 
-                ItemMeta meta = template.getItemMeta();
-                String uuid = templates.get(index);
-                if (meta != null && uuid != null) {
-                    meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING, uuid);
-                    template.setItemMeta(meta);
-                }
-                inventory.setItem(slots[i], template);
+            String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
+            String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
+            String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
+            if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
+            ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
 
+            ItemMeta meta = template.getItemMeta();
+            String uuid = templates.get(index);
+            if (meta != null && uuid != null) {
+                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING, uuid);
+                template.setItemMeta(meta);
             }
+            inventory.setItem(slots[i], template);
         }
     }
 
