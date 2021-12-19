@@ -47,7 +47,6 @@ public class InfractionsMenu extends Menu {
 
     public void handleMenu(InventoryClickEvent event) {
         if (event.getCurrentItem() == null) return;
-        Player player = (Player) event.getWhoClicked();
 
         if (event.getCurrentItem().getType().equals(Material.PAPER) && event.getClick().equals(ClickType.DROP)) {
             ItemMeta meta = event.getCurrentItem().getItemMeta();
@@ -60,6 +59,7 @@ public class InfractionsMenu extends Menu {
             }
         }
 
+        Player player = (Player) event.getWhoClicked();
         if (event.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page).open();
         if (event.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page).open();
         if (event.getSlot() == 49) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
@@ -69,10 +69,10 @@ public class InfractionsMenu extends Menu {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
 
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
         ArrayList<String> infractions = new ArrayList<>(PlayerStorage.getConfig().getStringList(target.getUniqueId() + ".infractions"));
         if (infractions.isEmpty()) return;
 
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
         for (int i = 0; i < slots.length; i++) {
             int index = slots.length * page + i;
             if (index >= infractions.size()) break;
