@@ -21,11 +21,12 @@ public class ChatListener implements Listener {
 
         event.setCancelled(true);
         String mute = getMute(PlayerStorage.getPunishments(player.getUniqueId()));
-        String reason = mute.split(";")[2];
         long duration = Long.parseLong(mute.split(";")[4]) - System.currentTimeMillis();
 
         String message = plugin.getConfig().getString("messages." + ( duration == 0L ? "permanentlyMute" : "temporarilyMute"));
         if (message == null) return;
+
+        String reason = mute.split(";")[2];
         message = message.replace("[duration]", TimeUtils.makeReadable(duration)).replace("[reason]", reason);
         player.sendMessage(message);
     }
