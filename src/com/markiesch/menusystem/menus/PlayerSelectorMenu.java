@@ -27,7 +27,6 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class PlayerSelectorMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
@@ -143,12 +142,12 @@ public class PlayerSelectorMenu extends Menu {
         int maxPages = players.size() / headSlots.length;
 
         if (page >= 1) {
-            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, "§cPrevious Page", "§7Click to visit page " + page);
             inventory.setItem(prevPageSlot, prevPage);
         }
 
         if (page < maxPages) {
-            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), "§7Click to visit page " + (page + 2));
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, "§cNext Page", "§7Click to visit page " + (page + 2));
             onLastPage = false;
             inventory.setItem(nextPageSlot, nextPage);
         }

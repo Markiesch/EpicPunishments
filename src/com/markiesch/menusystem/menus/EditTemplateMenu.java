@@ -3,6 +3,7 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.InputTypes;
 import com.markiesch.menusystem.Menu;
+import com.markiesch.menusystem.MenuUtils;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.InputUtils;
 import com.markiesch.utils.ItemUtils;
@@ -112,7 +113,7 @@ public class EditTemplateMenu extends Menu implements Listener {
         ItemStack template = ItemUtils.createItem(Material.PAPER, "§c§l" + name, "", "§cType: §7" + type, "§cReason: §7" + reason);
         inventory.setItem(NAME_SLOT, template);
 
-        ItemStack typeItem = ItemUtils.createItem(getType(), "§c§l" + type, "§7Click to toggle type");
+        ItemStack typeItem = ItemUtils.createItem(MenuUtils.getMaterialType(this.type), "§c§l" + type, "§7Click to toggle type");
         inventory.setItem(TYPE_SLOT, typeItem);
 
         ItemStack timeItem = ItemUtils.createItem(Material.CLOCK, "§c§lDuration", "§7Click to insert duration", "", "§7Duration set: §c" + TimeUtils.makeReadable(duration));
@@ -123,14 +124,5 @@ public class EditTemplateMenu extends Menu implements Listener {
 
         ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§c§lEdit Template", "§7Click to confirm settings", "", "§7Reason set: §c" + reason);
         inventory.setItem(UPDATE_SLOT, createItem);
-    }
-
-    public Material getType() {
-        Material type = Material.PAPER;
-        if ("BAN".equalsIgnoreCase(this.type)) type = Material.OAK_DOOR;
-        if ("KICK".equalsIgnoreCase(this.type)) type = Material.ENDER_EYE;
-        if ("WARN".equalsIgnoreCase(this.type)) type = Material.PAPER;
-        if ("MUTE".equalsIgnoreCase(this.type)) type = Material.STRING;
-        return type;
     }
 }

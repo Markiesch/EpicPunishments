@@ -15,13 +15,10 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.UUID;
-
-import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class InfractionsMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
@@ -99,12 +96,12 @@ public class InfractionsMenu extends Menu {
         maxPages = infractions.size() / slots.length;
 
         if (page >= 1) {
-            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, "§cPrevious Page", "§7Click to visit page " + page);
             inventory.setItem(45, prevPage);
         }
 
         if (page < maxPages) {
-            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), "§7Click to visit page " + (page + 2));
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, "§cNext Page", "§7Click to visit page " + (page + 2));
             onLastPage = false;
             inventory.setItem(53, nextPage);
         }

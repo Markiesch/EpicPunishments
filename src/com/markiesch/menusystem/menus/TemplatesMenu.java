@@ -14,6 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-
-import static com.markiesch.utils.BanMenuUtils.getConfigItemName;
 
 public class TemplatesMenu extends Menu implements Listener {
     private static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
@@ -53,16 +52,23 @@ public class TemplatesMenu extends Menu implements Listener {
 
         if (clickedItem.equals(Material.PAPER)) {
             ItemMeta meta = event.getCurrentItem().getItemMeta();
-            if (meta != null) {
-                String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING);
-                if (uuid == null) return;
-                playerMenuUtility.reset();
+            if (meta == null) return;
 
-                playerMenuUtility.setUUID(UUID.fromString(uuid));
-                new EditTemplateMenu(playerMenuUtility).open();
-            } else {
-                player.sendMessage("§cThere was an error trying to resolve the template name");
+            String uuidString = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING);
+            if (uuidString == null) return;
+
+            UUID uuid = UUID.fromString(uuidString);
+
+            if (event.getClick().equals(ClickType.DROP)) {
+                TemplateStorage.removeTemplate(uuid);
+                inventory.remove(Material.PAPER);
+                setMenuItems();
+                return;
             }
+
+            playerMenuUtility.reset();
+            playerMenuUtility.setUUID(uuid);
+            new EditTemplateMenu(playerMenuUtility).open();
         }
 
         if (event.getSlot() == prevPageSlot && page != 0) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), --page).open();
@@ -99,37 +105,35 @@ public class TemplatesMenu extends Menu implements Listener {
         for (int i = 0; i < slots.length; i++) {
             int index = slots.length * page + i;
             if (index >= templates.size()) break;
-            if (templates.get(index) != null) {
+            if (templates.get(index) == null) continue;
+            String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
+            if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
+            String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
+            reason = reason != null && reason.length() > 30 ? reason.substring(0, 27) + "..."  : reason;
+            String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
+            long duration = TemplateStorage.getConfig().getLong(templates.get(index) + ".duration");
 
-                String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
-                if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
-                String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
-                reason = reason != null && reason.length() > 30 ? reason.substring(0, 27) + "..."  : reason;
-                String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
-                long duration = TemplateStorage.getConfig().getLong(templates.get(index) + ".duration");
+            ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name,
+                    "§bLeft Click §7to manage template", "§bPress Q §7to delete template", "", "§7Type: §a" + type, "§7Reason: §a" + (reason != null ? reason : "None"), "§7Duration: §a" + TimeUtils.makeReadable(duration));
 
-                ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name,
-                        "§bLeft Click §7to manage template", "", "§7Type: §a" + type, "§7Reason: §a" + (reason != null ? reason : "None"), "§7Duration: §a" + TimeUtils.makeReadable(duration));
-
-                ItemMeta meta = template.getItemMeta();
-                String uuid = templates.get(index);
-                if (meta != null && uuid != null) {
-                    meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING, uuid);
-                    template.setItemMeta(meta);
-                }
-
-                inventory.setItem(slots[i], template);
+            ItemMeta meta = template.getItemMeta();
+            String uuid = templates.get(index);
+            if (meta != null && uuid != null) {
+                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING, uuid);
+                template.setItemMeta(meta);
             }
+
+            inventory.setItem(slots[i], template);
         }
 
         int maxPages = templates.size() / slots.length;
         if (page >= 1) {
-            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.prevPageName","§cPrevious Page"), "§7Click to visit page " + page);
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, "§cPrevious Page", "§7Click to visit page " + page);
             inventory.setItem(prevPageSlot, prevPage);
         }
 
         if (page < maxPages) {
-            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, getConfigItemName("mainMenu.nextPageName","§cNext Page"), "§7Click to visit page " + (page + 2));
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, "§cNext Page", "§7Click to visit page " + (page + 2));
             onLastPage = false;
             inventory.setItem(nextPageSlot, nextPage);
         }
