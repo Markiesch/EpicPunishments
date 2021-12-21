@@ -33,6 +33,9 @@ public class PlayerInput implements Listener {
             } else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_REASON)) {
                 playerMenuUtility.setReason(message);
                 new CreateTemplateMenu(playerMenuUtility).open();
+            }else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_DURATION)) {
+                playerMenuUtility.setDuration(TimeUtils.parseTime(message.replace(" ", "")));
+                new CreateTemplateMenu(playerMenuUtility).open();
             } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_NAME)) {
                 playerMenuUtility.setTemplateName(message.replace(" ", "_"));
                 new EditTemplateMenu(playerMenuUtility).open();
