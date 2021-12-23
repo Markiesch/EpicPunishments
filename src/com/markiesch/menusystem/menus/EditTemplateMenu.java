@@ -56,7 +56,7 @@ public class EditTemplateMenu extends Menu implements Listener {
         this.name = playerMenuUtility.getTemplateName() == null ? name : playerMenuUtility.getTemplateName();
         this.reason = playerMenuUtility.getReason() == null ? reason : playerMenuUtility.getReason();
         this.duration = playerMenuUtility.getDuration() == null ? duration : playerMenuUtility.getDuration();
-        this.type = type == null ? "KICK" : type.toUpperCase(Locale.US);
+        this.type = playerMenuUtility.getType() == null ? type == null ? "KICK" : type : playerMenuUtility.getType();
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -102,6 +102,7 @@ public class EditTemplateMenu extends Menu implements Listener {
             if ("KICK".equalsIgnoreCase(name)) type = "WARN";
             if ("WARN".equalsIgnoreCase(name)) type = "MUTE";
             if ("MUTE".equalsIgnoreCase(name)) type = "BAN";
+            playerMenuUtility.setType(type);
             setMenuItems();
         }
     }
