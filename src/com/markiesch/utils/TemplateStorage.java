@@ -48,12 +48,13 @@ public class TemplateStorage {
         if (!configFile.exists()) plugin.saveResource("templates.yml", false);
     }
 
-    public static void addTemplate(String name, String reason, String type) {
+    public static void addTemplate(String name, String reason, String type, long duration) {
         UUID uuid = UuidUtil.getTimeBasedUuid();
         ConfigurationSection section = getConfig().createSection(uuid.toString());
         section.set("name", name);
-        section.set("reason", reason);
         section.set("type", type);
+        section.set("duration", duration);
+        section.set("reason", reason);
         saveConfig();
     }
 
@@ -62,9 +63,9 @@ public class TemplateStorage {
         if (section == null) return false;
 
         section.set("name", name);
-        section.set("reason", reason);
         section.set("type", type);
         section.set("duration", duration);
+        section.set("reason", reason);
 
         saveConfig();
         return true;
