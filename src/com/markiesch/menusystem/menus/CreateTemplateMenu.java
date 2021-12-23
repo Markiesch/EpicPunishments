@@ -1,7 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.InputTypes;
+import com.markiesch.utils.InputTypes;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.MenuUtils;
 import com.markiesch.menusystem.PlayerMenuUtility;
@@ -22,7 +22,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
     private final String name;
     private final String reason;
     private final Long duration;
-    private String type = "KICK";
+    private String type;
 
     private final int NAME_SLOT = 13;
     private final int TYPE_SLOT = 19;
@@ -35,9 +35,13 @@ public class CreateTemplateMenu extends Menu implements Listener {
 
     public CreateTemplateMenu(PlayerMenuUtility playerMenuUtility) {
         super(playerMenuUtility);
-        this.name = playerMenuUtility.getTemplateName();
-        this.reason = playerMenuUtility.getReason();
-        this.duration = playerMenuUtility.getDuration();
+
+        playerMenuUtility.fillEmptyFields();
+
+        name = playerMenuUtility.getTemplateName();
+        reason = playerMenuUtility.getReason();
+        duration = playerMenuUtility.getDuration();
+        type = playerMenuUtility.getType();
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -58,6 +62,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
             else if ("KICK".equalsIgnoreCase(name)) type = "WARN";
             else if ("WARN".equalsIgnoreCase(name)) type = "MUTE";
             else if ("MUTE".equalsIgnoreCase(name)) type = "BAN";
+            playerMenuUtility.setType(type);
             setMenuItems();
             return;
         }
@@ -75,9 +80,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
 
         if (event.getSlot() == CREATE_SLOT) {
             PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
-            String name = playerMenuUtility.getTemplateName();
-            String reason = playerMenuUtility.getReason();
-            TemplateStorage.addTemplate(name, reason, type);
+            TemplateStorage.addTemplate(name, reason, type, duration);
             playerMenuUtility.reset();
             player.sendMessage("§7Successfully§a created§7 the template with the name of §e" + name);
             new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
@@ -88,7 +91,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
         String reason = this.reason;
         if (reason == null) reason = "None";
 
-        ItemStack template = ItemUtils.createItem(Material.PAPER, "§c§l" + name, "", "§cType: §7" + type, "§cReason: §7" + reason);
+        ItemStack template = ItemUtils.createItem(Material.PAPER, "§c§l" + name, "§7Click to insert a new name", "", "§cType: §7" + type, "§cReason: §7" + reason, "§cDuration: §7" + TimeUtils.makeReadable(duration));
         inventory.setItem(NAME_SLOT, template);
 
         ItemStack typeItem = ItemUtils.createItem(MenuUtils.getMaterialType(this.type), "§c§l" + type, "§7Click to toggle type");
