@@ -1,7 +1,7 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.InputTypes;
+import com.markiesch.utils.InputTypes;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.menus.CreateTemplateMenu;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
@@ -27,13 +27,14 @@ public class PlayerInput implements Listener {
         edit.cancel();
         Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> {
             PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
+
             if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_NAME)) {
                 playerMenuUtility.setTemplateName(message.replace(" ", "_"));
                 new CreateTemplateMenu(playerMenuUtility).open();
             } else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_REASON)) {
                 playerMenuUtility.setReason(message);
                 new CreateTemplateMenu(playerMenuUtility).open();
-            }else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_DURATION)) {
+            } else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_DURATION)) {
                 playerMenuUtility.setDuration(TimeUtils.parseTime(message.replace(" ", "")));
                 new CreateTemplateMenu(playerMenuUtility).open();
             } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_NAME)) {
