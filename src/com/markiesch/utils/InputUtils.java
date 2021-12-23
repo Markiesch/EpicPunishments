@@ -1,7 +1,6 @@
 package com.markiesch.utils;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.InputTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
