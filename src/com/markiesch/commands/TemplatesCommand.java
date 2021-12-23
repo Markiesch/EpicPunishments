@@ -1,7 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.InputTypes;
+import com.markiesch.utils.InputTypes;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.menus.CreateTemplateMenu;
 import com.markiesch.menusystem.menus.EditTemplateMenu;
