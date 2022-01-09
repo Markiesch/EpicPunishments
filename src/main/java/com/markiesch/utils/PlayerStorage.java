@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import static org.bukkit.Bukkit.getServer;
 
-
 public class PlayerStorage {
     static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
     static long permanent = 0L;
