@@ -1,11 +1,9 @@
 package com.markiesch.commands;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;

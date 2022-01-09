@@ -1,17 +1,14 @@
 package com.markiesch.commands;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.TemplateStorage;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 
 public class PunishTabCompleter {

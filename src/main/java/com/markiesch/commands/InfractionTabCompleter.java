@@ -1,6 +1,5 @@
 package com.markiesch.commands;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
