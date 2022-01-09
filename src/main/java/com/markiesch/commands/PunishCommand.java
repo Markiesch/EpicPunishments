@@ -24,7 +24,7 @@ public class PunishCommand {
 
                 if (args.length > 0 && "reload".equalsIgnoreCase(args[0])) {
                     if (!player.hasPermission("epicpunishments.reload")) {
-                        player.sendMessage("§cYou do not have permissions to run this command!");
+                        this.sendPermissionMessage(sender);
                         return true;
                     }
 
@@ -40,7 +40,7 @@ public class PunishCommand {
                 }
 
                 if (!player.hasPermission("epicpunishments.gui")) {
-                    player.sendMessage("§7You do not have§c permissions §7to use this command!");
+                    this.sendPermissionMessage(sender);
                     return true;
                 }
 

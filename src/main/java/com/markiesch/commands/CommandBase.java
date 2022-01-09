@@ -53,10 +53,10 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         sender.sendMessage(getUsage());
     }
 
-    public boolean execute (CommandSender sender, String alias, String[] arguments) {
+    public boolean execute(CommandSender sender, String alias, String[] arguments) {
         String permission = getPermission();
         if (permission != null && !sender.hasPermission(permission)) {
-            sender.sendMessage("§7You do not have §cpermissions §7to use this command!");
+            this.sendPermissionMessage(sender);
             return true;
         }
 
@@ -72,6 +72,10 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
 
         if (!onCommand(sender, arguments)) sendUsage(sender);
         return true;
+    }
+
+    public void sendPermissionMessage(CommandSender sender) {
+        sender.sendMessage("§7You do not have§c permissions §7to use this command!");
     }
 
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
