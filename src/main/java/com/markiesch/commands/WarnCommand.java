@@ -3,7 +3,6 @@ package com.markiesch.commands;
 import com.markiesch.EpicPunishments;
 import com.markiesch.utils.PlayerStorage;
 import com.markiesch.utils.PunishTypes;
-import io.netty.util.concurrent.ImmediateEventExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -15,8 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class WarnCommand {
-    EpicPunishments plugin = EpicPunishments.getInstance();
-
     public WarnCommand() {
         new CommandBase("warn", 1, -1, true) {
             @Override

@@ -18,15 +18,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Locale;
 import java.util.UUID;
 
 public class EditTemplateMenu extends Menu implements Listener {
     EpicPunishments plugin = EpicPunishments.getInstance();
-    private String name = null;
-    private String reason = null;
-    private Long duration = null;
-    private String type = "KICK";
+    private String name;
+    private String reason;
+    private Long duration;
+    private String type;
     private final UUID uuid;
 
     private final int NAME_SLOT = 13;
