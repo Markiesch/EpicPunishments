@@ -1,3 +1,7 @@
+# When true the issuer needs the permission "epicpunishments.templates.use.<templateName>" to use the template.
+# When false you only need "epicpunishments.templates.use" + "epicpunishments.<templateType>"
+requireExactTemplatePermission: false
+
 messages:
   # [target] shows the username of the command issuer
   # [command] shows the command input

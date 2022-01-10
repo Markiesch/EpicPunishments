@@ -73,9 +73,14 @@ public class PlayerStorage {
     public static boolean hasTemplatePermission(UUID issuer, UUID template) {
         Player player = Bukkit.getPlayer(issuer);
         String type = TemplateStorage.getConfig().getString(template + ".type");
+        String name = TemplateStorage.getConfig().getString(template + ".name");
 
         if (type == null || player == null) return false;
-        return player.hasPermission("epicpunishments." + type);
+
+        boolean hasPermission = !plugin.getConfig().getBoolean("requireExactTemplatePermission") || player.hasPermission("epicpunishments.templates.use." + name);
+
+        if (!player.hasPermission("epicpunishments." + type)) hasPermission = false;
+        return hasPermission;
     }
 
     public static boolean punishPlayerFromTemplate(UUID target, UUID issuer, UUID templateUUID) {
