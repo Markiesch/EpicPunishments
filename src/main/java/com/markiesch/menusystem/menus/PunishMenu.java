@@ -145,4 +145,12 @@ public class PunishMenu extends Menu implements Listener {
         playerHead.setItemMeta(playerMeta);
         inventory.setItem(13, playerHead);
     }
+
+    public boolean hasPermission() {
+        Player player = playerMenuUtility.getOwner();
+        if (player.hasPermission("epicpunishments.templates")) return true;
+        player.sendMessage("§7You do not have§c permissions§7 to view templates");
+        player.closeInventory();
+        return false;
+    }
 }

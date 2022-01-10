@@ -34,6 +34,7 @@ public class TemplatesMenu extends Menu implements Listener {
 
     public TemplatesMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
+        if (!hasPermission()) return;
         page = currentPage;
         open();
     }
@@ -47,7 +48,7 @@ public class TemplatesMenu extends Menu implements Listener {
     }
 
     public void handleMenu(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) return;
+        if (event.getCurrentItem() == null || !hasPermission()) return;
         Player player = (Player) event.getWhoClicked();
         Material clickedItem = event.getCurrentItem().getType();
 
@@ -61,9 +62,12 @@ public class TemplatesMenu extends Menu implements Listener {
             UUID uuid = UUID.fromString(uuidString);
 
             if (event.getClick().equals(ClickType.DROP)) {
-                TemplateStorage.removeTemplate(uuid);
-                inventory.remove(Material.PAPER);
-                setMenuItems();
+                if (player.hasPermission("epicpunishments.templates.manage")) {
+                    TemplateStorage.removeTemplate(uuid);
+                    inventory.remove(Material.PAPER);
+                    setMenuItems();
+                } else player.sendMessage("§7You do not have§c permissions§7 to delete templates");
+
                 return;
             }
 
@@ -138,5 +142,13 @@ public class TemplatesMenu extends Menu implements Listener {
             onLastPage = false;
             inventory.setItem(nextPageSlot, nextPage);
         }
+    }
+
+    public boolean hasPermission() {
+        Player player = playerMenuUtility.getOwner();
+        if (player.hasPermission("epicpunishments.templates")) return true;
+        player.sendMessage("§7You do not have§c permissions§7 to view templates");
+        player.closeInventory();
+        return false;
     }
 }

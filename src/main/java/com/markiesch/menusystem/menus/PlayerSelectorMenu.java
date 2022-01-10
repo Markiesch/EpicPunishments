@@ -27,7 +27,6 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 public class PlayerSelectorMenu extends Menu {
     EpicPunishments plugin = EpicPunishments.getInstance();
     private int page;

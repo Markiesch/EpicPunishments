@@ -19,9 +19,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class CreateTemplateMenu extends Menu implements Listener {
     EpicPunishments plugin = EpicPunishments.getInstance();
-    private final String name;
-    private final String reason;
-    private final Long duration;
+    private String name;
+    private String reason;
+    private Long duration;
     private String type;
 
     private final int NAME_SLOT = 13;
@@ -35,9 +35,9 @@ public class CreateTemplateMenu extends Menu implements Listener {
 
     public CreateTemplateMenu(PlayerMenuUtility playerMenuUtility) {
         super(playerMenuUtility);
+        if (!hasPermission()) return;
 
         playerMenuUtility.fillEmptyFields();
-
         name = playerMenuUtility.getTemplateName();
         reason = playerMenuUtility.getReason();
         duration = playerMenuUtility.getDuration();
@@ -46,7 +46,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
     }
 
     public void handleMenu(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) return;
+        if (event.getCurrentItem() == null || !hasPermission()) return;
         Player player = (Player) event.getWhoClicked();
 
         if (event.getSlot() == NAME_SLOT) {
@@ -106,5 +106,13 @@ public class CreateTemplateMenu extends Menu implements Listener {
 
         ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§c§lCreate Template", "§7Click to confirm settings", "", "§7Reason set: §c" + reason);
         inventory.setItem(CREATE_SLOT, createItem);
+    }
+
+    public boolean hasPermission() {
+        Player player = playerMenuUtility.getOwner();
+        if (player.hasPermission("epicpunishments.templates.manage")) return true;
+        player.sendMessage("§7You do not have§c permissions§7 to create templates");
+        player.closeInventory();
+        return false;
     }
 }

@@ -26,7 +26,7 @@ public class EditTemplateMenu extends Menu implements Listener {
     private String reason;
     private Long duration;
     private String type;
-    private final UUID uuid;
+    private UUID uuid;
 
     private final int NAME_SLOT = 13;
     private final int TYPE_SLOT = 19;
@@ -39,19 +39,14 @@ public class EditTemplateMenu extends Menu implements Listener {
 
     public EditTemplateMenu(PlayerMenuUtility playerMenuUtility) {
         super(playerMenuUtility);
-        uuid = playerMenuUtility.getUUID();
+        if (!hasPermission()) return;
 
-        Player player = playerMenuUtility.getOwner();
-        if (!player.hasPermission("epicpunishments.templates.edit")) {
-            player.sendMessage("§7You do not have§c permissions§7 to edit templates");
-            player.closeInventory();
-            return;
-        }
+        uuid = playerMenuUtility.getUUID();
 
         ConfigurationSection section = TemplateStorage.getConfig().getConfigurationSection(uuid.toString());
         if (section == null) {
-            player.sendMessage("§cThe given template couldn't be found");
-            player.closeInventory();
+            playerMenuUtility.getOwner().sendMessage("§cThe given template couldn't be found");
+            playerMenuUtility.getOwner().closeInventory();
             return;
         }
 
@@ -68,7 +63,7 @@ public class EditTemplateMenu extends Menu implements Listener {
     }
 
     public void handleMenu(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) return;
+        if (event.getCurrentItem() == null || !hasPermission()) return;
         Player player = (Player) event.getWhoClicked();
 
         if (event.getSlot() == NAME_SLOT) {
@@ -133,5 +128,13 @@ public class EditTemplateMenu extends Menu implements Listener {
 
         ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§c§lEdit Template", "§7Click to confirm settings", "", "§7Reason set: §c" + reason);
         inventory.setItem(UPDATE_SLOT, createItem);
+    }
+
+    public boolean hasPermission() {
+        Player player = playerMenuUtility.getOwner();
+        if (player.hasPermission("epicpunishments.templates.manage")) return true;
+        player.sendMessage("§7You do not have§c permissions§7 to edit templates");
+        player.closeInventory();
+        return false;
     }
 }
