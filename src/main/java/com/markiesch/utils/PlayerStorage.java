@@ -75,30 +75,20 @@ public class PlayerStorage {
         Player oTarget = Bukkit.getPlayer(target);
         if (reason.isEmpty()) reason = "none";
 
-        if (type.equals(PunishTypes.KICK)) {
-            if (oTarget != null) {
-                String kickMessage = plugin.getConfig().getString("messages.kickMessage");
-                if (kickMessage != null) {
-                    kickMessage = kickMessage.replace("[reason]", reason);
-                }
-                oTarget.kickPlayer(plugin.changeColor(kickMessage));
-            } else {
-                Player oIssuer = Bukkit.getPlayer(issuer);
-                if (oIssuer != null) oIssuer.sendMessage("§cThat player is not online. Warned instead!");
-                type = PunishTypes.WARN;
-            }
+        if (type.equals(PunishTypes.KICK) && oTarget != null) {
+            String kickMessage = plugin.getConfig().getString("messages.kickMessage");
+            if (kickMessage != null) kickMessage = kickMessage.replace("[reason]", reason);
+            oTarget.kickPlayer(plugin.changeColor(kickMessage));
         }
 
         if (type.equals(PunishTypes.BAN) && oTarget != null) {
             if (duration.equals(permanent)) {
                 String kickMessage = plugin.getConfig().getString("messages.permBanMessage");
-                if (kickMessage != null) {
-                    kickMessage = kickMessage.replace("[reason]", reason);
-                }
+                if (kickMessage != null) kickMessage = kickMessage.replace("[reason]", reason);
                 oTarget.kickPlayer(kickMessage);
             } else {
                 plugin.getConfig().getString("messages.tempBanMessage");
-                oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + "§c from this server!\n\n§7Reason: §f" + reason + "\n§7Find out more: §e§nwww.example.com");
+                oTarget.kickPlayer("§cYou are temporarily banned for §f" + TimeUtils.makeReadable(duration) + "§c from this server!\n\n§7Reason: §f" + reason + "\n§7Find out more:§e§n www.example.com");
             }
             oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
         }
@@ -112,23 +102,24 @@ public class PlayerStorage {
         long currentTime = System.currentTimeMillis();
         long expires = currentTime + duration;
         String[] punishment = {
-                issuer.toString(),
-                type.toString(),
-                reason,
-                duration.toString(),
-                Long.toString(expires)
+            issuer.toString(),
+            type.toString(),
+            reason,
+            duration.toString(),
+            Long.toString(expires)
         };
 
         punishments.add(String.join(";", punishment));
         getConfig().set(target + ".infractions", punishments);
         Player player = Bukkit.getPlayer(issuer);
 
-        String sType = type.toString().toLowerCase(Locale.US);
-
-        if ("kick".equals(sType)) sType = "kicked";
-        if ("warn".equals(sType)) sType = "warned";
-        if ("mute".equals(sType)) sType = "muted";
-        if ("ban".equals(sType)) sType = "banned";
+        String sType = switch (type.toString().toLowerCase(Locale.US)) {
+            case "kick" -> "kicked";
+            case "warn" -> "warned";
+            case "mute" -> "muted";
+            case "ban" -> "banned";
+            default -> type.toString().toLowerCase(Locale.US);
+        };
 
         if (player != null) player.sendMessage("§7Successfully " + sType + " §a" + Bukkit.getOfflinePlayer(target).getName() + " §7Reason: §e" + reason);
         saveConfig();
