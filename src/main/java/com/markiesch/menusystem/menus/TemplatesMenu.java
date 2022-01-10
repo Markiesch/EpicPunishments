@@ -86,8 +86,10 @@ public class TemplatesMenu extends Menu implements Listener {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         inventory.setItem(49, back);
 
-        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", "§7Click to create a new template");
-        inventory.setItem(52, newTemplate);
+        if (playerMenuUtility.getOwner().hasPermission("epicpunishments.templates.manage")) {
+            ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", "§7Click to create a new template");
+            inventory.setItem(52, newTemplate);
+        }
 
         generateTemplates();
     }

@@ -18,10 +18,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class PunishMenu extends Menu implements Listener {
     EpicPunishments plugin = EpicPunishments.getInstance();
@@ -59,17 +56,9 @@ public class PunishMenu extends Menu implements Listener {
             String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING);
             if (uuid == null) return;
 
-            String type = TemplateStorage.getConfig().getString(uuid + ".type");
-            if (type == null) type = "WARN";
-            PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase(Locale.US));
-
-            String reason = TemplateStorage.getConfig().getString(uuid + ".reason");
-            if (reason == null) reason = "none";
-
-            long duration = TemplateStorage.getConfig().getLong(uuid + ".duration");
-
+            if (!PlayerStorage.hasTemplatePermission(player.getUniqueId(), UUID.fromString(uuid))) player.sendMessage("§7You do not have§c permissions§7 to use this template");
+            else if (!PlayerStorage.punishPlayerFromTemplate(target.getUniqueId(), player.getUniqueId(), UUID.fromString(uuid))) player.sendMessage("§cFailed to punish player");
             player.closeInventory();
-            PlayerStorage.createPunishment(target.getUniqueId(), player.getUniqueId(), punishType, reason, duration);
             return;
         }
 

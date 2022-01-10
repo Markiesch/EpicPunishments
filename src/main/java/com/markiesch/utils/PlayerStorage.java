@@ -70,6 +70,33 @@ public class PlayerStorage {
 
     public static boolean playerRegistered(UUID uuid) { return getConfig().getConfigurationSection(uuid.toString()) != null; }
 
+    public static boolean hasTemplatePermission(UUID issuer, UUID template) {
+        Player player = Bukkit.getPlayer(issuer);
+        String type = TemplateStorage.getConfig().getString(template + ".type");
+
+        if (type == null || player == null) return false;
+        return player.hasPermission("epicpunishments." + type);
+    }
+
+    public static boolean punishPlayerFromTemplate(UUID target, UUID issuer, UUID templateUUID) {
+        Player player = Bukkit.getPlayer(issuer);
+        if (player == null || !hasTemplatePermission(issuer, templateUUID)) return false;
+
+        String type = TemplateStorage.getConfig().getString(templateUUID + ".type");
+        if (type == null) type = "WARN";
+
+        if (!player.hasPermission("epicpunishments." + type)) return false;
+
+        String reason = TemplateStorage.getConfig().getString(templateUUID + ".reason");
+        if (reason == null) reason = "none";
+
+        long duration = TemplateStorage.getConfig().getLong(templateUUID + ".duration");
+        PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase(Locale.US));
+
+        PlayerStorage.createPunishment(target, issuer, punishType, reason, duration);
+        return true;
+    }
+
     public static void createPunishment(UUID target, UUID issuer, PunishTypes type, String reason, Long duration) {
         if (getConfig().contains(target.toString())) createPlayerProfile(target);
         Player oTarget = Bukkit.getPlayer(target);
