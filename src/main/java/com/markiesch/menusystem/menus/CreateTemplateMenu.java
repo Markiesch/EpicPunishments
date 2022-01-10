@@ -42,6 +42,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
         reason = playerMenuUtility.getReason();
         duration = playerMenuUtility.getDuration();
         type = playerMenuUtility.getType();
+        open();
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -83,7 +84,7 @@ public class CreateTemplateMenu extends Menu implements Listener {
             TemplateStorage.addTemplate(name, reason, type, duration);
             playerMenuUtility.reset();
             player.sendMessage("§7Successfully§a created§7 the template with the name of §e" + name);
-            new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+            new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0);
         }
     }
 

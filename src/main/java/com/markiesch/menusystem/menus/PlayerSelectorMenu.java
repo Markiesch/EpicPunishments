@@ -44,6 +44,7 @@ public class PlayerSelectorMenu extends Menu {
         super(playerMenuUtility);
         page = currentPage;
         filter = filterType;
+        open();
     }
 
     @Override
@@ -74,14 +75,14 @@ public class PlayerSelectorMenu extends Menu {
                     player.teleport(target.getPlayer().getLocation());
                 }
             } else {
-                new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
+                new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target);
             }
             return;
         }
 
-        if (event.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), --page, filter).open();
-        if (event.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), ++page, filter).open();
-        if (event.getSlot() == templateSlot) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+        if (event.getSlot() == prevPageSlot && page != 0) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), --page, filter);
+        if (event.getSlot() == nextPageSlot && !onLastPage) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), ++page, filter);
+        if (event.getSlot() == templateSlot) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0);
         if (event.getSlot() == closeSlot) player.closeInventory();
         if (event.getSlot() == filterSlot) toggleFilter();
     }

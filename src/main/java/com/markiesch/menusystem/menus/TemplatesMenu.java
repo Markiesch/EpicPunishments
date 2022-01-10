@@ -35,6 +35,7 @@ public class TemplatesMenu extends Menu implements Listener {
     public TemplatesMenu(PlayerMenuUtility playerMenuUtility, int currentPage) {
         super(playerMenuUtility);
         page = currentPage;
+        open();
     }
 
     public String getMenuName() {
@@ -68,13 +69,13 @@ public class TemplatesMenu extends Menu implements Listener {
 
             playerMenuUtility.reset();
             playerMenuUtility.setUUID(uuid);
-            new EditTemplateMenu(playerMenuUtility).open();
+            new EditTemplateMenu(playerMenuUtility);
         }
 
-        if (event.getSlot() == prevPageSlot && page != 0) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), --page).open();
-        if (event.getSlot() == nextPageSlot && !onLastPage) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), ++page).open();
+        if (event.getSlot() == prevPageSlot && page != 0) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), --page);
+        if (event.getSlot() == nextPageSlot && !onLastPage) new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), ++page);
         if (clickedItem.equals(Material.ANVIL)) plugin.getEditor().put(player.getUniqueId(), new InputUtils(InputTypes.CREATE_TEMPLATE_NAME, player, "§bNew Template", "§7Type in a template name"));
-        if (clickedItem.equals(Material.OAK_SIGN)) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL).open();
+        if (clickedItem.equals(Material.OAK_SIGN)) new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL);
     }
 
     public void setMenuItems() {

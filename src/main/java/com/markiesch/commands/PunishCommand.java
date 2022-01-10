@@ -45,7 +45,7 @@ public class PunishCommand {
                 }
 
                 if (args.length == 0) {
-                    new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL).open();
+                    new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL);
                     return true;
                 }
 
@@ -56,7 +56,7 @@ public class PunishCommand {
                 }
 
                 if (PlayerStorage.getConfig().contains(target.getUniqueId().toString())) {
-                    new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
+                    new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target);
                 } else {
                     player.sendMessage("§cCouldn't link that username to any UUID!");
                 }

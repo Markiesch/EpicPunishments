@@ -41,9 +41,17 @@ public class EditTemplateMenu extends Menu implements Listener {
         super(playerMenuUtility);
         uuid = playerMenuUtility.getUUID();
 
+        Player player = playerMenuUtility.getOwner();
+        if (!player.hasPermission("epicpunishments.templates.edit")) {
+            player.sendMessage("§7You do not have§c permissions§7 to edit templates");
+            player.closeInventory();
+            return;
+        }
+
         ConfigurationSection section = TemplateStorage.getConfig().getConfigurationSection(uuid.toString());
         if (section == null) {
-            playerMenuUtility.getOwner().sendMessage("§cThe given template couldn't be found");
+            player.sendMessage("§cThe given template couldn't be found");
+            player.closeInventory();
             return;
         }
 
@@ -56,6 +64,7 @@ public class EditTemplateMenu extends Menu implements Listener {
         this.reason = playerMenuUtility.getReason() == null ? reason : playerMenuUtility.getReason();
         this.duration = playerMenuUtility.getDuration() == null ? duration : playerMenuUtility.getDuration();
         this.type = playerMenuUtility.getType() == null ? type == null ? "KICK" : type : playerMenuUtility.getType();
+        open();
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -87,7 +96,7 @@ public class EditTemplateMenu extends Menu implements Listener {
                 return;
             }
 
-            new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+            new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0);
             player.sendMessage("§7Successfully§a edited §7the template with the name of §e" + name);
             return;
         }

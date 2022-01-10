@@ -51,8 +51,8 @@ public class PlayerStorage {
 
         try {
             getConfig().save(configFile);
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, e);
+        } catch (IOException exception) {
+            plugin.getLogger().log(Level.SEVERE, "Could not save config to " + configFile, exception);
         }
     }
 
@@ -93,7 +93,7 @@ public class PlayerStorage {
             oTarget.getWorld().spawnEntity(oTarget.getLocation(), EntityType.BAT);
         }
 
-        if (type.equals(PunishTypes.WARN) && oTarget != null && oTarget.isOnline()) {
+        if (type.equals(PunishTypes.WARN) && oTarget != null) {
             String message = plugin.getConfig().getString("messages.warnMessage");
             if (message != null) oTarget.sendMessage(message.replace("[reason]", reason));
         }

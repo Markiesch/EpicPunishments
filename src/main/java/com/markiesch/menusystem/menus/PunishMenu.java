@@ -32,6 +32,7 @@ public class PunishMenu extends Menu implements Listener {
     public PunishMenu(PlayerMenuUtility playerMenuUtility, OfflinePlayer player) {
         super(playerMenuUtility);
         target = player;
+        open();
     }
 
     public String getMenuName() {
@@ -47,7 +48,7 @@ public class PunishMenu extends Menu implements Listener {
         Player player = (Player) event.getWhoClicked();
 
         if (event.getCurrentItem().getType().equals(Material.FLOWER_BANNER_PATTERN)) {
-            new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, 0).open();
+            new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, 0);
             return;
         }
 
@@ -73,7 +74,7 @@ public class PunishMenu extends Menu implements Listener {
         }
 
         if (event.getCurrentItem().getType().equals(Material.OAK_SIGN)) {
-            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL).open();
+            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL);
         }
     }
 

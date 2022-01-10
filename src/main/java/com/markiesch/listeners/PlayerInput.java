@@ -30,22 +30,22 @@ public class PlayerInput implements Listener {
 
             if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_NAME)) {
                 playerMenuUtility.setTemplateName(message.replace(" ", "_"));
-                new CreateTemplateMenu(playerMenuUtility).open();
+                new CreateTemplateMenu(playerMenuUtility);
             } else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_REASON)) {
                 playerMenuUtility.setReason(message);
-                new CreateTemplateMenu(playerMenuUtility).open();
+                new CreateTemplateMenu(playerMenuUtility);
             } else if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_DURATION)) {
                 playerMenuUtility.setDuration(TimeUtils.parseTime(message.replace(" ", "")));
-                new CreateTemplateMenu(playerMenuUtility).open();
+                new CreateTemplateMenu(playerMenuUtility);
             } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_NAME)) {
                 playerMenuUtility.setTemplateName(message.replace(" ", "_"));
-                new EditTemplateMenu(playerMenuUtility).open();
+                new EditTemplateMenu(playerMenuUtility);
             } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_REASON)) {
                 playerMenuUtility.setReason(message);
-                new EditTemplateMenu(playerMenuUtility).open();
+                new EditTemplateMenu(playerMenuUtility);
             } else if (edit.getChat().equals(InputTypes.EDIT_TEMPLATE_DURATION)) {
                 playerMenuUtility.setDuration(TimeUtils.parseTime(message.replace(" ", "")));
-                new EditTemplateMenu(playerMenuUtility).open();
+                new EditTemplateMenu(playerMenuUtility);
             }
         }, 5L);
     }

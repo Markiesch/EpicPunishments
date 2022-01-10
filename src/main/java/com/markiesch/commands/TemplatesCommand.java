@@ -26,7 +26,7 @@ public class TemplatesCommand {
                 Player player = (Player) sender;
 
                 if (args.length == 0) {
-                    new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0).open();
+                    new TemplatesMenu(EpicPunishments.getPlayerMenuUtility(player), 0);
                     return true;
                 }
 
@@ -35,7 +35,7 @@ public class TemplatesCommand {
                 if ("create".equalsIgnoreCase(args[0])) {
                     if (args.length >= 2) {
                         playerMenuUtility.setTemplateName(args[1]);
-                        new CreateTemplateMenu(playerMenuUtility).open();
+                        new CreateTemplateMenu(playerMenuUtility);
                         return true;
                     }
 
@@ -52,7 +52,7 @@ public class TemplatesCommand {
 
                     playerMenuUtility.reset();
                     playerMenuUtility.setUUID(uuid);
-                    new EditTemplateMenu(playerMenuUtility).open();
+                    new EditTemplateMenu(playerMenuUtility);
                     return true;
                 }
 

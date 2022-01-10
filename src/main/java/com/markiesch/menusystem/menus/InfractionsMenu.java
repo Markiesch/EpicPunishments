@@ -32,6 +32,7 @@ public class InfractionsMenu extends Menu {
         super(playerMenuUtility);
         target = player;
         this.page = page;
+        open();
     }
 
     public String getMenuName() {
@@ -57,9 +58,9 @@ public class InfractionsMenu extends Menu {
         }
 
         Player player = (Player) event.getWhoClicked();
-        if (event.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page).open();
-        if (event.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page).open();
-        if (event.getSlot() == 49) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target).open();
+        if (event.getSlot() == 45 && page != 0) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, --page);
+        if (event.getSlot() == 53 && !onLastPage) new InfractionsMenu(EpicPunishments.getPlayerMenuUtility(player), target, ++page);
+        if (event.getSlot() == 49) new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target);
     }
 
     public void setMenuItems() {
