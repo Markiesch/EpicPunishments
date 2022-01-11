@@ -20,13 +20,14 @@ public class ChatListener implements Listener {
         if (!isMuted) return;
 
         event.setCancelled(true);
-        String mute = getMute(PlayerStorage.getPunishments(player.getUniqueId()));
-        long duration = Long.parseLong(mute.split(";")[4]) - System.currentTimeMillis();
+        String[] mute = getMute(PlayerStorage.getPunishments(player.getUniqueId())).split(";");
 
-        String message = plugin.getConfig().getString("messages." + ( duration == 0L ? "permanentlyMute" : "temporarilyMute"));
+        long duration = Long.parseLong(mute[4]) - System.currentTimeMillis();
+
+        String message = plugin.getConfig().getString("messages." + ( Long.parseLong(mute[3]) == 0L ? "permanentlyMute" : "temporarilyMute"));
         if (message == null) return;
 
-        String reason = mute.split(";")[2];
+        String reason = mute[2];
         message = message.replace("[duration]", TimeUtils.makeReadable(duration)).replace("[reason]", reason);
         player.sendMessage(message);
     }
@@ -39,8 +40,8 @@ public class ChatListener implements Listener {
             String type = infraction.split(";")[1];
             if (!"mute".equalsIgnoreCase(type)) continue;
             long duration = Long.parseLong(infraction.split(";")[3]);
-            if (Long.parseLong(infraction.split(";")[4]) - System.currentTimeMillis() < 0) continue;
             if (duration == 0L) return infraction;
+            if (Long.parseLong(infraction.split(";")[4]) - System.currentTimeMillis() < 0) continue;
             if (duration > highestDuration) {
                 punishment = infraction;
                 highestDuration = duration;
