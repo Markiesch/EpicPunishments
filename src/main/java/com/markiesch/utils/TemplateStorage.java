@@ -1,7 +1,6 @@
 package com.markiesch.utils;
 
 import com.markiesch.EpicPunishments;
-import org.apache.logging.log4j.core.util.UuidUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -49,7 +48,7 @@ public class TemplateStorage {
     }
 
     public static void addTemplate(String name, String reason, String type, long duration) {
-        UUID uuid = UuidUtil.getTimeBasedUuid();
+        UUID uuid = getTemplateUUID();
         ConfigurationSection section = getConfig().createSection(uuid.toString());
         section.set("name", name);
         section.set("type", type);
@@ -89,5 +88,11 @@ public class TemplateStorage {
         }
 
         return templateUuid;
+    }
+
+    public static UUID getTemplateUUID() {
+         UUID uuid = UUID.randomUUID();
+         if (getConfig().get(uuid.toString()) != null) return getTemplateUUID();
+        return uuid;
     }
 }
