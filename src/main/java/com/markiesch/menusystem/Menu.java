@@ -7,20 +7,23 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 public abstract class Menu implements InventoryHolder {
-    protected Inventory inventory;
     protected PlayerMenuUtility playerMenuUtility;
-    public Menu(PlayerMenuUtility playerMenuUtility) {
+    private final String menuName;
+    private final int slots;
+    private Inventory inventory;
+
+    public Menu(PlayerMenuUtility playerMenuUtility, String menuName, int slots) {
         this.playerMenuUtility = playerMenuUtility;
+        this.menuName = menuName;
+        this.slots = slots;
     }
 
-    public abstract String getMenuName();
-    public abstract int getSlots();
-    public abstract void handleMenu(InventoryClickEvent e);
+    public abstract void handleMenu(InventoryClickEvent event);
     public abstract void setMenuItems();
 
     public void open() {
         Player player = playerMenuUtility.getOwner();
-        inventory = Bukkit.createInventory(this, getSlots(), getMenuName());
+        inventory = Bukkit.createInventory(this, slots, menuName);
         this.setMenuItems();
         player.openInventory(inventory);
     }

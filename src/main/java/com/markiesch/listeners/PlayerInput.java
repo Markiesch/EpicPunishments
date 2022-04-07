@@ -25,7 +25,7 @@ public class PlayerInput implements Listener {
         String message = event.getMessage();
         event.setCancelled(true);
         edit.cancel();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(EpicPunishments.getInstance(), () -> {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             PlayerMenuUtility playerMenuUtility = EpicPunishments.getPlayerMenuUtility(player);
 
             if (edit.getChat().equals(InputTypes.CREATE_TEMPLATE_NAME)) {

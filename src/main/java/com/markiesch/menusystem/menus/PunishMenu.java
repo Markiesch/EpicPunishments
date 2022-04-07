@@ -1,10 +1,12 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.controllers.TemplateController;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.SearchTypes;
-import com.markiesch.utils.*;
+import com.markiesch.utils.ItemUtils;
+import com.markiesch.utils.PlayerStorage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -21,23 +23,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PunishMenu extends Menu implements Listener {
-    EpicPunishments plugin = EpicPunishments.getInstance();
+    private final EpicPunishments plugin;
+    private final TemplateController templateController;
     public OfflinePlayer target;
     int maxTemplatesPerPage = 14;
     int page = 0;
 
     public PunishMenu(PlayerMenuUtility playerMenuUtility, OfflinePlayer player) {
-        super(playerMenuUtility);
+        super(playerMenuUtility, "Punish > " + player.getName(), 54);
+        plugin = EpicPunishments.getInstance();
+        templateController = EpicPunishments.getTemplateController();
+
         target = player;
         open();
-    }
-
-    public String getMenuName() {
-        return "Punish > " + target.getName();
-    }
-
-    public int getSlots() {
-        return 54;
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -75,17 +73,17 @@ public class PunishMenu extends Menu implements Listener {
         }
 
         ItemStack infractions = ItemUtils.createItem(Material.FLOWER_BANNER_PATTERN, "§c§lInfractions", "§7Click to view infractions");
-        inventory.setItem(52, infractions);
+        getInventory().setItem(52, infractions);
 
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
-        inventory.setItem(49, back);
+        getInventory().setItem(49, back);
 
         generateTemplates();
         generatePlayerHead();
     }
 
     private void generateTemplates() {
-        ConfigurationSection configurationSection = TemplateStorage.getConfig().getConfigurationSection("");
+        ConfigurationSection configurationSection = templateController.getConfigurationSection("");
         if (configurationSection == null) {
             playerMenuUtility.getOwner().sendMessage("There was an error whilst opening the Templates Menu");
             return;
@@ -94,16 +92,16 @@ public class PunishMenu extends Menu implements Listener {
         ArrayList<String> templates = new ArrayList<>(configurationSection.getKeys(false));
         if (templates.isEmpty()) return;
 
-        int[] slots = {28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43};
+        int[] slots = { 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43 };
 
         for (int i = 0; i < maxTemplatesPerPage; i++) {
             int index = maxTemplatesPerPage * page + i;
             if (index >= templates.size()) break;
             if (templates.get(index) == null) continue;
 
-            String name = TemplateStorage.getConfig().getString(templates.get(index) + ".name");
-            String type = TemplateStorage.getConfig().getString(templates.get(index) + ".type");
-            String reason = TemplateStorage.getConfig().getString(templates.get(index) + ".reason");
+            String name = templateController.getConfig().getString(templates.get(index) + ".name");
+            String type = templateController.getConfig().getString(templates.get(index) + ".type");
+            String reason = templateController.getConfig().getString(templates.get(index) + ".reason");
             if (type != null) type = type.substring(0, 1).toUpperCase(Locale.US) + type.substring(1).toLowerCase(Locale.US);
             ItemStack template = ItemUtils.createItem(Material.PAPER, "§9§l" + name, "§7Click to punish " + target.getName(), "", "§7Type: §a" + (type == null ? "none" : type), "§7Reason: §a" + (reason == null ? "none" : reason));
 
@@ -113,7 +111,7 @@ public class PunishMenu extends Menu implements Listener {
                 meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "templateUUID"), PersistentDataType.STRING, uuid);
                 template.setItemMeta(meta);
             }
-            inventory.setItem(slots[i], template);
+            getInventory().setItem(slots[i], template);
         }
     }
 
@@ -126,13 +124,13 @@ public class PunishMenu extends Menu implements Listener {
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD, "§b§l" + target.getName(), "",
                 (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
-                (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is§a banned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not§e banned"),
                 "", "§7Joined at: " + formattedDate);
 
         SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
         if (playerMeta != null) playerMeta.setOwningPlayer(target);
         playerHead.setItemMeta(playerMeta);
-        inventory.setItem(13, playerHead);
+        getInventory().setItem(13, playerHead);
     }
 
     public boolean hasPermission() {

@@ -28,19 +28,11 @@ public class InfractionsMenu extends Menu {
     int maxPages;
     boolean onLastPage = true;
 
-    public InfractionsMenu(PlayerMenuUtility playerMenuUtility, OfflinePlayer player, int page) {
-        super(playerMenuUtility);
-        target = player;
+    public InfractionsMenu(PlayerMenuUtility playerMenuUtility, OfflinePlayer target, int page) {
+        super(playerMenuUtility, target.getName() + " > Infractions", 54);
+        this.target = target;
         this.page = page;
         open();
-    }
-
-    public String getMenuName() {
-        return target.getName() + " > Infractions";
-    }
-
-    public int getSlots() {
-        return 54;
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -51,7 +43,7 @@ public class InfractionsMenu extends Menu {
             if (meta != null) {
                 String data = meta.getPersistentDataContainer().get(dataKey, PersistentDataType.STRING);
                 PlayerStorage.removeInfraction(target.getUniqueId(), data);
-                inventory.remove(Material.PAPER);
+                getInventory().remove(Material.PAPER);
                 setMenuItems();
                 return;
             }
@@ -65,7 +57,7 @@ public class InfractionsMenu extends Menu {
 
     public void setMenuItems() {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
-        inventory.setItem(49, back);
+        getInventory().setItem(49, back);
 
         ArrayList<String> infractions = new ArrayList<>(PlayerStorage.getConfig().getStringList(target.getUniqueId() + ".infractions"));
         if (infractions.isEmpty()) return;
@@ -90,7 +82,7 @@ public class InfractionsMenu extends Menu {
                     infraction.setItemMeta(meta);
                 }
 
-                inventory.setItem(slots[i], infraction);
+                getInventory().setItem(slots[i], infraction);
             }
         }
 
@@ -98,13 +90,13 @@ public class InfractionsMenu extends Menu {
 
         if (page >= 1) {
             ItemStack prevPage = ItemUtils.createItem(Material.ARROW, "§cPrevious Page", "§7Click to visit page " + page);
-            inventory.setItem(45, prevPage);
+            getInventory().setItem(45, prevPage);
         }
 
         if (page < maxPages) {
             ItemStack nextPage = ItemUtils.createItem(Material.ARROW, "§cNext Page", "§7Click to visit page " + (page + 2));
             onLastPage = false;
-            inventory.setItem(53, nextPage);
+            getInventory().setItem(53, nextPage);
         }
     }
 }

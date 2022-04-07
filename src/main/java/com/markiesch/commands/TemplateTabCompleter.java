@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
-import com.markiesch.utils.TemplateStorage;
+import com.markiesch.EpicPunishments;
+import com.markiesch.controllers.TemplateController;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -18,15 +19,19 @@ public class TemplateTabCompleter {
             return result;
         }
 
+
         if (args.length == 2) {
-            ConfigurationSection config = TemplateStorage.getConfig().getConfigurationSection("");
+            final TemplateController templateController = EpicPunishments.getTemplateController();
+
+            ConfigurationSection config = templateController.getConfigurationSection("");
             if (config == null) return result;
+
             List<String> templates = new ArrayList<>(config.getKeys(false));
             for (String template : templates) {
-                String templateName = TemplateStorage.getConfig().getString(template + ".name");
-                if (templateName != null && templateName.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US))) result.add(templateName);
+                String templateName = templateController.getConfig().getString(template + ".name");
+                if (templateName != null && templateName.toLowerCase(Locale.US).startsWith(args[1].toLowerCase(Locale.US)))
+                    result.add(templateName);
             }
-            return result;
         }
 
         return result;

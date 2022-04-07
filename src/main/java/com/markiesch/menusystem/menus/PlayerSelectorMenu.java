@@ -1,11 +1,14 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.controllers.PlayerController;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.SearchTypes;
+import com.markiesch.models.PlayerModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.PlayerStorage;
+import com.markiesch.utils.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -28,35 +31,27 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class PlayerSelectorMenu extends Menu {
-    EpicPunishments plugin = EpicPunishments.getInstance();
+    private final EpicPunishments plugin;
+    private final PlayerController playerController;
     private int page;
-    private boolean onLastPage = true;
-    static int prevPageSlot = 45;
-    static int nextPageSlot = 53;
-    static int templateSlot = 52;
-    static int closeSlot = 49;
-    static int filterSlot = 46;
-    static SearchTypes filter;
+    private SearchTypes filter;
 
+    private boolean onLastPage = true;
+    private final int prevPageSlot = 45;
+    private final int nextPageSlot = 53;
+    private final int templateSlot = 52;
+    private final int closeSlot = 49;
+    private final int filterSlot = 46;
 
     public PlayerSelectorMenu(PlayerMenuUtility playerMenuUtility, int currentPage, SearchTypes filterType) {
-        super(playerMenuUtility);
+        super(playerMenuUtility, "Overview > Players", 54);
+        plugin = EpicPunishments.getInstance();
+        playerController = new PlayerController();
         page = currentPage;
         filter = filterType;
         open();
     }
 
-    @Override
-    public String getMenuName() {
-        return "Overview > Players";
-    }
-
-    @Override
-    public int getSlots() {
-        return 54;
-    }
-
-    @Override
     public void handleMenu(InventoryClickEvent event) {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
@@ -86,22 +81,21 @@ public class PlayerSelectorMenu extends Menu {
         if (event.getSlot() == filterSlot) toggleFilter();
     }
 
-    @Override
     public void setMenuItems() {
         String nextFilter = "all";
         if (filter.equals(SearchTypes.ALL)) nextFilter = "online";
         else if (filter.equals(SearchTypes.ONLINE_ONLY)) nextFilter = "offline";
 
         ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE, "§b§lVisibility", "§7Click to show §e" + nextFilter + " §7users");
-        inventory.setItem(filterSlot, filterItem);
+        getInventory().setItem(filterSlot, filterItem);
 
-        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, "§c§lClose Menu", "§7Click to close menu");
-        inventory.setItem(closeSlot, closeButton);
+        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, "§c§lClose", "§7Click to close menu");
+        getInventory().setItem(closeSlot, closeButton);
 
         ItemStack templates = ItemUtils.createItem(Material.ANVIL, "§b§lTemplates", "§7Click to manage templates");
-        inventory.setItem(templateSlot, templates);
+        getInventory().setItem(templateSlot, templates);
 
-        List<OfflinePlayer> players = getPlayers();
+        List<PlayerModel> players = playerController.readAll();
         int[] headSlots = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
 
         if (!players.isEmpty()) {
@@ -109,22 +103,26 @@ public class PlayerSelectorMenu extends Menu {
                 int index = headSlots.length * page + i;
                 if (index >= players.size()) break;
 
-                OfflinePlayer target = players.get(index);
-                if (target == null) continue;
+                PlayerModel modelTarget = players.get(index);
+                if (modelTarget == null) return;
 
-                Date date = new Date(target.getFirstPlayed());
+                OfflinePlayer target = modelTarget.getPlayer();
+
+                long date = target.getFirstPlayed();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
                 String formattedDate = sdf.format(date);
                 List<String> infractionsList = PlayerStorage.getPunishments(target.getUniqueId());
 
+                String headName = Translation.PLAYER_SELECTOR_HEAD_NAME.format().replace("[target]", target.getName() + "");
+
                 ItemStack playerHead = ItemUtils.createItem(
                         Material.PLAYER_HEAD,
-                        "§b§l" + target.getName(),
+                        headName,
                         "§bLeft Click §7to manage player",
                         "§bRight Click §7to teleport",
                         "",
                         (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
-                        (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is §abanned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not §ebanned"),
+                        (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is§a banned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not§e banned"),
                         "",
                         "§7Joined at: " + formattedDate
                 );
@@ -135,7 +133,7 @@ public class PlayerSelectorMenu extends Menu {
                     playerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, target.getUniqueId().toString());
                     playerHead.setItemMeta(playerMeta);
                 }
-                inventory.setItem(headSlots[i], playerHead);
+                getInventory().setItem(headSlots[i], playerHead);
             }
         }
 
@@ -143,28 +141,14 @@ public class PlayerSelectorMenu extends Menu {
 
         if (page >= 1) {
             ItemStack prevPage = ItemUtils.createItem(Material.ARROW, "§cPrevious Page", "§7Click to visit page " + page);
-            inventory.setItem(prevPageSlot, prevPage);
+            getInventory().setItem(prevPageSlot, prevPage);
         }
 
         if (page < maxPages) {
             ItemStack nextPage = ItemUtils.createItem(Material.ARROW, "§cNext Page", "§7Click to visit page " + (page + 2));
             onLastPage = false;
-            inventory.setItem(nextPageSlot, nextPage);
+            getInventory().setItem(nextPageSlot, nextPage);
         }
-    }
-
-    public List<OfflinePlayer> getPlayers() {
-        List<OfflinePlayer> players = new ArrayList<>();
-
-        ConfigurationSection configSection = PlayerStorage.getConfig().getConfigurationSection("");
-        if (configSection == null) return players;
-
-        for (String uuid : configSection.getKeys(false)) players.add(Bukkit.getOfflinePlayer(UUID.fromString(uuid)));
-
-        if (filter.equals(SearchTypes.ONLINE_ONLY)) return players.stream().filter(OfflinePlayer::isOnline).collect(Collectors.toList());
-        if (filter.equals(SearchTypes.OFFLINE_ONLY)) return players.stream().filter(player -> !player.isOnline()).collect(Collectors.toList());
-
-        return players;
     }
 
     public void toggleFilter() {
@@ -172,7 +156,7 @@ public class PlayerSelectorMenu extends Menu {
         else if (filter.equals(SearchTypes.ONLINE_ONLY)) filter = SearchTypes.OFFLINE_ONLY;
         else if (filter.equals(SearchTypes.OFFLINE_ONLY)) filter = SearchTypes.ALL;
 
-        inventory.remove(Material.PLAYER_HEAD);
+        getInventory().remove(Material.PLAYER_HEAD);
         setMenuItems();
     }
 }

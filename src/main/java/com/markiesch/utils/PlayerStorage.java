@@ -1,6 +1,7 @@
 package com.markiesch.utils;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.controllers.TemplateController;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +22,8 @@ import java.util.stream.Collectors;
 import static org.bukkit.Bukkit.getServer;
 
 public class PlayerStorage {
-    static final EpicPunishments plugin = EpicPunishments.getPlugin(EpicPunishments.class);
+    static final EpicPunishments plugin = EpicPunishments.getInstance();
+    static final TemplateController templateController = EpicPunishments.getTemplateController();
     static long permanent = 0L;
     static FileConfiguration dataConfig = null;
     static File configFile = new File(plugin.getDataFolder(), "data.yml");
@@ -72,8 +74,8 @@ public class PlayerStorage {
 
     public static boolean hasTemplatePermission(UUID issuer, UUID template) {
         Player player = Bukkit.getPlayer(issuer);
-        String type = TemplateStorage.getConfig().getString(template + ".type");
-        String name = TemplateStorage.getConfig().getString(template + ".name");
+        String type = templateController.getConfig().getString(template + ".type");
+        String name = templateController.getConfig().getString(template + ".name");
 
         if (type == null || player == null) return false;
 
@@ -87,15 +89,15 @@ public class PlayerStorage {
         Player player = Bukkit.getPlayer(issuer);
         if (player == null || !hasTemplatePermission(issuer, templateUUID)) return false;
 
-        String type = TemplateStorage.getConfig().getString(templateUUID + ".type");
+        String type = templateController.getConfig().getString(templateUUID + ".type");
         if (type == null) type = "WARN";
 
         if (!player.hasPermission("epicpunishments." + type)) return false;
 
-        String reason = TemplateStorage.getConfig().getString(templateUUID + ".reason");
+        String reason = templateController.getConfig().getString(templateUUID + ".reason");
         if (reason == null) reason = "none";
 
-        long duration = TemplateStorage.getConfig().getLong(templateUUID + ".duration");
+        long duration = templateController.getConfig().getLong(templateUUID + ".duration");
         PunishTypes punishType = PunishTypes.valueOf(type.toUpperCase(Locale.US));
 
         PlayerStorage.createPunishment(target, issuer, punishType, reason, duration);

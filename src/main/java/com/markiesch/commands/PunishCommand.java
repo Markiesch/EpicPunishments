@@ -13,63 +13,62 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PunishCommand {
+public class PunishCommand extends CommandBase {
     EpicPunishments plugin = EpicPunishments.getInstance();
 
     public PunishCommand() {
-        new CommandBase("punish", 0, -1, true) {
-            @Override
-            public boolean onCommand(CommandSender sender, String[] args) {
-                Player player = (Player) sender;
+        super("punish", 0, -1, true);
+    }
 
-                if (args.length > 0 && "reload".equalsIgnoreCase(args[0])) {
-                    if (!player.hasPermission("epicpunishments.reload")) {
-                        this.sendPermissionMessage(sender);
-                        return true;
-                    }
+    @Override
+    public boolean onCommand(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
 
-                    try {
-                        long startTime = System.currentTimeMillis();
-                        plugin.reloadConfig();
-                        long estimatedTime = System.currentTimeMillis() - startTime;
-                        player.sendMessage("§aConfig files reloaded! Took [ms]ms".replace("[ms]", Long.toString(estimatedTime)));
-                    } catch (Exception e) {
-                        player.sendMessage("§cFailed to load config file! Check spelling!");
-                    }
-                    return true;
-                }
-
-                if (!player.hasPermission("epicpunishments.gui")) {
-                    this.sendPermissionMessage(sender);
-                    return true;
-                }
-
-                if (args.length == 0) {
-                    new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL);
-                    return true;
-                }
-
-                // Open menu of defined player
-                OfflinePlayer target = Bukkit.getPlayer(args[0]);
-                if (target == null) {
-                    target = Bukkit.getOfflinePlayer(args[0]);
-                }
-
-                if (PlayerStorage.getConfig().contains(target.getUniqueId().toString())) {
-                    new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target);
-                } else {
-                    player.sendMessage("§cCouldn't link that username to any UUID!");
-                }
+        if (args.length > 0 && "reload".equalsIgnoreCase(args[0])) {
+            if (!player.hasPermission("epicpunishments.reload")) {
+                this.sendPermissionMessage(sender);
                 return true;
             }
 
-            @Override
-            public String getUsage() { return ""; }
-            public String getPermission() { return "epicpunishments.punish"; }
-            public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-                if (!sender.hasPermission(getPermission())) return new ArrayList<>();
-                return PunishTabCompleter.onTabComplete(args);
+            try {
+                long startTime = System.currentTimeMillis();
+                plugin.reloadConfig();
+                long estimatedTime = System.currentTimeMillis() - startTime;
+                player.sendMessage("§aConfig files reloaded! Took [ms]ms".replace("[ms]", Long.toString(estimatedTime)));
+            } catch (Exception e) {
+                player.sendMessage("§cFailed to load config file! Check spelling!");
             }
-        };
+            return true;
+        }
+
+        if (!player.hasPermission("epicpunishments.gui")) {
+            this.sendPermissionMessage(sender);
+            return true;
+        }
+
+        if (args.length == 0) {
+            new PlayerSelectorMenu(EpicPunishments.getPlayerMenuUtility(player), 0, SearchTypes.ALL);
+            return true;
+        }
+
+        // Open menu of defined player
+        OfflinePlayer target = Bukkit.getPlayer(args[0]);
+        if (target == null) {
+            target = Bukkit.getOfflinePlayer(args[0]);
+        }
+
+        if (PlayerStorage.getConfig().contains(target.getUniqueId().toString())) {
+            new PunishMenu(EpicPunishments.getPlayerMenuUtility(player), target);
+        } else {
+            player.sendMessage("§cCouldn't link that username to any UUID!");
+        }
+        return true;
+    }
+
+    @Override public String getUsage() { return ""; }
+    @Override public String getPermission() { return "epicpunishments.punish"; }
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String alias, String[] args) {
+        return PunishTabCompleter.onTabComplete(args);
     }
 }

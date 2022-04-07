@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.SimplePluginManager;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommandBase extends BukkitCommand implements CommandExecutor {
@@ -20,7 +21,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     public abstract boolean onCommand(CommandSender sender, String[] args);
     public abstract String getUsage();
     public abstract String getPermission();
-    public abstract List<String> tabComplete(CommandSender sender, String alias, String[] args);
+    public abstract List<String> onTabComplete(CommandSender sender, String alias, String[] args);
 
     public CommandBase(String command, int minArgs, int maxArgs, boolean playerOnly) {
         super(command);
@@ -53,6 +54,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         sender.sendMessage(getUsage());
     }
 
+    @Override
     public boolean execute(CommandSender sender, String alias, String[] arguments) {
         String permission = getPermission();
         if (permission != null && !sender.hasPermission(permission)) {
@@ -78,7 +80,14 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         sender.sendMessage("§7You do not have§c permissions §7to use this command!");
     }
 
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
         return this.onCommand(sender, args);
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        if (!sender.hasPermission(getPermission())) return new ArrayList<>();
+        return onTabComplete(sender, alias, args);
     }
 }
