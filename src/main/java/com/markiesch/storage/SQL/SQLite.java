@@ -1,14 +1,12 @@
 package com.markiesch.storage.SQL;
 
-import com.google.common.base.Function;
 import com.markiesch.EpicPunishments;
 import com.markiesch.models.InfractionModel;
 import com.markiesch.models.ProfileModel;
 import com.markiesch.storage.Storage;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,36 +19,24 @@ public final class SQLite extends Storage {
     public SQLite(EpicPunishments plugin) {
         super(plugin);
         this.file = new File(plugin.getDataFolder(), "data.db");
+        setup();
     }
 
-    @Override
-    protected void setup() {
+    private void setup() {
         try {
             connection = getConnection();
 
             // Create tables
+            System.out.println("Creating SQLite tables...");
             executeUpdate(Query.CREATE_INFRACTION_TABLE);
             executeUpdate(Query.CREATE_PLAYER_TABLE);
             executeUpdate(Query.CREATE_TEMPLATE_TABLE);
-
-            ResultSet profileResult = connection.prepareStatement("SELECT * FROM Profiles").executeQuery();
-            while (profileResult.next()) {
-                UUID uuid = UUID.fromString(profileResult.getString("UUID"));
-                System.out.println("Loading profile " + uuid);
-                profileController.createProfile(uuid);
-            }
-            profileResult.close();
-
-            ResultSet infractionResult = connection.prepareStatement("SELECT * FROM Profiles").executeQuery();
-            while (infractionResult.next()) {
-                UUID uuid = UUID.fromString(infractionResult.getString("UUID"));
-                System.out.println("Loading profile " + uuid);
-                profileController.createProfile(uuid);
-            }
-            infractionResult.close();
+            System.out.println("Created SQLite tables!");
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
+        } finally {
+            closeConnection();
         }
     }
 
@@ -95,8 +81,11 @@ public final class SQLite extends Storage {
             resultSet.next();
 
             model = new ProfileModel(plugin, UUID.fromString(resultSet.getString("UUID")));
+            resultSet.close();
         } catch(SQLException sqlException) {
             sqlException.printStackTrace();
+        } finally {
+            closeConnection();
         }
 
         return model;
@@ -122,10 +111,23 @@ public final class SQLite extends Storage {
     @Override
     public void createProfile(ProfileModel profile) {
         try {
+
+            // Already exists
+            if (getProfile(profile.uuid) != null)
+            {
+                System.out.println(profile.getPlayer().getName() + " already has a profile");
+                return;
+            }
+
+            System.out.println("Creating profile for " + profile.getPlayer().getName());
+            System.out.println();
+
             PreparedStatement preparedStatement = getConnection().prepareStatement(Query.ADD_PROFILE.getQuery());
             preparedStatement.setString(1, profile.uuid.toString());
+//            preparedStatement.setString(2, profile.uuid.toString());
 
             preparedStatement.executeUpdate();
+            closeConnection();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -146,21 +148,21 @@ public final class SQLite extends Storage {
     @Override
     public void saveInfraction(InfractionModel infraction) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "REPLACE INTO Infractions (UUID, Victim, Issuer, Type, Reason, Duration, Date)" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?);"
+            PreparedStatement preparedStatement = getConnection().prepareStatement(
+                    "REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date)" +
+                            "VALUES (?, ?, ?, ?, ?, ?);"
             );
 
             // Insert model values
-            preparedStatement.setString(1, infraction.uuid.toString());
             preparedStatement.setString(1, infraction.victim.toString());
-            preparedStatement.setString(1, infraction.issuer.toString());
-            preparedStatement.setString(1, infraction.type.toString());
-            preparedStatement.setString(1, infraction.reason);
-            preparedStatement.setLong(1, infraction.duration);
-            preparedStatement.setLong(1, infraction.date.getTime());
-            preparedStatement.executeQuery();
+            preparedStatement.setString(2, infraction.issuer.toString());
+            preparedStatement.setString(3, infraction.type.toString());
+            preparedStatement.setString(4, infraction.reason);
+            preparedStatement.setLong(5, infraction.duration);
+            preparedStatement.setLong(6, infraction.date.getTime());
+            preparedStatement.executeUpdate();
 
+            closeConnection();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -173,18 +175,20 @@ public final class SQLite extends Storage {
 
     private void openConnection() {
         try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + file);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } catch (ClassNotFoundException classNotFoundException) {
-            plugin.getLogger().severe(classNotFoundException.getMessage());
+            connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
+        } catch (SQLException | IOException | ClassNotFoundException exception) {
+            exception.printStackTrace();
         }
     }
 
     public void closeConnection() {
         try {
-            connection.close();
+            if (connection != null && !connection.isClosed()) connection.close();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
