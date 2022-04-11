@@ -2,16 +2,17 @@ package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.controllers.InfractionController;
+import com.markiesch.models.InfractionModel;
 import com.markiesch.models.ProfileModel;
+import com.markiesch.storage.Storage;
+import com.markiesch.utils.PunishTypes;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class BanCommand extends CommandBase {
     private final EpicPunishments plugin;
@@ -39,7 +40,20 @@ public class BanCommand extends CommandBase {
         List<String> arguments = Arrays.asList(args);
         String reason = String.join(" ", arguments.subList(2, arguments.size()));
 
-        ProfileModel profile = plugin.getProfileController().getProfile(target.getUniqueId());
+
+        InfractionModel infraction = new InfractionModel(
+                UUID.randomUUID(),
+                PunishTypes.BAN,
+                target.getUniqueId(),
+                issuer.getUniqueId(),
+                reason,
+                duration,
+                new Date()
+        );
+
+        plugin.getStorage().saveInfraction(infraction);
+
+//        ProfileModel profile = plugin.getProfileController().getProfile(target.getUniqueId());
 //        PlayerStorage.createPunishment(target.getUniqueId(), issuer.getUniqueId(), PunishTypes.BAN, reason, duration);
         return true;
     }
