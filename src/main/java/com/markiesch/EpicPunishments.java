@@ -34,12 +34,12 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         // Initialize config
         this.saveDefaultConfig();
 
-        // Initialize storage
-        storage = new SQLite(this);
-
         // Initialize controllers
         profileController = new ProfileController(this);
         infractionController = new InfractionController(this);
+
+        // Initialize storage
+        storage = new SQLite(this);
 
         // Initialize listeners
         getServer().getPluginManager().registerEvents(new CommandSpy(), this);
