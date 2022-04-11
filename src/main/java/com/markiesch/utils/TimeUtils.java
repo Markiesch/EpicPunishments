@@ -3,7 +3,6 @@ package com.markiesch.utils;
 import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
-
     public static String makeReadable(Long time) {
         if (time == null) return "";
 

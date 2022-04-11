@@ -1,45 +1,29 @@
 package com.markiesch;
 
-import com.markiesch.controllers.TemplateController;
+import com.markiesch.controllers.InfractionController;
+import com.markiesch.controllers.ProfileController;
 import com.markiesch.commands.*;
 import com.markiesch.listeners.*;
-import com.markiesch.menusystem.PlayerMenuUtility;
-import com.markiesch.utils.InputUtils;
-import com.markiesch.utils.PlayerStorage;
-import com.markiesch.utils.configs.LangConfig;
+import com.markiesch.storage.SQL.SQLite;
+import com.markiesch.storage.Storage;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class EpicPunishments extends JavaPlugin implements Listener {
-    private static TemplateController templateController;
-    public static TemplateController getTemplateController() {
-        return templateController;
+    private Storage storage;
+    public Storage getStorage() {
+        return storage;
     }
 
-    private static final ConcurrentHashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new ConcurrentHashMap<>();
+    private ProfileController profileController;
+    public ProfileController getProfileController() {
+        return profileController;
+    }
 
-    private final ConcurrentHashMap<UUID, InputUtils> editor = new ConcurrentHashMap<>();
-    public ConcurrentHashMap<UUID, InputUtils> getEditor() { return this.editor; }
-
-    private static EpicPunishments instance;
-    public static EpicPunishments getInstance() { return instance; }
-
-    private static LangConfig langConfig;
-    public static LangConfig getLangConfig() { return langConfig; };
-
-    public static PlayerMenuUtility getPlayerMenuUtility(Player player) {
-        PlayerMenuUtility playerMenuUtility;
-
-        if (playerMenuUtilityMap.containsKey(player)) return playerMenuUtilityMap.get(player);
-
-        playerMenuUtility = new PlayerMenuUtility(player);
-        playerMenuUtilityMap.put(player, playerMenuUtility);
-        return playerMenuUtility;
+    private InfractionController infractionController;
+    public InfractionController getInfractionController() {
+        return infractionController;
     }
 
     public String changeColor(String string) {
@@ -47,35 +31,34 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     }
 
     public void onEnable() {
-        instance = this;
-
-        templateController = new TemplateController();
-
-
-        PlayerStorage.saveDefaultConfig();
-        langConfig = new LangConfig(this);
+        // Initialize config
         this.saveDefaultConfig();
 
-        getServer().getPluginManager().registerEvents(new CommandSpy(), this);
-        getServer().getPluginManager().registerEvents(new SignSpy(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInput(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        // Initialize storage
+        storage = new SQLite(this);
 
-        new KickCommand();
-        new WarnCommand();
-        new MuteCommand();
-        new UnMuteCommand();
-        new BanCommand();
+        // Initialize controllers
+        profileController = new ProfileController(this);
+        infractionController = new InfractionController(this);
+
+        // Initialize listeners
+        getServer().getPluginManager().registerEvents(new CommandSpy(), this);
+        getServer().getPluginManager().registerEvents(new SignSpy(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
+
+        // Initialize commands
+        new BanCommand(this);
         new UnBanCommand();
-        new PunishCommand();
-        new TemplatesCommand();
 
         getServer().getConsoleSender().sendMessage("§aEpicPunishments is now enabled");
     }
 
     public void onDisable() {
+        if (storage instanceof SQLite) {
+            SQLite sqLite = (SQLite) storage;
+            sqLite.closeConnection();
+        }
+        
         getServer().getConsoleSender().sendMessage("§cEpicPunishments is now disabled");
     }
 }

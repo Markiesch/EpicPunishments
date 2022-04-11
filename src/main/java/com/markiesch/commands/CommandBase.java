@@ -18,13 +18,20 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     private final int maxArgs;
     private final boolean playerOnly;
 
-    public abstract boolean onCommand(CommandSender sender, String[] args);
-    public abstract String getUsage();
-    public abstract String getPermission();
-    public abstract List<String> onTabComplete(CommandSender sender, String alias, String[] args);
+    protected abstract boolean onCommand(CommandSender sender, String[] args);
+    protected abstract List<String> onTabComplete(CommandSender sender, String alias, String[] args);
 
-    public CommandBase(String command, int minArgs, int maxArgs, boolean playerOnly) {
+    public CommandBase(
+            String command,
+            String permission,
+            String usage,
+            int minArgs,
+            int maxArgs,
+            boolean playerOnly
+    ) {
         super(command);
+        this.setPermission(permission);
+        this.setUsage(usage);
         this.minArgs = minArgs;
         this.maxArgs = maxArgs;
         this.playerOnly = playerOnly;
