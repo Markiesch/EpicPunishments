@@ -18,7 +18,6 @@ public abstract class Storage {
         this.plugin = plugin;
         this.infractionController = plugin.getInfractionController();
         this.profileController = plugin.getProfileController();
-        setup();
     }
 
     public abstract List<ProfileModel> getProfiles();
@@ -27,5 +26,4 @@ public abstract class Storage {
     public abstract void saveProfile(ProfileModel profile);
     public abstract List<InfractionModel> loadInfractions(UUID uuid);
     public abstract void saveInfraction(InfractionModel infraction);
-    protected abstract void setup();
 }
