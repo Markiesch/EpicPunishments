@@ -1,5 +1,6 @@
 package com.markiesch.commands;
 
+import com.markiesch.EpicPunishments;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

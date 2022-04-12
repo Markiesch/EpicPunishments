@@ -34,12 +34,12 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         // Initialize config
         this.saveDefaultConfig();
 
+        // Initialize storage
+        storage = new Storage(this);
+
         // Initialize controllers
         profileController = new ProfileController(this);
         infractionController = new InfractionController(this);
-
-        // Initialize storage
-        storage = new SQLite(this);
 
         // Initialize listeners
         getServer().getPluginManager().registerEvents(new CommandSpy(), this);
@@ -54,10 +54,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     }
 
     public void onDisable() {
-        if (storage instanceof SQLite) {
-            SQLite sqLite = (SQLite) storage;
-            sqLite.closeConnection();
-        }
+        storage.closeConnection();
         
         getServer().getConsoleSender().sendMessage("§cEpicPunishments is now disabled");
     }

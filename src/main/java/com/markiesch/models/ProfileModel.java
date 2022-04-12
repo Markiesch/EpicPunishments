@@ -22,7 +22,7 @@ public class ProfileModel {
     }
 
     public List<InfractionModel> getInfractions() {
-        return plugin.getInfractionController().getPlayerInfractions(uuid);
+        return plugin.getInfractionController().readAll(uuid);
     }
 
     public InfractionModel getActiveInfraction(PunishTypes type) {

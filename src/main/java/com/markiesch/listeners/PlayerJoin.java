@@ -10,18 +10,24 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import java.util.UUID;
 
 public class PlayerJoin implements Listener {
-    private final EpicPunishments plugin;
+    private final ProfileController profileController;
 
     public PlayerJoin(EpicPunishments plugin) {
-        this.plugin = plugin;
+        this.profileController = plugin.getProfileController();
     }
 
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
-        ProfileController profileController = plugin.getProfileController();
 
-        ProfileModel profile = profileController.createProfile(uuid);
+        profileController.createProfile(uuid);
+
+        ProfileModel profile = profileController.getProfile(uuid);
+
+        if (profile == null) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "You profile couldn't be created or found, please relog");
+            return;
+        }
 
         if (profile.isBanned()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, "The ban hammer has spoken...");

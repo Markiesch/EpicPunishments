@@ -12,9 +12,9 @@ public class InfractionModel {
     public UUID issuer;
     public String reason;
     public long duration;
-    public Date date;
+    public long date;
 
-    public InfractionModel(UUID uuid, PunishTypes type, UUID victim, UUID issuer, String reason, long duration, Date date) {
+    public InfractionModel(UUID uuid, PunishTypes type, UUID victim, UUID issuer, String reason, long duration, long date) {
         this.uuid = uuid;
         this.type = type;
         this.victim = victim;
@@ -25,6 +25,6 @@ public class InfractionModel {
     }
 
     public boolean isActive() {
-        return System.currentTimeMillis() > date.getTime() + duration;
+        return System.currentTimeMillis() > date + duration;
     }
 }
