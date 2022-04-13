@@ -28,9 +28,13 @@ public enum Query {
             ");"
     ),
     ADD_PROFILE(
-            "INSERT INTO Profile (UUID) " +
-            "VALUES(?);"
+            "INSERT OR REPLACE INTO Profile (UUID, ipHistory)" +
+            "VALUES(?, ?) " +
+            "ON CONFLICT(UUID) DO UPDATE SET " +
+            "ipHistory = ipHistory || ';' || ?"
     ),
+//            "INSERT OR REPLACE INTO Profile (UUID, ipHistory) " +
+//            "VALUES(?, CONCAT(Profile.ipHistory, ?));"
     SELECT_PROFILE("SELECT * FROM Profile WHERE UUID = ?;"),
     SELECT_PROFILES("SELECT * FROM Profile;"),
     SELECT_INFRACTION("SELECT * FROM Infraction WHERE [id] = ?;"),
