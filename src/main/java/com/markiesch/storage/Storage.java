@@ -9,12 +9,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Storage {
-    private final EpicPunishments plugin;
     private Connection connection;
     private final File file;
 
     public Storage(EpicPunishments plugin) {
-        this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "data.db");
         setup();
     }
