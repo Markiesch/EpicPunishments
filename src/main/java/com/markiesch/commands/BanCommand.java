@@ -36,7 +36,6 @@ public class BanCommand extends CommandBase {
         List<String> arguments = Arrays.asList(args);
         String reason = String.join(" ", arguments.subList(2, arguments.size()));
 
-
         plugin.getInfractionController().create(
                 PunishTypes.BAN,
                 target.getUniqueId(),
@@ -46,8 +45,6 @@ public class BanCommand extends CommandBase {
                 new Date().getTime()
         );
 
-//        ProfileModel profile = plugin.getProfileController().getProfile(target.getUniqueId());
-//        PlayerStorage.createPunishment(target.getUniqueId(), issuer.getUniqueId(), PunishTypes.BAN, reason, duration);
         return true;
     }
 

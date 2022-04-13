@@ -17,6 +17,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     private final int minArgs;
     private final int maxArgs;
     private final boolean playerOnly;
+    private final String permission;
 
     protected abstract boolean onCommand(CommandSender sender, String[] args);
     protected abstract List<String> onTabComplete(CommandSender sender, String alias, String[] args);
@@ -30,7 +31,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
             boolean playerOnly
     ) {
         super(command);
-        this.setPermission(permission);
+        this.permission = permission;
         this.setUsage(usage);
         this.minArgs = minArgs;
         this.maxArgs = maxArgs;
@@ -63,7 +64,6 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
 
     @Override
     public boolean execute(CommandSender sender, String alias, String[] arguments) {
-        String permission = getPermission();
         if (permission != null && !sender.hasPermission(permission)) {
             this.sendPermissionMessage(sender);
             return true;
@@ -94,7 +94,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        if (!sender.hasPermission(getPermission())) return new ArrayList<>();
+        if (!sender.hasPermission(permission)) return new ArrayList<>();
         return onTabComplete(sender, alias, args);
     }
 }
