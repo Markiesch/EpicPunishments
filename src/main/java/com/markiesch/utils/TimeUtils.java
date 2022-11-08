@@ -8,10 +8,10 @@ public class TimeUtils {
 
         String string = "";
 
-        long days = TimeUnit.MILLISECONDS.toDays(time);
-        long hours = TimeUnit.MILLISECONDS.toHours(time) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(time));
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(time) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(time));
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time));
+        long days = TimeUnit.SECONDS.toDays(time);
+        long hours = TimeUnit.SECONDS.toHours(time) - TimeUnit.DAYS.toHours(TimeUnit.SECONDS.toDays(time));
+        long minutes = TimeUnit.SECONDS.toMinutes(time) - TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(time));
+        long seconds = TimeUnit.SECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(time));
 
         if (days != 0L) string += " " + days + "d";
         if (hours != 0L) string += " " + hours + "h";
@@ -39,11 +39,11 @@ public class TimeUtils {
 
     private static long convert(long value, char unit) {
         return switch (unit) {
-            case 'y' -> value * 1000L * 60L * 60L * 24L * 365;
-            case 'd' -> value * 1000L * 60L * 60L * 24L;
-            case 'h' -> value * 1000L * 60L * 60L;
-            case 'm' -> value * 1000L * 60L;
-            case 's' -> value * 1000L;
+            case 'y' -> value * 60L * 60L * 24L * 365;
+            case 'd' -> value * 60L * 60L * 24L;
+            case 'h' -> value * 60L * 60L;
+            case 'm' -> value * 60L;
+            case 's' -> value;
             default -> 0L;
         };
     }
