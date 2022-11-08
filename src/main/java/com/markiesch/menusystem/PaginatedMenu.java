@@ -1,5 +1,6 @@
 package com.markiesch.menusystem;
 
+import com.markiesch.EpicPunishments;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,8 +17,8 @@ public abstract class PaginatedMenu extends Menu {
     protected int page = 0;
     protected final int[] itemSlots;
 
-    public PaginatedMenu(PlayerMenuUtility playerMenuUtility, String menuName, int slots, int[] itemSlots) {
-        super(playerMenuUtility, menuName, slots);
+    public PaginatedMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int slots, int[] itemSlots) {
+        super(plugin, playerMenuUtility, slots);
         this.itemSlots = itemSlots;
     }
 
@@ -38,6 +39,10 @@ public abstract class PaginatedMenu extends Menu {
 
     public void setPaginatedItems(List<ItemStack> items) {
         items = items.subList(itemSlots.length * page, Math.min(itemSlots.length * page + itemSlots.length, items.size()));
+
+        for (int i = 0; i < items.size(); i++) {
+            getInventory().setItem(itemSlots[i], items.get(i));
+        }
 
         int maxPages = items.size() / itemSlots.length;
 
