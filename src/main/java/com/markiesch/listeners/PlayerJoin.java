@@ -1,8 +1,8 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.controllers.ProfileController;
-import com.markiesch.models.ProfileModel;
+import com.markiesch.modules.profile.ProfileController;
+import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -16,7 +16,7 @@ public class PlayerJoin implements Listener {
 
     public PlayerJoin(EpicPunishments plugin) {
         this.plugin = plugin;
-        this.profileController = plugin.getProfileController();
+        profileController = new ProfileController();
     }
 
     @EventHandler
