@@ -8,17 +8,19 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class BanCommand extends CommandBase {
-    public BanCommand() {
+public class WarnCommand extends CommandBase {
+    public WarnCommand() {
         super(
-            "ban",
-            "epicpunishments.ban",
-            "§7Usage: §e/ban <target> <duration | permanent> (reason)",
-            2,
-            -1,
-            true
+                "warn",
+                "epicpunishments.warn",
+                "§7Usage: §e/warn <target> (reason)",
+                1,
+                -1,
+                true
         );
     }
 
@@ -31,13 +33,10 @@ public class BanCommand extends CommandBase {
 
         long duration = TimeUtils.parseTime(args[1]);
         List<String> arguments = Arrays.asList(args);
-        String reason = String.join(" ", arguments.subList(2, arguments.size()));
+        String reason = String.join(" ", arguments.subList(1, arguments.size()));
 
-        new PreparedInfraction(
-            InfractionType.BAN,
-            reason,
-            duration
-        ).execute(issuer, target);
+        new PreparedInfraction(InfractionType.WARN, reason, duration)
+                .execute(issuer, target);
 
         return true;
     }
