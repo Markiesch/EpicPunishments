@@ -1,8 +1,6 @@
-package com.markiesch.controllers;
+package com.markiesch.modules.profile;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.models.ProfileModel;
-import com.markiesch.storage.Query;
 import com.markiesch.storage.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -16,12 +14,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProfileController {
-    private final EpicPunishments plugin;
     private final Storage storage;
 
-    public ProfileController(EpicPunishments plugin) {
-        this.plugin = plugin;
-        storage = plugin.getStorage();
+    public ProfileController() {
+        storage = Storage.getInstance();
     }
 
     /**
@@ -35,7 +31,7 @@ public class ProfileController {
 
             Connection connection = storage.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement(Query.ADD_PROFILE.getQuery());
+            PreparedStatement preparedStatement = connection.prepareStatement(ProfileQuery.ADD_PROFILE);
             preparedStatement.setString(1, uuid.toString());
             preparedStatement.setString(2, ip);
             preparedStatement.setString(3, ip);
@@ -53,11 +49,11 @@ public class ProfileController {
         try {
             Connection connection = storage.getConnection();
 
-            ResultSet result = connection.prepareStatement(Query.SELECT_PROFILES.getQuery()).executeQuery();
+            ResultSet result = connection.prepareStatement(ProfileQuery.SELECT_PROFILES).executeQuery();
 
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("UUID"));
-                models.add(new ProfileModel(plugin, uuid));
+                models.add(new ProfileModel(uuid));
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -72,13 +68,13 @@ public class ProfileController {
         try {
             Connection connection = storage.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement(Query.SELECT_PROFILE.getQuery());
+            PreparedStatement preparedStatement = connection.prepareStatement(ProfileQuery.SELECT_PROFILE);
             preparedStatement.setString(1, uuid.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
 
-            model = new ProfileModel(plugin, UUID.fromString(resultSet.getString("UUID")));
+            model = new ProfileModel(UUID.fromString(resultSet.getString("UUID")));
             resultSet.close();
         } catch(SQLException sqlException) {
             sqlException.printStackTrace();
