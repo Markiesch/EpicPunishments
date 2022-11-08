@@ -7,42 +7,37 @@ import java.util.UUID;
 
 public class PlayerMenuUtility {
     private final UUID owner;
-    private String name;
-    private String reason;
-    private String type;
-    private Long duration;
-    private UUID uuid;
+    private String templateName;
+    private String templateReason;
+    private String templateType;
+    private Long templateDuration;
 
     public PlayerMenuUtility(UUID owner) { this.owner = owner; }
     public Player getOwner() { return Bukkit.getPlayer(owner); }
 
-    public String getTemplateName() { return name; }
-    public void setTemplateName(String templateName) { this.name = templateName; }
+    public String getTemplateName() { return templateName; }
+    public void setTemplateName(String templateName) { this.templateName = templateName; }
 
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
+    public String getReason() { return templateReason; }
+    public void setReason(String templateReason) { this.templateReason = templateReason; }
 
-    public String getType() { return type; }
-    public void setType(String reason) { this.type = reason; }
+    public String getType() { return templateType; }
+    public void setType(String templateType) { this.templateType = templateType; }
 
-    public Long getDuration() { return duration; }
-    public void setDuration(Long duration) { this.duration = duration; }
-
-    public UUID getUUID() { return uuid; }
-    public void setUUID(UUID uuid) { this.uuid = uuid; }
+    public Long getTemplateDuration() { return templateDuration; }
+    public void setTemplateDuration(Long templateDuration) { this.templateDuration = templateDuration; }
 
     public void reset() {
-        reason = null;
-        name = null;
-        type = null;
-        duration = null;
-        uuid = null;
+        templateReason = null;
+        templateName = null;
+        templateType = null;
+        templateDuration = null;
     }
 
     public void fillEmptyFields() {
-        name = name == null ? "new_template" : name;
-        reason = reason == null ? "none" : reason;
-        type = type == null ? "KICK" : type;
-        duration = duration == null ? 0L : duration;
+        templateName = templateName == null ? "new_template" : templateName;
+        templateReason = templateReason == null ? "none" : templateReason;
+        templateType = templateType == null ? "KICK" : templateType;
+        templateDuration = templateDuration == null ? 0L : templateDuration;
     }
 }
