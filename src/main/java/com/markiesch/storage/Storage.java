@@ -10,14 +10,17 @@ import java.sql.SQLException;
 
 public class Storage {
     private Connection connection;
-    private final File file;
+    private File file;
 
-    public Storage(EpicPunishments plugin) {
-        this.file = new File(plugin.getDataFolder(), "data.db");
-        setup();
+    private static Storage instance;
+    public static Storage getInstance() {
+        if (instance == null) instance = new Storage();
+        return instance;
     }
 
-    private void setup() {
+    public void setup(EpicPunishments plugin) {
+        this.file = new File(plugin.getDataFolder(), "data.db");
+
         try {
             connection = getConnection();
 
@@ -53,6 +56,9 @@ public class Storage {
         return connection;
     }
 
+    /**
+     * Creates a new connection to the local SQLite database
+     */
     private void openConnection() {
         try {
             // Create file if it does not exist
@@ -65,6 +71,9 @@ public class Storage {
         }
     }
 
+    /**
+     * Closes the connection
+     */
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) connection.close();
