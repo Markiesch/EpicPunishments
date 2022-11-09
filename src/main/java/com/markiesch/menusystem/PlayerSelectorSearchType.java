@@ -1,6 +1,6 @@
 package com.markiesch.menusystem;
 
-public enum SearchTypes {
+public enum PlayerSelectorSearchType {
     OFFLINE_ONLY,
     ONLINE_ONLY,
     ALL

@@ -5,7 +5,7 @@ import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.menusystem.PlayerMenuUtility;
-import com.markiesch.menusystem.SearchTypes;
+import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -30,14 +30,14 @@ public class PlayerSelectorMenu extends PaginatedMenu {
     private final EpicPunishments plugin;
     private final ProfileController profileController;
     private final InfractionController infractionController;
-    private SearchTypes filter;
+    private PlayerSelectorSearchType filter;
 
     private final byte TEMPLATE_BUTTON_SLOT = 52;
 
     private final int closeSlot = 49;
     private final int filterSlot = 46;
 
-    public PlayerSelectorMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int page, SearchTypes filter) {
+    public PlayerSelectorMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int page, PlayerSelectorSearchType filter) {
         super(
                 plugin,
                 playerMenuUtility,
@@ -97,9 +97,9 @@ public class PlayerSelectorMenu extends PaginatedMenu {
     public void setMenuItems() {
         List<ItemStack> players = profileController.getProfiles().stream()
                 .filter(profile -> {
-                    if (filter.equals(SearchTypes.ALL)) return true;
-                    else if (filter.equals(SearchTypes.ONLINE_ONLY) && profile.getPlayer().isOnline()) return true;
-                    else return filter.equals(SearchTypes.OFFLINE_ONLY) && !profile.getPlayer().isOnline();
+                    if (filter.equals(PlayerSelectorSearchType.ALL)) return true;
+                    else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY) && profile.getPlayer().isOnline()) return true;
+                    else return filter.equals(PlayerSelectorSearchType.OFFLINE_ONLY) && !profile.getPlayer().isOnline();
                 })
                 .map(profile -> {
                     OfflinePlayer target = profile.getPlayer();
@@ -137,8 +137,8 @@ public class PlayerSelectorMenu extends PaginatedMenu {
         setPaginatedItems(players);
 
         String nextFilter = "all";
-        if (filter.equals(SearchTypes.ALL)) nextFilter = "online";
-        else if (filter.equals(SearchTypes.ONLINE_ONLY)) nextFilter = "offline";
+        if (filter.equals(PlayerSelectorSearchType.ALL)) nextFilter = "online";
+        else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) nextFilter = "offline";
 
         ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE, "§b§lVisibility", "§7Click to show §e" + nextFilter + " §7users");
         getInventory().setItem(filterSlot, filterItem);
@@ -151,9 +151,9 @@ public class PlayerSelectorMenu extends PaginatedMenu {
     }
 
     public void toggleFilter() {
-        if (filter.equals(SearchTypes.ALL)) filter = SearchTypes.ONLINE_ONLY;
-        else if (filter.equals(SearchTypes.ONLINE_ONLY)) filter = SearchTypes.OFFLINE_ONLY;
-        else if (filter.equals(SearchTypes.OFFLINE_ONLY)) filter = SearchTypes.ALL;
+        if (filter.equals(PlayerSelectorSearchType.ALL)) filter = PlayerSelectorSearchType.ONLINE_ONLY;
+        else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) filter = PlayerSelectorSearchType.OFFLINE_ONLY;
+        else if (filter.equals(PlayerSelectorSearchType.OFFLINE_ONLY)) filter = PlayerSelectorSearchType.ALL;
 
         getInventory().remove(Material.PLAYER_HEAD);
         setMenuItems();
