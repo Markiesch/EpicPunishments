@@ -1,4 +1,4 @@
-package com.markiesch.utils;
+package com.markiesch.modules.infraction;
 
 public enum InfractionType {
     BAN, MUTE, KICK, WARN

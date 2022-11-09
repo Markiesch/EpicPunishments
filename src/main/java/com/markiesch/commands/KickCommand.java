@@ -1,7 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.modules.infraction.PreparedInfraction;
-import com.markiesch.utils.InfractionType;
+import com.markiesch.modules.infraction.InfractionType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
