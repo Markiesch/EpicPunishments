@@ -1,11 +1,11 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.chat.PlayerChat;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.modules.template.TemplateController;
-import com.markiesch.utils.InputTypes;
-import com.markiesch.utils.InputUtils;
+import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.ChatColor;
@@ -23,32 +23,32 @@ public class EditTemplateMenu extends Menu {
     private static final byte REASON_SLOT = 21;
     private static final byte TYPE_SLOT = 23;
     private static final byte DURATION_SLOT = 24;
-    private static final byte CREATE_SLOT = 40;
+    private static final byte SAVE_SLOT = 40;
 
     private final TemplateController templateController;
+    private final TemplateModel template;
 
-    private final String name;
-    private final String reason;
-    private final long duration;
+    private String name;
+    private String reason;
+    private long duration;
     private String type;
 
-    public EditTemplateMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility) {
+    public EditTemplateMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int id) {
         super(plugin, playerMenuUtility, SLOTS);
 
         templateController = new TemplateController();
+        template = templateController.readSingle(id);
 
-        playerMenuUtility.fillEmptyFields();
-        name = playerMenuUtility.getTemplateName();
-        reason = playerMenuUtility.getReason();
-        duration = playerMenuUtility.getTemplateDuration();
-        type = playerMenuUtility.getType();
-
+        this.name = template.name;
+        this.reason = template.reason;
+        this.duration = template.duration;
+        this.type = template.type;
         open();
     }
 
     @Override
     public String getMenuName() {
-        return "Templates > Edit > " + name;
+        return "Templates > Edit Template";
     }
 
     @Override
@@ -61,52 +61,54 @@ public class EditTemplateMenu extends Menu {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
 
-        if (event.getSlot() == NAME_SLOT) {
-            plugin.getEditor().put(player.getUniqueId(), new InputUtils(plugin, InputTypes.CREATE_TEMPLATE_NAME, player, "§bTemplate Name", "§7Type in a new name"));
-            return;
-        }
+        switch (event.getSlot()) {
+            case NAME_SLOT -> {
+                new PlayerChat(plugin, playerMenuUtility.getOwner(), "§bTemplate Name", "§7Type in a new name", (String message) -> {
+                    this.name = message;
+                    System.out.println("test " + message);
+                    open();
+                });
+            }
+            case TYPE_SLOT -> {
+                ItemStack item = event.getCurrentItem();
+                ItemMeta meta = item.getItemMeta();
+                if (meta == null) return;
+                String name = ChatColor.stripColor(meta.getDisplayName());
+                if ("BAN".equalsIgnoreCase(name)) type = "KICK";
+                else if ("KICK".equalsIgnoreCase(name)) type = "WARN";
+                else if ("WARN".equalsIgnoreCase(name)) type = "MUTE";
+                else if ("MUTE".equalsIgnoreCase(name)) type = "BAN";
+                playerMenuUtility.setType(type);
+                setMenuItems();
+            }
+            case DURATION_SLOT -> {
+                player.sendMessage("§7Please type in a valid time\n§ay §7- §eYear\n§ad §7- §eDay\n§am §7- §eMinute\n§as §7- §eSecond");
 
-        if (event.getSlot() == TYPE_SLOT) {
-            ItemStack item = event.getCurrentItem();
-            ItemMeta meta = item.getItemMeta();
-            if (meta == null) return;
-            String name = ChatColor.stripColor(meta.getDisplayName());
-            if ("BAN".equalsIgnoreCase(name)) type = "KICK";
-            else if ("KICK".equalsIgnoreCase(name)) type = "WARN";
-            else if ("WARN".equalsIgnoreCase(name)) type = "MUTE";
-            else if ("MUTE".equalsIgnoreCase(name)) type = "BAN";
-            playerMenuUtility.setType(type);
-            setMenuItems();
-            return;
-        }
-
-        if (event.getSlot() == DURATION_SLOT) {
-            player.sendMessage("§7Please type in a valid time\n§ay §7- §eYear\n§ad §7- §eDay\n§am §7- §eMinute\n§as §7- §eSecond");
-            plugin.getEditor().put(player.getUniqueId(), new InputUtils(plugin, InputTypes.CREATE_TEMPLATE_DURATION, player, "§bTemplate Duration", "§7Type in a template duration"));
-            return;
-        }
-
-        if (event.getSlot() == REASON_SLOT) {
-            plugin.getEditor().put(player.getUniqueId(), new InputUtils(plugin, InputTypes.CREATE_TEMPLATE_REASON, player, "§bTemplate Reason", "§7Type in a template reason"));
-            return;
-        }
-
-        if (event.getSlot() == CREATE_SLOT) {
-            templateController.addTemplate(name, reason, type, duration);
-            playerMenuUtility.reset();
-            player.sendMessage("§7Successfully§a created§7 the template with the name of §e" + name);
-            new TemplateSelectorMenu(plugin, playerMenuUtility);
+                new PlayerChat(plugin, playerMenuUtility.getOwner(), "§bTemplate Duration", "§7Type in a template duration", (String message) -> {
+                    this.duration = TimeUtils.parseTime(message);
+                    open();
+                });
+            }
+            case REASON_SLOT -> {
+                new PlayerChat(plugin, playerMenuUtility.getOwner(), "§bTemplate Reason", "§7Type in a template reason", (String message) -> {
+                    this.reason = message;
+                    open();
+                });
+            }
+            case SAVE_SLOT -> {
+                templateController.updateTemplate(template.id, name, reason, type, duration);
+                playerMenuUtility.reset();
+                player.sendMessage("§7Successfully§a saved§7 template §e" + name);
+                new TemplateSelectorMenu(plugin, playerMenuUtility);
+            }
         }
     }
 
     @Override
     public void setMenuItems() {
-        String reason = this.reason;
-        if (reason == null) reason = "None";
-
         ItemStack infoItem = ItemUtils.createItem(
                 Material.NETHER_STAR,
-                "§b§lNew template",
+                "§b§lEdit template",
                 "",
                 "§eName: §7" + name,
                 "§eType: §7" + type,
@@ -139,7 +141,7 @@ public class EditTemplateMenu extends Menu {
         ItemStack reasonItem = ItemUtils.createItem(Material.WRITABLE_BOOK, "§b§lReason", "§7Click to insert reason", "", "§7Reason set: §e" + reason);
         getInventory().setItem(REASON_SLOT, reasonItem);
 
-        ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§b§lCreate Template", "§7Click to create template");
-        getInventory().setItem(CREATE_SLOT, createItem);
+        ItemStack saveItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§b§lSave Template", "§7Click to save changes");
+        getInventory().setItem(SAVE_SLOT, saveItem);
     }
 }
