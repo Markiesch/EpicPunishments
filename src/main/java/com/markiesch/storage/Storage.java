@@ -12,10 +12,14 @@ public class Storage {
     private Connection connection;
     private File file;
 
-    private static Storage instance;
+    private Storage() {}
+
+    private static class StorageHolder {
+        static final Storage INSTANCE = new Storage();
+    }
+
     public static Storage getInstance() {
-        if (instance == null) instance = new Storage();
-        return instance;
+        return StorageHolder.INSTANCE;
     }
 
     public void setup(EpicPunishments plugin) {
