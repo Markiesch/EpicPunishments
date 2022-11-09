@@ -38,8 +38,6 @@ public class EditTemplateMenu extends Menu {
         templateController = new TemplateController();
         template = templateController.readSingle(id);
 
-        System.out.println(template.type);
-
         this.name = template.name;
         this.reason = template.reason;
         this.duration = template.duration;
@@ -66,12 +64,10 @@ public class EditTemplateMenu extends Menu {
             case NAME_SLOT -> {
                 new PlayerChat(plugin, getOwner(), "§bTemplate Name", "§7Type in a new name", (String message) -> {
                     this.name = message;
-                    System.out.println("test " + message);
                     open();
                 });
             }
             case TYPE_SLOT -> {
-                System.out.println(type);
                 if ("BAN".equalsIgnoreCase(type)) type = "KICK";
                 else if ("KICK".equalsIgnoreCase(type)) type = "WARN";
                 else if ("WARN".equalsIgnoreCase(type)) type = "MUTE";
