@@ -1,7 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.SearchTypes;
+import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.menusystem.menus.PlayerSelectorMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +28,7 @@ public class PunishCommand extends CommandBase {
     public boolean onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        new PlayerSelectorMenu(plugin, plugin.getPlayerMenuUtility(player.getUniqueId()), 0, SearchTypes.ALL);
+        new PlayerSelectorMenu(plugin, plugin.getPlayerMenuUtility(player.getUniqueId()), 0, PlayerSelectorSearchType.ALL);
 
         return true;
     }
