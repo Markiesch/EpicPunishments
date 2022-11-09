@@ -1,9 +1,8 @@
 package com.markiesch.modules.profile;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.infraction.InfractionModel;
-import com.markiesch.utils.InfractionType;
+import com.markiesch.modules.infraction.InfractionType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
