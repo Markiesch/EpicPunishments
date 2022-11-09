@@ -1,14 +1,16 @@
 package com.markiesch.commands;
 
-import com.markiesch.modules.infraction.PreparedInfraction;
 import com.markiesch.modules.infraction.InfractionType;
+import com.markiesch.modules.infraction.PreparedInfraction;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BanCommand extends CommandBase {
     public BanCommand() {

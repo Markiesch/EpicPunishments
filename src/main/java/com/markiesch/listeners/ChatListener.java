@@ -1,10 +1,9 @@
 package com.markiesch.listeners;
 
-import com.markiesch.EpicPunishments;
-import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.infraction.InfractionModel;
-import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.modules.infraction.InfractionType;
+import com.markiesch.modules.profile.ProfileController;
+import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

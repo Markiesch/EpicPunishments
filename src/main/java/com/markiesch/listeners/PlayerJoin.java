@@ -1,6 +1,5 @@
 package com.markiesch.listeners;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.event.EventHandler;
