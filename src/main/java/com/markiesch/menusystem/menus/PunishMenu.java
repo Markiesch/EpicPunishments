@@ -4,7 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.menusystem.PlayerMenuUtility;
-import com.markiesch.menusystem.SearchTypes;
+import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
@@ -41,7 +41,7 @@ public class PunishMenu extends Menu implements Listener {
         if (event.getCurrentItem() == null) return;
 
         if (event.getSlot() == BACK_BUTTON_SLOT) {
-            new PlayerSelectorMenu(plugin, playerMenuUtility, 0, SearchTypes.ALL);
+            new PlayerSelectorMenu(plugin, playerMenuUtility, 0, PlayerSelectorSearchType.ALL);
             return;
         }
 

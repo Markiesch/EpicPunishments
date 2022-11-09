@@ -3,7 +3,7 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.menusystem.PlayerMenuUtility;
-import com.markiesch.menusystem.SearchTypes;
+import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
@@ -56,23 +56,16 @@ public class TemplateSelectorMenu extends PaginatedMenu {
             if (event.getAction().equals(InventoryAction.DROP_ONE_SLOT)) {
                 new TemplateController().delete(id);
                 open();
-                return;
             } else {
-                // TODO open edit template
-                new EditTemplateMenu(plugin, playerMenuUtility);
+                new EditTemplateMenu(plugin, playerMenuUtility, id);
             }
+
             return;
         }
 
-        if (event.getSlot() == NEW_TEMPLATE_SLOT) {
-            new CreateTemplateMenu(plugin, playerMenuUtility);
-            return;
-        }
-
-        if (event.getSlot() == BACK_SLOT)
-        {
-            new PlayerSelectorMenu(plugin, playerMenuUtility, 0, SearchTypes.ALL);
-            return;
+        switch (event.getSlot()) {
+            case NEW_TEMPLATE_SLOT -> new CreateTemplateMenu(plugin, playerMenuUtility);
+            case BACK_SLOT -> new PlayerSelectorMenu(plugin, playerMenuUtility, 0, PlayerSelectorSearchType.ALL);
         }
     }
 
