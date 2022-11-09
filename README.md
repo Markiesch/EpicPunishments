@@ -10,15 +10,3 @@
     ·
     <a href="https://github.com/Markiesch/EpicPunishments/issues">Feature Request</a>
 </div>
-
-<br />
-<br />
-<br />
-
-### TODO
-
-- Improve edit/create template GUI
-- Add duration modifier to create template GUI
-- Add option to filter players on offline/online/both
-- Add option to search players by name
-- Add support to punish players through console
