@@ -6,16 +6,13 @@ import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
 public class PlayerJoin implements Listener {
-    private final EpicPunishments plugin;
     private final ProfileController profileController;
 
-    public PlayerJoin(EpicPunishments plugin) {
-        this.plugin = plugin;
+    public PlayerJoin() {
         profileController = new ProfileController();
     }
 
@@ -35,11 +32,5 @@ public class PlayerJoin implements Listener {
         if (profile.isBanned()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, "The ban hammer has spoken...");
         }
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        
-        plugin.playerMenuUtilityMap.remove(event.getPlayer().getUniqueId());
     }
 }

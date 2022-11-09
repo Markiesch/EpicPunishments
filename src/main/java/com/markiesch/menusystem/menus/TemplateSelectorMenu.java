@@ -2,7 +2,6 @@ package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.PaginatedMenu;
-import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
@@ -16,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TemplateSelectorMenu extends PaginatedMenu {
@@ -26,8 +26,8 @@ public class TemplateSelectorMenu extends PaginatedMenu {
     private static final byte BACK_SLOT = 49;
     private static final Material TEMPLATE_MATERIAL = Material.PAPER;
 
-    public TemplateSelectorMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility) {
-        super(plugin, playerMenuUtility, SLOTS, ITEM_SLOTS);
+    public TemplateSelectorMenu(EpicPunishments plugin, UUID uuid) {
+        super(plugin, uuid, SLOTS, ITEM_SLOTS);
 
         open();
     }
@@ -57,15 +57,15 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                 new TemplateController().delete(id);
                 open();
             } else {
-                new EditTemplateMenu(plugin, playerMenuUtility, id);
+                new EditTemplateMenu(plugin, uuid, id);
             }
 
             return;
         }
 
         switch (event.getSlot()) {
-            case NEW_TEMPLATE_SLOT -> new CreateTemplateMenu(plugin, playerMenuUtility);
-            case BACK_SLOT -> new PlayerSelectorMenu(plugin, playerMenuUtility, 0, PlayerSelectorSearchType.ALL);
+            case NEW_TEMPLATE_SLOT -> new CreateTemplateMenu(plugin, uuid);
+            case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0, PlayerSelectorSearchType.ALL);
         }
     }
 

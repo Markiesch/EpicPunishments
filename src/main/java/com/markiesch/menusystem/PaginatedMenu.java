@@ -7,9 +7,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class PaginatedMenu extends Menu {
-
     protected final int prevPageSlot = 45;
     protected final int nextPageSlot = 53;
     protected boolean onLastPage = true;
@@ -17,8 +17,8 @@ public abstract class PaginatedMenu extends Menu {
     protected int page = 0;
     protected final int[] itemSlots;
 
-    public PaginatedMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int slots, int[] itemSlots) {
-        super(plugin, playerMenuUtility, slots);
+    public PaginatedMenu(EpicPunishments plugin, UUID uuid, int slots, int[] itemSlots) {
+        super(plugin, uuid, slots);
         this.itemSlots = itemSlots;
     }
 

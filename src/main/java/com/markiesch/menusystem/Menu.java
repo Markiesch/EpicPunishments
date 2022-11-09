@@ -7,15 +7,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+import java.util.UUID;
+
 public abstract class Menu implements InventoryHolder {
-    protected PlayerMenuUtility playerMenuUtility;
+    protected final UUID uuid;
     protected final EpicPunishments plugin;
     private final int slots;
     private Inventory inventory;
 
-    public Menu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int slots) {
+    public Menu(EpicPunishments plugin, UUID uuid, int slots) {
         this.plugin = plugin;
-        this.playerMenuUtility = playerMenuUtility;
+        this.uuid = uuid;
         this.slots = slots;
     }
 
@@ -25,7 +27,7 @@ public abstract class Menu implements InventoryHolder {
     public abstract void setMenuItems();
 
     public void open() {
-        Player player = playerMenuUtility.getOwner();
+        Player player = getOwner();
 
         if (getRequiredPermission() != null && !player.hasPermission(getRequiredPermission())) {
             player.sendMessage("§7You do not have§c permissions§7 to view templates");
@@ -35,6 +37,10 @@ public abstract class Menu implements InventoryHolder {
         inventory = Bukkit.createInventory(this, slots, this.getMenuName());
         this.setMenuItems();
         player.openInventory(inventory);
+    }
+
+    public Player getOwner() {
+        return Bukkit.getPlayer(uuid);
     }
 
     @Override

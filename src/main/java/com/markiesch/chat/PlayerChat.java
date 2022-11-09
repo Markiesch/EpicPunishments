@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class PlayerChat implements Listener {
     private final EpicPunishments plugin;

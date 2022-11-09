@@ -1,11 +1,10 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.menusystem.Menu;
-import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.infraction.InfractionModel;
+import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -17,7 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 public class PunishMenu extends Menu implements Listener {
     private final byte BACK_BUTTON_SLOT = 49;
@@ -25,8 +27,8 @@ public class PunishMenu extends Menu implements Listener {
 
     public OfflinePlayer target;
 
-    public PunishMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, UUID player) {
-        super(plugin, playerMenuUtility, 54);
+    public PunishMenu(EpicPunishments plugin, UUID uuid, UUID player) {
+        super(plugin, uuid, 54);
 
         target = Bukkit.getOfflinePlayer(player);
         open();
@@ -40,21 +42,16 @@ public class PunishMenu extends Menu implements Listener {
     public void handleMenu(InventoryClickEvent event) {
         if (event.getCurrentItem() == null) return;
 
-        if (event.getSlot() == BACK_BUTTON_SLOT) {
-            new PlayerSelectorMenu(plugin, playerMenuUtility, 0, PlayerSelectorSearchType.ALL);
-            return;
-        }
-
-        if (event.getSlot() == SHOW_INFRACTIONS_BUTTON_SLOT) {
-            new InfractionsMenu(plugin, playerMenuUtility, target.getUniqueId());
-            return;
+        switch (event.getSlot()) {
+            case BACK_BUTTON_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0, PlayerSelectorSearchType.ALL);
+            case SHOW_INFRACTIONS_BUTTON_SLOT -> new InfractionsMenu(plugin, uuid, target.getUniqueId());
         }
     }
 
     public void setMenuItems() {
         if (target == null) {
-            playerMenuUtility.getOwner().sendMessage("§cCouldn't find player. Closing menu...");
-            playerMenuUtility.getOwner().closeInventory();
+            getOwner().sendMessage("§cCouldn't find player. Closing menu...");
+            getOwner().closeInventory();
             return;
         }
 

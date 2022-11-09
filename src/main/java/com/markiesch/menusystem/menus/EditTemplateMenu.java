@@ -3,17 +3,16 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.EpicPunishments;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.menusystem.Menu;
-import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.UUID;
 
 public class EditTemplateMenu extends Menu {
     private static final byte SLOTS = 54;
@@ -33,11 +32,13 @@ public class EditTemplateMenu extends Menu {
     private long duration;
     private String type;
 
-    public EditTemplateMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int id) {
-        super(plugin, playerMenuUtility, SLOTS);
+    public EditTemplateMenu(EpicPunishments plugin, UUID uuid, int id) {
+        super(plugin, uuid, SLOTS);
 
         templateController = new TemplateController();
         template = templateController.readSingle(id);
+
+        System.out.println(template.type);
 
         this.name = template.name;
         this.reason = template.reason;
@@ -63,43 +64,38 @@ public class EditTemplateMenu extends Menu {
 
         switch (event.getSlot()) {
             case NAME_SLOT -> {
-                new PlayerChat(plugin, playerMenuUtility.getOwner(), "§bTemplate Name", "§7Type in a new name", (String message) -> {
+                new PlayerChat(plugin, getOwner(), "§bTemplate Name", "§7Type in a new name", (String message) -> {
                     this.name = message;
                     System.out.println("test " + message);
                     open();
                 });
             }
             case TYPE_SLOT -> {
-                ItemStack item = event.getCurrentItem();
-                ItemMeta meta = item.getItemMeta();
-                if (meta == null) return;
-                String name = ChatColor.stripColor(meta.getDisplayName());
-                if ("BAN".equalsIgnoreCase(name)) type = "KICK";
-                else if ("KICK".equalsIgnoreCase(name)) type = "WARN";
-                else if ("WARN".equalsIgnoreCase(name)) type = "MUTE";
-                else if ("MUTE".equalsIgnoreCase(name)) type = "BAN";
-                playerMenuUtility.setType(type);
+                System.out.println(type);
+                if ("BAN".equalsIgnoreCase(type)) type = "KICK";
+                else if ("KICK".equalsIgnoreCase(type)) type = "WARN";
+                else if ("WARN".equalsIgnoreCase(type)) type = "MUTE";
+                else if ("MUTE".equalsIgnoreCase(type)) type = "BAN";
                 setMenuItems();
             }
             case DURATION_SLOT -> {
                 player.sendMessage("§7Please type in a valid time\n§ay §7- §eYear\n§ad §7- §eDay\n§am §7- §eMinute\n§as §7- §eSecond");
 
-                new PlayerChat(plugin, playerMenuUtility.getOwner(), "§bTemplate Duration", "§7Type in a template duration", (String message) -> {
+                new PlayerChat(plugin, getOwner(), "§bTemplate Duration", "§7Type in a template duration", (String message) -> {
                     this.duration = TimeUtils.parseTime(message);
                     open();
                 });
             }
             case REASON_SLOT -> {
-                new PlayerChat(plugin, playerMenuUtility.getOwner(), "§bTemplate Reason", "§7Type in a template reason", (String message) -> {
+                new PlayerChat(plugin, getOwner(), "§bTemplate Reason", "§7Type in a template reason", (String message) -> {
                     this.reason = message;
                     open();
                 });
             }
             case SAVE_SLOT -> {
-                templateController.updateTemplate(template.id, name, reason, type, duration);
-                playerMenuUtility.reset();
+                templateController.updateTemplate(template.id, name, type, reason, duration);
                 player.sendMessage("§7Successfully§a saved§7 template §e" + name);
-                new TemplateSelectorMenu(plugin, playerMenuUtility);
+                new TemplateSelectorMenu(plugin, uuid);
             }
         }
     }

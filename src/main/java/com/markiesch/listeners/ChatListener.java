@@ -4,7 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.profile.ProfileModel;
-import com.markiesch.utils.InfractionType;
+import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,12 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
-    private final EpicPunishments plugin;
-
-    public ChatListener(EpicPunishments plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();

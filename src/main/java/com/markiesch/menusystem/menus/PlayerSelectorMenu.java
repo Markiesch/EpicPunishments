@@ -1,19 +1,13 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.modules.infraction.InfractionController;
-import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.menusystem.PaginatedMenu;
-import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
+import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.infraction.InfractionModel;
+import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.utils.ItemUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,10 +31,10 @@ public class PlayerSelectorMenu extends PaginatedMenu {
     private final int closeSlot = 49;
     private final int filterSlot = 46;
 
-    public PlayerSelectorMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, int page, PlayerSelectorSearchType filter) {
+    public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid, int page, PlayerSelectorSearchType filter) {
         super(
                 plugin,
-                playerMenuUtility,
+                uuid,
                 54,
                 new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 }
         );
@@ -68,28 +62,27 @@ public class PlayerSelectorMenu extends PaginatedMenu {
         super.handleMenu(event);
         if (event.getCurrentItem() == null) return;
 
-        Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
             ItemMeta meta = event.getCurrentItem().getItemMeta();
             if (meta == null) return;
 
-            String uuid = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
-            if (uuid == null) return;
+            String targetUUID = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING);
+            if (targetUUID == null) return;
 
-            OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
-            if ("right".equalsIgnoreCase(event.getClick().toString()) && player.hasPermission("epicpunishments.teleport")) {
+            OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(targetUUID));
+            if ("right".equalsIgnoreCase(event.getClick().toString()) && getOwner().hasPermission("epicpunishments.teleport")) {
                 if (target.getPlayer() != null && target.getPlayer().isOnline()) {
-                    player.setGameMode(GameMode.SPECTATOR);
-                    player.teleport(target.getPlayer().getLocation());
+                    getOwner().setGameMode(GameMode.SPECTATOR);
+                    getOwner().teleport(target.getPlayer().getLocation());
                 }
             } else {
-                new PunishMenu(plugin, plugin.getPlayerMenuUtility(player.getUniqueId()), target.getUniqueId());
+                new PunishMenu(plugin, uuid, target.getUniqueId());
             }
             return;
         }
 
-        if (event.getSlot() == TEMPLATE_BUTTON_SLOT) new TemplateSelectorMenu(plugin, playerMenuUtility);
-        if (event.getSlot() == closeSlot) player.closeInventory();
+        if (event.getSlot() == TEMPLATE_BUTTON_SLOT) new TemplateSelectorMenu(plugin, uuid);
+        if (event.getSlot() == closeSlot) getOwner().closeInventory();
         if (event.getSlot() == filterSlot) toggleFilter();
     }
 

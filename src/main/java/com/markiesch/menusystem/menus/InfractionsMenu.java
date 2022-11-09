@@ -1,10 +1,9 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.infraction.InfractionModel;
-import com.markiesch.menusystem.PaginatedMenu;
-import com.markiesch.menusystem.PlayerMenuUtility;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
@@ -27,8 +26,8 @@ public class InfractionsMenu extends PaginatedMenu {
 
     private final static int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
-    public InfractionsMenu(EpicPunishments plugin, PlayerMenuUtility playerMenuUtility, UUID target) {
-        super(plugin, playerMenuUtility, 54, SLOTS);
+    public InfractionsMenu(EpicPunishments plugin, UUID uuid, UUID target) {
+        super(plugin, uuid, 54, SLOTS);
 
         this.target = Bukkit.getOfflinePlayer(target);
         open();
@@ -49,7 +48,7 @@ public class InfractionsMenu extends PaginatedMenu {
         if (event.getCurrentItem() == null) return;
 
         if (event.getSlot() == BACK_BUTTON_SLOT) {
-            new PunishMenu(plugin, playerMenuUtility, target.getUniqueId());
+            new PunishMenu(plugin, uuid, target.getUniqueId());
             return;
         }
 
@@ -61,7 +60,6 @@ public class InfractionsMenu extends PaginatedMenu {
                 new InfractionController().delete(id);
             }
             open();
-            return;
         }
     }
 
