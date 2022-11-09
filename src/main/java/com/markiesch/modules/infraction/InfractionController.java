@@ -1,8 +1,6 @@
 package com.markiesch.modules.infraction;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.storage.Storage;
-import com.markiesch.utils.InfractionType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

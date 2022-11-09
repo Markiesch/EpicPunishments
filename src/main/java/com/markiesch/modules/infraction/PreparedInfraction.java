@@ -2,7 +2,6 @@ package com.markiesch.modules.infraction;
 
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
-import com.markiesch.utils.InfractionType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 

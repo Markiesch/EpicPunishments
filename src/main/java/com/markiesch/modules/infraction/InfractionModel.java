@@ -1,7 +1,5 @@
 package com.markiesch.modules.infraction;
 
-import com.markiesch.utils.InfractionType;
-
 import java.util.UUID;
 
 public class InfractionModel {
