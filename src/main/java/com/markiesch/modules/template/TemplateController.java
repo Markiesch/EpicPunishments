@@ -38,6 +38,31 @@ public class TemplateController {
         return templates;
     }
 
+    public TemplateModel readSingle(int id) {
+        List<TemplateModel> templates = new ArrayList<>();
+        try {
+            Connection connection = storage.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.SELECT_SINGLE_TEMPLATE);
+            preparedStatement.setInt(1, id);
+
+            ResultSet result = connection.prepareStatement(TemplateQuery.SELECT_ALL_TEMPLATES).executeQuery();
+
+            while (result.next()) {
+                int templateId = result.getInt("id");
+                String templateName = result.getString("name");
+                String templateReason = result.getString("reason");
+                String templateType = result.getString("type");
+                Long templateDuration = result.getLong("duration");
+                templates.add(new TemplateModel(templateId, templateName, templateReason, templateType, templateDuration));
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
+        return templates.size() > 0 ? templates.get(0) : null;
+    }
+
     public void addTemplate(String name, String reason, String type, Long duration) {
         try {
             Connection connection = storage.getConnection();
@@ -61,6 +86,24 @@ public class TemplateController {
 
             PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.DELETE_TEMPLATE);
             preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            storage.closeConnection();
+        }
+    }
+
+    public void updateTemplate(int id, String name, String reason, String type, long duration) {
+        try {
+            Connection connection = storage.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.UPDATE_TEMPLATE);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, type);
+            preparedStatement.setString(3, reason);
+            preparedStatement.setLong(4, duration);
+            preparedStatement.setInt(5, id);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
