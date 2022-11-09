@@ -63,14 +63,14 @@ public class TemplateController {
         return templates.size() > 0 ? templates.get(0) : null;
     }
 
-    public void addTemplate(String name, String reason, String type, Long duration) {
+    public void create(String name, String reason, String type, Long duration) {
         try {
             Connection connection = storage.getConnection();
 
             PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.CREATE_TEMPLATE);
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, reason);
-            preparedStatement.setString(3, type);
+            preparedStatement.setString(2, type);
+            preparedStatement.setString(3, reason);
             preparedStatement.setLong(4, duration);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -94,7 +94,7 @@ public class TemplateController {
         }
     }
 
-    public void updateTemplate(int id, String name, String reason, String type, long duration) {
+    public void updateTemplate(int id, String name, String type, String reason, long duration) {
         try {
             Connection connection = storage.getConnection();
 
