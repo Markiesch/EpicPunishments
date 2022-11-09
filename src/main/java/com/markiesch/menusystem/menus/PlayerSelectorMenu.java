@@ -70,20 +70,23 @@ public class PlayerSelectorMenu extends PaginatedMenu {
             if (targetUUID == null) return;
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(targetUUID));
-            if ("right".equalsIgnoreCase(event.getClick().toString()) && getOwner().hasPermission("epicpunishments.teleport")) {
-                if (target.getPlayer() != null && target.getPlayer().isOnline()) {
-                    getOwner().setGameMode(GameMode.SPECTATOR);
-                    getOwner().teleport(target.getPlayer().getLocation());
-                }
-            } else {
+            if (!"right".equalsIgnoreCase(event.getClick().toString()) || !getOwner().hasPermission("epicpunishments.teleport")) {
                 new PunishMenu(plugin, uuid, target.getUniqueId());
+                return;
+            }
+
+            if (target.getPlayer() != null && target.getPlayer().isOnline()) {
+                getOwner().setGameMode(GameMode.SPECTATOR);
+                getOwner().teleport(target.getPlayer().getLocation());
             }
             return;
         }
 
-        if (event.getSlot() == TEMPLATE_BUTTON_SLOT) new TemplateSelectorMenu(plugin, uuid);
-        if (event.getSlot() == closeSlot) getOwner().closeInventory();
-        if (event.getSlot() == filterSlot) toggleFilter();
+        switch (event.getSlot()) {
+            case TEMPLATE_BUTTON_SLOT -> new TemplateSelectorMenu(plugin, uuid);
+            case closeSlot -> getOwner().closeInventory();
+            case filterSlot -> toggleFilter();
+        }
     }
 
     @Override
