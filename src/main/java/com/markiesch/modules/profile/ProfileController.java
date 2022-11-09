@@ -23,11 +23,7 @@ public class ProfileController {
      * Creates a profile for the given player
      */
     public void createProfile(UUID uuid, String ip) {
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
-
         try {
-            System.out.println("Creating profile for " + offlinePlayer.getName() + "...");
-
             Connection connection = storage.getConnection();
 
             PreparedStatement preparedStatement = connection.prepareStatement(ProfileQuery.ADD_PROFILE);
