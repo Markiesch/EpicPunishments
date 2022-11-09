@@ -29,12 +29,11 @@ public class Storage {
             connection = getConnection();
 
             // Create tables
-            System.out.println("Creating SQLite tables...");
+            plugin.getLogger().info("Creating SQLite tables...");
             executeUpdate(Query.CREATE_INFRACTION_TABLE);
             executeUpdate(Query.CREATE_PLAYER_TABLE);
             executeUpdate(Query.CREATE_TEMPLATE_TABLE);
-            System.out.println("Created SQLite tables!");
-
+            plugin.getLogger().info("Created SQLite tables!");
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
