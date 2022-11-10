@@ -48,7 +48,7 @@ public class InfractionsMenu extends PaginatedMenu {
         if (event.getCurrentItem() == null) return;
 
         if (event.getSlot() == BACK_BUTTON_SLOT) {
-            new PunishMenu(plugin, uuid, target.getUniqueId());
+            new PlayerMenu(plugin, uuid, target.getUniqueId());
             return;
         }
 
