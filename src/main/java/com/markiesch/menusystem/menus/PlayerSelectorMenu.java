@@ -71,7 +71,7 @@ public class PlayerSelectorMenu extends PaginatedMenu {
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(UUID.fromString(targetUUID));
             if (!"right".equalsIgnoreCase(event.getClick().toString()) || !getOwner().hasPermission("epicpunishments.teleport")) {
-                new PunishMenu(plugin, uuid, target.getUniqueId());
+                new PlayerMenu(plugin, uuid, target.getUniqueId());
                 return;
             }
 
