@@ -43,7 +43,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         }
     }
 
-    public CommandMap getCommandMap() {
+    private CommandMap getCommandMap() {
         try {
             if (Bukkit.getPluginManager() instanceof SimplePluginManager) {
                 Field field = SimplePluginManager.class.getDeclaredField("commandMap");
@@ -58,7 +58,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         return null;
     }
 
-    public void sendUsage(CommandSender sender) {
+    private void sendUsage(CommandSender sender) {
         sender.sendMessage(getUsage());
     }
 
@@ -83,7 +83,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         return true;
     }
 
-    public void sendPermissionMessage(CommandSender sender) {
+    private void sendPermissionMessage(CommandSender sender) {
         sender.sendMessage("§7You do not have§c permissions §7to use this command!");
     }
 
