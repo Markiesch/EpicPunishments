@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.chat.PlayerChat;
 import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.template.TemplateController;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,10 +27,16 @@ public class TemplateSelectorMenu extends PaginatedMenu {
 
     private static final byte NEW_TEMPLATE_SLOT = 52;
     private static final byte BACK_SLOT = 49;
+    private static final byte SEARCH_NAME_SLOT = 46;
     private static final Material TEMPLATE_MATERIAL = Material.PAPER;
+
+    private String filter = "";
+    private final List<TemplateModel> templates;
 
     public TemplateSelectorMenu(EpicPunishments plugin, UUID uuid) {
         super(plugin, uuid, SLOTS, ITEM_SLOTS);
+
+        templates = new TemplateController().readAll();
 
         open();
     }
@@ -65,6 +73,12 @@ public class TemplateSelectorMenu extends PaginatedMenu {
         }
 
         switch (event.getSlot()) {
+            case SEARCH_NAME_SLOT -> {
+                new PlayerChat(plugin, getOwner(), "", "", (String message) -> {
+                    this.filter = message;
+                    open();
+                });
+            }
             case NEW_TEMPLATE_SLOT -> new CreateTemplateMenu(plugin, uuid);
             case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0, PlayerSelectorSearchType.ALL);
         }
@@ -72,21 +86,18 @@ public class TemplateSelectorMenu extends PaginatedMenu {
 
     @Override
     public void setMenuItems() {
+        ItemStack filterNameButton = ItemUtils.createItem(Material.COMPASS, "§b§lSearch Template", "§7Click to search by name", "", "§7Current filter: §e" + (filter.equals("") ? "none" : filter));
+        getInventory().setItem(SEARCH_NAME_SLOT, filterNameButton);
+
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         getInventory().setItem(BACK_SLOT, back);
 
         ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", "§7Click to create a new template");
         getInventory().setItem(NEW_TEMPLATE_SLOT, newTemplate);
 
-        List<TemplateModel> templates = new TemplateController().readAll();
-        if (templates.isEmpty()) {
-            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", "§7There are no templates yet!");
-            getInventory().setItem(22, noTemplates);
-            return;
-        }
-
-        List<ItemStack> items = new TemplateController().readAll()
+        List<ItemStack> items = templates
                 .stream()
+                .filter(template -> template.name.toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT)))
                 .map(template -> {
                     ItemStack item = ItemUtils.createItem(
                             TEMPLATE_MATERIAL,
@@ -108,6 +119,12 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                     return item;
                 })
                 .collect(Collectors.toList());
+
+        if (items.isEmpty()) {
+            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", "§7There are no templates yet!");
+            getInventory().setItem(22, noTemplates);
+            return;
+        }
 
         setPaginatedItems(items);
     }
