@@ -25,8 +25,8 @@ public class ChatListener implements Listener {
 
         String message = (
         infraction.isPermanent() ?
-            "§c———————————————————————————\n§c§lHey! §cYou are still muted for [duration]!\n§7Reason: §c[reason]\n§7Find out more here:§c www.example.com/faq#muted\n§c———————————————————————————"  :
-            "§c———————————————————————————\n§c§lHey! §cYou are currently muted!\n§7Reason: §c[reason]\n§7Find out more here:§c www.example.com/faq#muted\n§c———————————————————————————")
+            "§c———————————————————————————\n§c§lHey! §cYou are currently muted!\n§7Reason: §c[reason]\n§7Find out more here:§c www.example.com/faq#muted\n§c———————————————————————————" :
+            "§c———————————————————————————\n§c§lHey! §cYou are still muted for [duration]!\n§7Reason: §c[reason]\n§7Find out more here:§c www.example.com/faq#muted\n§c———————————————————————————")
                 .replace("[duration]", TimeUtils.makeReadable(infraction.duration))
                 .replace("[reason]", infraction.reason);
 
