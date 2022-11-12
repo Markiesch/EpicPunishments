@@ -22,6 +22,8 @@ public class InfractionModel {
     }
 
     public boolean isActive() {
+        if (duration == 0L) return true;
+
         long currentUnixTime = System.currentTimeMillis() / 1000L;
         return (date + duration > currentUnixTime);
     }

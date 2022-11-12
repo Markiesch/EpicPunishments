@@ -29,7 +29,7 @@ public class InfractionController {
             // Insert model values
             preparedStatement.setString(1, victim.toString());
             preparedStatement.setString(2, issuer.toString());
-            preparedStatement.setString(3, type.toString());
+            preparedStatement.setString(3, type.name());
             preparedStatement.setString(4, reason);
             preparedStatement.setLong(5, duration);
             preparedStatement.setLong(6, date);
