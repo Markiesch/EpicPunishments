@@ -2,13 +2,13 @@ package com.markiesch.commands;
 
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.infraction.PreparedInfraction;
+import com.markiesch.utils.CommandUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +43,8 @@ public class MuteCommand extends CommandBase {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String alias, String[] args) {
-        return new ArrayList<>();
+        if (args.length == 1) return CommandUtils.getAllOfflinePlayerNames();
+        if (args.length == 2) return CommandUtils.getTimeOptions(args[1]);
+        else return List.of("reason");
     }
 }
