@@ -68,18 +68,29 @@ public class PunishMenu extends Menu {
             case BACK_BUTTON_SLOT -> {
                 new PlayerMenu(plugin, uuid, target.getUniqueId());
             }
+            case TEMPLATE_BUTTON_SLOT -> {
+                new SelectTemplateMenu(plugin, uuid, (template) -> {
+                    if (template != null) {
+                        this.reason = template.reason;
+                        this.duration = template.duration;
+                    }
+                    open();
+                });
+            }
         }
     }
 
     @Override
     public void setMenuItems() {
-        ItemStack reasonButton = ItemUtils.createItem(Material.WRITABLE_BOOK, "§b§lReason", "§7Click to insert a reason");
+        getInventory().setItem(13, ItemUtils.createPlayerInfoHead(target.getUniqueId()));
+
+        ItemStack reasonButton = ItemUtils.createItem(Material.WRITABLE_BOOK, "§b§lReason", "§7Click to insert a reason", "", "§7Current reason: §e" + reason);
         getInventory().setItem(REASON_BUTTON_SLOT, reasonButton);
 
-        ItemStack durationButton = ItemUtils.createItem(Material.CLOCK, "§b§lDuration", "§7Click to insert a duration");
+        ItemStack durationButton = ItemUtils.createItem(Material.CLOCK, "§b§lDuration", "§7Click to insert a duration", "", "§7Current duration: §e" + TimeUtils.makeReadable(duration));
         getInventory().setItem(DURATION_BUTTON_SLOT, durationButton);
 
-        ItemStack typeButton = ItemUtils.createItem(Material.OAK_DOOR, "§b§lType", "§7Click to cycle type");
+        ItemStack typeButton = ItemUtils.createItem(Material.OAK_DOOR, "§b§lType", "§7Click to cycle type", "", "§7Type set: §e" + type);
         getInventory().setItem(TYPE_BUTTON_SLOT, typeButton);
 
         ItemStack templateButton = ItemUtils.createItem(Material.ANVIL, "§b§lUse template", "§7Click to use a template");
@@ -89,9 +100,9 @@ public class PunishMenu extends Menu {
                 "§c§lConfirm",
                 "§7Click to punish" + target.getName(),
                 "",
-                "Reason: " + reason,
-                "Duration: " + TimeUtils.makeReadable(duration),
-                "Type: " + type);
+                "§7Reason: §e" + reason,
+                "§7Duration: §e" + TimeUtils.makeReadable(duration),
+                "§7Type: §e" + type);
 
         getInventory().setItem(CONFIRM_BUTTON_SLOT, confirmButton);
 

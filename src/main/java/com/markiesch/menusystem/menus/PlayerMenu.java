@@ -38,7 +38,7 @@ public class PlayerMenu extends Menu implements Listener {
 
     @Override
     public String getMenuName() {
-        return "Punish > " + target.getName();
+        return "Player > " + target.getName();
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -75,31 +75,7 @@ public class PlayerMenu extends Menu implements Listener {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
         getInventory().setItem(BACK_BUTTON_SLOT, back);
 
-        generatePlayerHead();
-    }
-
-    private void generatePlayerHead() {
-        Date date = new Date(target.getFirstPlayed());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        String formattedDate = sdf.format(date);
-
-
-        ProfileModel profile = new ProfileController().getProfile(target.getUniqueId());
-        List<InfractionModel> infractions = profile.getInfractions();
-
-        ItemStack playerHead = ItemUtils.createItem(
-                Material.PLAYER_HEAD,
-                "§b§l" + target.getName(),
-                "",
-                (infractions.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractions.size() + " punishments"),
-                (profile.isBanned() ? "§6✔ §7" + target.getName() + " is§a banned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not§e banned"),
-                "",
-                "§7Joined at: " + formattedDate);
-
-        SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
-        if (playerMeta != null) playerMeta.setOwningPlayer(target);
-        playerHead.setItemMeta(playerMeta);
-        getInventory().setItem(13, playerHead);
+        getInventory().setItem(13, ItemUtils.createPlayerInfoHead(target.getUniqueId()));
     }
 
     @Override
