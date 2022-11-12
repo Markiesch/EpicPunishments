@@ -38,8 +38,9 @@ public class TimeUtils {
     }
 
     private static long convert(long value, char unit) {
-        return switch (unit) {
+        return switch (Character.toLowerCase(unit)) {
             case 'y' -> value * 60L * 60L * 24L * 365;
+            case 'w' -> value * 60L * 60L * 24L * 7L;
             case 'd' -> value * 60L * 60L * 24L;
             case 'h' -> value * 60L * 60L;
             case 'm' -> value * 60L;
