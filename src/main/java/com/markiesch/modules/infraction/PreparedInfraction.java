@@ -37,13 +37,11 @@ public class PreparedInfraction {
 
                 break;
             case KICK:
-                // TODO check if player is online
                 if (!target.isOnline()) {
                     issuer.sendMessage("This player is not online");
                     return;
                 }
 
-                // TODO kick target
                 Player onlineTarget = target.getPlayer();
                 if (onlineTarget != null) {
                     onlineTarget.kickPlayer("You have been kicked: \nReason: " + reason);
@@ -51,11 +49,12 @@ public class PreparedInfraction {
 
                 break;
             case MUTE:
-                sendMessage(target, "You have been muted: \nReason: " + reason);
-                break;
-            case WARN:
-                sendMessage(target, "You have been warned: \nReason: " + reason);
+                if (targetProfile.isMuted()) {
+                    issuer.sendMessage("§e" + target.getName() + "§7 is already§c muted");
+                    return;
+                }
 
+                issuer.sendMessage("§7Successfully muted §e" + target.getName());
                 break;
         }
 
@@ -66,14 +65,5 @@ public class PreparedInfraction {
                 reason,
                 duration
         );
-    }
-
-    private void sendMessage(OfflinePlayer offlineTarget, String message) {
-        if (!offlineTarget.isOnline()) return;
-
-        Player target = offlineTarget.getPlayer();
-        if (target == null) return;
-
-        target.sendMessage(message);
     }
 }

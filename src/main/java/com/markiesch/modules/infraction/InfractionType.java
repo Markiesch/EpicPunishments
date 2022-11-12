@@ -1,5 +1,5 @@
 package com.markiesch.modules.infraction;
 
 public enum InfractionType {
-    BAN, MUTE, KICK, WARN
+    BAN, MUTE, KICK
 }

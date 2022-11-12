@@ -38,7 +38,6 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         new MuteCommand();
         new PunishCommand(this);
         new TemplatesCommand(this);
-        new WarnCommand();
     }
 
     public void onDisable() {
