@@ -36,6 +36,7 @@ public class ProfileModel {
     public List<InfractionModel> getActiveInfractions(InfractionType type) {
         return getInfractions()
                 .stream()
+                .filter(infraction -> infraction.type == type)
                 .filter(InfractionModel::isActive)
                 .collect(Collectors.toList());
     }
@@ -45,6 +46,6 @@ public class ProfileModel {
     }
 
     public boolean isMuted() {
-        return (getActiveInfractions(InfractionType.BAN).size() > 0);
+        return (getActiveInfractions(InfractionType.MUTE).size() > 0);
     }
 }
