@@ -1,0 +1,11 @@
+menu:
+  general:
+    previous: '&cPrevious Page'
+    next: '&cNext Page'
+    visit: '&7Click to visit page [page]'
+  players:
+    title: 'Overview > Punish'
+    manage: '&bLeft Click &7to manage player'
+    teleport: '§bRight Click §7to teleport'
+  main:
+    title: 'Overview > Punish'

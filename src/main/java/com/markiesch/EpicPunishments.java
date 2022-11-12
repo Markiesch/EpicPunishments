@@ -2,12 +2,18 @@ package com.markiesch;
 
 import com.markiesch.commands.*;
 import com.markiesch.listeners.*;
+import com.markiesch.locale.LangConfig;
 import com.markiesch.storage.Storage;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
+    private static LangConfig langConfig;
+    public static LangConfig getLangConfig() {
+        return langConfig;
+    }
+
     public String changeColor(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
@@ -15,6 +21,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     public void onEnable() {
         // Initialize config
         this.saveDefaultConfig();
+        langConfig = new LangConfig(this);
 
         // Initialize storage
         Storage.getInstance().setup(this);

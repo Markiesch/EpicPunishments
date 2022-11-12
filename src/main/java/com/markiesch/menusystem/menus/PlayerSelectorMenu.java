@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.locale.Locale;
 import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.infraction.InfractionController;
@@ -16,7 +17,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,7 +49,7 @@ public class PlayerSelectorMenu extends PaginatedMenu {
 
     @Override
     public String getMenuName() {
-        return "Overview > Players";
+        return Locale.PLAYER_SELECTOR_TITLE.toString();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class PlayerSelectorMenu extends PaginatedMenu {
                     String headName = "§b§l" + profile.getPlayer().getName();
 
                     long date = profile.getPlayer().getFirstPlayed();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.US);
                     String formattedDate = sdf.format(date);
                     List<InfractionModel> infractionsList = infractionController.readAll(target.getUniqueId());
 
