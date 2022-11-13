@@ -1,6 +1,7 @@
 package com.markiesch.modules.infraction;
 
 import com.markiesch.storage.Storage;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ public class InfractionController {
         storage = Storage.getInstance();
     }
 
-    public void create(InfractionType type, UUID victim, UUID issuer, String reason, long duration) {
+    public void create(InfractionType type, UUID victim, @Nullable UUID issuer, String reason, long duration) {
         try {
             PreparedStatement preparedStatement = storage.getConnection().prepareStatement(
                     "REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date)" +
@@ -28,7 +29,7 @@ public class InfractionController {
 
             // Insert model values
             preparedStatement.setString(1, victim.toString());
-            preparedStatement.setString(2, issuer.toString());
+            preparedStatement.setString(2, issuer == null ? null : issuer.toString());
             preparedStatement.setString(3, type.name());
             preparedStatement.setString(4, reason);
             preparedStatement.setLong(5, duration);
@@ -55,7 +56,7 @@ public class InfractionController {
             while (result.next()) {
                 int id = result.getInt("id");
                 UUID victim = UUID.fromString(result.getString("victim"));
-                UUID issuer = UUID.fromString(result.getString("issuer"));
+                UUID issuer = result.getString("issuer") == null ? null : UUID.fromString(result.getString("issuer"));
                 InfractionType type = InfractionType.valueOf(result.getString("type"));
                 String reason = result.getString("reason");
                 int duration = result.getInt("duration");

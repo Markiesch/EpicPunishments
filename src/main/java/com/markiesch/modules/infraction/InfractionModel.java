@@ -1,17 +1,20 @@
 package com.markiesch.modules.infraction;
 
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 public class InfractionModel {
     public final int id;
     public InfractionType type;
     public UUID victim;
-    public UUID issuer;
+    @Nullable public UUID issuer;
     public String reason;
     public long duration;
     public long date;
 
-    public InfractionModel(int id, InfractionType type, UUID victim, UUID issuer, String reason, long duration, long date) {
+    public InfractionModel(int id, InfractionType type, UUID victim, @Nullable UUID issuer, String reason, long duration, long date) {
         this.id = id;
         this.type = type;
         this.victim = victim;
@@ -19,6 +22,10 @@ public class InfractionModel {
         this.reason = reason;
         this.duration = duration;
         this.date = date;
+    }
+
+    public String getIssuer() {
+        return this.issuer == null ? "Console" : Bukkit.getOfflinePlayer(issuer).getName();
     }
 
     public boolean isActive() {

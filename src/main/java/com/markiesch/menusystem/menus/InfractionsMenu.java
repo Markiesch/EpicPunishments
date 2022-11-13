@@ -80,7 +80,7 @@ public class InfractionsMenu extends PaginatedMenu {
                             "",
                             "§7reason: §a" + infraction.reason,
                             "§7Duration: §a" + TimeUtils.makeReadable(infraction.duration),
-                            "§7Issuer: §a" + Bukkit.getOfflinePlayer(infraction.issuer).getName()
+                            "§7Issuer: §a" + infraction.getIssuer()
                     );
 
                     ItemMeta meta = item.getItemMeta();

@@ -3,6 +3,7 @@ package com.markiesch.modules.infraction;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class PreparedInfraction {
@@ -22,7 +23,7 @@ public class PreparedInfraction {
         this.duration = 0L;
     }
 
-    public void execute(Player issuer, OfflinePlayer target) {
+    public void execute(CommandSender issuer, OfflinePlayer target) {
         ProfileModel targetProfile = new ProfileController().getProfile(target.getUniqueId());
 
         switch (type) {
@@ -61,7 +62,7 @@ public class PreparedInfraction {
         new InfractionController().create(
                 type,
                 target.getUniqueId(),
-                issuer.getUniqueId(),
+                issuer instanceof OfflinePlayer ? ((Player)issuer).getUniqueId() : null,
                 reason,
                 duration
         );

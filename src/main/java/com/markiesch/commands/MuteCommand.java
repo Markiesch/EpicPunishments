@@ -20,14 +20,12 @@ public class MuteCommand extends CommandBase {
                 "§7Usage: §e/mute <target> <duration | permanent> (reason)",
                 2,
                 -1,
-                true
+                false
         );
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        Player issuer = (Player) sender;
-
         OfflinePlayer target = Bukkit.getPlayer(args[0]);
         if (target == null) target = Bukkit.getOfflinePlayer(args[0]);
 
@@ -36,7 +34,7 @@ public class MuteCommand extends CommandBase {
         String reason = String.join(" ", arguments.subList(2, arguments.size()));
 
         new PreparedInfraction(InfractionType.MUTE, reason, duration)
-                .execute(issuer, target);
+                .execute(sender, target);
 
         return true;
     }
