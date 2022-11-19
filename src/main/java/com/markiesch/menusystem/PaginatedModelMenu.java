@@ -18,7 +18,7 @@ public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
 
     protected abstract ItemStack modelToItemStack(T model);
     protected abstract List<T> getModels();
-    protected abstract void handleModelClick(T model);
+    protected abstract void handleModelClick(InventoryClickEvent event, T model);
 
     @Override
     public void handleMenu(InventoryClickEvent event) {
@@ -33,7 +33,7 @@ public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
         Integer index = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "modelId"), PersistentDataType.INTEGER);
         if (index == null) return;
 
-        handleModelClick(this.getModels().get(index));
+        handleModelClick(event, this.getModels().get(index));
     }
 
     @Override

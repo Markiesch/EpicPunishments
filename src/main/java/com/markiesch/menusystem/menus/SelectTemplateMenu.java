@@ -7,6 +7,7 @@ import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    protected void handleModelClick(TemplateModel template) {
+    protected void handleModelClick(InventoryClickEvent event, TemplateModel template) {
         callback.accept(template);
     }
 }
