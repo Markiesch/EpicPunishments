@@ -1,5 +1,7 @@
 package com.markiesch.listeners;
 
+import com.markiesch.modules.infraction.InfractionModel;
+import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.event.EventHandler;
@@ -24,12 +26,14 @@ public class PlayerJoin implements Listener {
         ProfileModel profile = profileController.getProfile(uuid);
 
         if (profile == null) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "You profile couldn't be created or found, please rejoin");
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Your profile couldn't be created or found, please rejoin");
             return;
         }
 
-        if (profile.isBanned()) {
-            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, "The ban hammer has spoken...");
-        }
+        InfractionModel activeBan = profile.getActiveInfraction(InfractionType.BAN);
+
+        if (activeBan == null) return;
+
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, activeBan.reason);
     }
 }
