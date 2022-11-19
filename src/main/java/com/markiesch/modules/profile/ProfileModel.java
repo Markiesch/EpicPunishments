@@ -28,6 +28,7 @@ public class ProfileModel {
     public InfractionModel getActiveInfraction(InfractionType type) {
         return getInfractions()
                 .stream()
+                .filter(infraction -> infraction.type == type)
                 .filter(InfractionModel::isActive)
                 .findFirst()
                 .orElse(null);
