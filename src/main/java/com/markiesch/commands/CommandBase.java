@@ -8,12 +8,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.SimplePluginManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommandBase extends BukkitCommand implements CommandExecutor {
+    private static final String COMMAND_FALLBACK_PREFIX = "command";
     private final int minArgs;
     private final int maxArgs;
     private final boolean playerOnly;
@@ -37,25 +39,21 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         this.maxArgs = maxArgs;
         this.playerOnly = playerOnly;
 
-        CommandMap commandMap = getCommandMap();
-        if (commandMap != null) {
-            commandMap.register(command, this);
-        }
+        registerCommand();
     }
 
-    private CommandMap getCommandMap() {
+    private void registerCommand() {
         try {
             if (Bukkit.getPluginManager() instanceof SimplePluginManager) {
                 Field field = SimplePluginManager.class.getDeclaredField("commandMap");
                 field.setAccessible(true);
 
-                return (CommandMap) field.get(Bukkit.getPluginManager());
+                CommandMap commandMap = (CommandMap) field.get(Bukkit.getPluginManager());
+                commandMap.register(COMMAND_FALLBACK_PREFIX, this);
             }
         } catch (NoSuchFieldException | IllegalAccessException error) {
             error.printStackTrace();
         }
-
-        return null;
     }
 
     private void sendUsage(CommandSender sender) {
@@ -63,7 +61,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     }
 
     @Override
-    public boolean execute(CommandSender sender, String alias, String[] arguments) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String alias, String[] arguments) {
         if (permission != null && !sender.hasPermission(permission)) {
             this.sendPermissionMessage(sender);
             return true;
@@ -88,12 +86,12 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         return this.onCommand(sender, args);
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+    public @NotNull List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         if (!sender.hasPermission(permission)) return new ArrayList<>();
         return onTabComplete(sender, alias, args);
     }
