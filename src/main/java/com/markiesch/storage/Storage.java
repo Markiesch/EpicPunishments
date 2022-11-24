@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Storage {
     private Connection connection;
@@ -83,5 +84,16 @@ public class Storage {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+    }
+
+    public Integer getLastInsertedId() {
+        try (Statement statement = getConnection().createStatement()) {
+            statement.execute("SELECT last_insert_rowid()");
+            return statement.getUpdateCount();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return null;
     }
 }
