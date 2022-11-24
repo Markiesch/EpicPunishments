@@ -1,14 +1,13 @@
 package com.markiesch.modules.infraction;
 
 import com.markiesch.storage.Storage;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class InfractionController {
@@ -18,32 +17,36 @@ public class InfractionController {
         storage = Storage.getInstance();
     }
 
-    public void create(InfractionType type, UUID victim, @Nullable UUID issuer, String reason, long duration) {
+    public @Nullable InfractionModel create(PreparedInfraction preparedInfraction) {
+        InfractionModel infractionModel = null;
+
         try {
             PreparedStatement preparedStatement = storage.getConnection().prepareStatement(
                     "REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date)" +
                             "VALUES (?, ?, ?, ?, ?, ?);"
             );
 
-            long date = System.currentTimeMillis() / 1000L;
-
             // Insert model values
-            preparedStatement.setString(1, victim.toString());
-            preparedStatement.setString(2, issuer == null ? null : issuer.toString());
-            preparedStatement.setString(3, type.name());
-            preparedStatement.setString(4, reason);
-            preparedStatement.setLong(5, duration);
-            preparedStatement.setLong(6, date);
+            preparedStatement.setString(1, preparedInfraction.victim.getUniqueId().toString());
+            preparedStatement.setString(2, preparedInfraction.issuer == null ? null : ((Player)preparedInfraction.issuer).getUniqueId().toString());
+            preparedStatement.setString(3, preparedInfraction.type.name());
+            preparedStatement.setString(4, preparedInfraction.reason);
+            preparedStatement.setLong(5, preparedInfraction.duration);
+            preparedStatement.setLong(6, preparedInfraction.date);
             preparedStatement.executeUpdate();
+
+            infractionModel = preparedInfraction.createInfraction(storage.getLastInsertedId());
 
             storage.closeConnection();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+
+        return infractionModel;
     }
 
-    public List<InfractionModel> readAll(UUID uuid) {
-        List<InfractionModel> infractions = new ArrayList<>();
+    public InfractionList readAll(UUID uuid) {
+        InfractionList infractions = new InfractionList();
 
         try {
             Connection connection = storage.getConnection();

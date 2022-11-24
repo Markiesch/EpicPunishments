@@ -3,10 +3,11 @@ package com.markiesch.modules.infraction;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class InfractionModel {
-    public final int id;
+    public int id;
     public InfractionType type;
     public UUID victim;
     @Nullable public UUID issuer;

@@ -25,15 +25,20 @@ public class MuteCommand extends CommandBase {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        OfflinePlayer target = Bukkit.getPlayer(args[0]);
-        if (target == null) target = Bukkit.getOfflinePlayer(args[0]);
+        OfflinePlayer victim = Bukkit.getPlayer(args[0]);
+        if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
 
         long duration = TimeUtils.parseTime(args[1]);
         List<String> arguments = Arrays.asList(args);
         String reason = String.join(" ", arguments.subList(2, arguments.size()));
 
-        new PreparedInfraction(InfractionType.MUTE, reason, duration)
-                .execute(sender, target);
+        new PreparedInfraction(
+                InfractionType.MUTE,
+                sender,
+                victim,
+                reason,
+                duration
+        ).execute();
 
         return true;
     }

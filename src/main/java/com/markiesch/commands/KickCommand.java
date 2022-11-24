@@ -27,16 +27,19 @@ public class KickCommand extends CommandBase {
     public boolean onCommand(CommandSender sender, String[] args) {
         Player issuer = (Player) sender;
 
-        OfflinePlayer target = Bukkit.getPlayer(args[0]);
-        if (target == null) target = Bukkit.getOfflinePlayer(args[0]);
+        OfflinePlayer victim = Bukkit.getPlayer(args[0]);
+        if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
 
         List<String> arguments = Arrays.asList(args);
         String reason = String.join(" ", arguments.subList(1, arguments.size()));
 
         new PreparedInfraction(
                 InfractionType.KICK,
-                reason
-        ).execute(issuer, target);
+                issuer,
+                victim,
+                reason,
+                0L
+        ).execute();
 
         return true;
     }

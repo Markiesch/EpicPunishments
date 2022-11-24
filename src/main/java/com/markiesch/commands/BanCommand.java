@@ -28,8 +28,8 @@ public class BanCommand extends CommandBase {
     public boolean onCommand(CommandSender sender, String[] args) {
         Player issuer = (Player) sender;
 
-        OfflinePlayer target = Bukkit.getPlayer(args[0]);
-        if (target == null) target = Bukkit.getOfflinePlayer(args[0]);
+        OfflinePlayer victim = Bukkit.getPlayer(args[0]);
+        if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
 
         long duration = TimeUtils.parseTime(args[1]);
         List<String> arguments = Arrays.asList(args);
@@ -37,9 +37,11 @@ public class BanCommand extends CommandBase {
 
         new PreparedInfraction(
             InfractionType.BAN,
+            issuer,
+            victim,
             reason,
             duration
-        ).execute(issuer, target);
+        ).execute();
 
         return true;
     }

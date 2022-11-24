@@ -5,66 +5,81 @@ import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class PreparedInfraction {
-    public InfractionType type;
-    public String reason;
-    public long duration;
+    public final InfractionType type;
+    public final CommandSender issuer;
+    public final OfflinePlayer victim;
+    public final String reason;
+    public final long duration;
+    public final long date;
 
-    public PreparedInfraction(InfractionType type, String reason, long duration) {
+    public PreparedInfraction(InfractionType type, CommandSender issuer, OfflinePlayer victim, String reason, long duration) {
         this.type = type;
+        this.issuer = issuer;
+        this.victim = victim;
         this.reason = reason;
         this.duration = duration;
+        date = System.currentTimeMillis() / 1000L;
     }
 
-    public PreparedInfraction(InfractionType type, String reason) {
-        this.type = type;
-        this.reason = reason;
-        this.duration = 0L;
-    }
+    public void execute() {
+        ProfileModel targetProfile = new ProfileController().getProfile(victim.getUniqueId());
 
-    public void execute(CommandSender issuer, OfflinePlayer target) {
-        ProfileModel targetProfile = new ProfileController().getProfile(target.getUniqueId());
+        InfractionList victimInfractionList = InfractionManager.getInstance().getPlayer(victim.getUniqueId());
 
         switch (type) {
-            case BAN:
-                if (targetProfile.isBanned()) {
+            case BAN -> {
+                if (victimInfractionList.isBanned()) {
                     issuer.sendMessage("This player is already banned");
                     return;
                 }
 
                 // TODO check if target is online
                 // TODO kick target
-
-                break;
-            case KICK:
-                if (!target.isOnline()) {
+                if (victim.isOnline()) {
+                    Player onlineVictim = victim.getPlayer();
+                    if (onlineVictim != null) {
+                        onlineVictim.kickPlayer("You have been banned: \nReason:" + reason);
+                    }
+                }
+            }
+            case KICK -> {
+                if (!victim.isOnline()) {
                     issuer.sendMessage("This player is not online");
                     return;
                 }
-
-                Player onlineTarget = target.getPlayer();
+                Player onlineTarget = victim.getPlayer();
                 if (onlineTarget != null) {
                     onlineTarget.kickPlayer("You have been kicked: \nReason: " + reason);
                 }
-
-                break;
-            case MUTE:
-                if (targetProfile.isMuted()) {
-                    issuer.sendMessage("§e" + target.getName() + "§7 is already§c muted");
+            }
+            case MUTE -> {
+                if (victimInfractionList.isMuted()) {
+                    issuer.sendMessage("§e" + victim.getName() + "§7 is already§c muted");
                     return;
                 }
-
-                issuer.sendMessage("§7Successfully muted §e" + target.getName());
-                break;
+                issuer.sendMessage("§7Successfully muted §e" + victim.getName());
+            }
         }
 
-        new InfractionController().create(
+        InfractionManager.getInstance().createInfraction(this);
+    }
+
+    private @Nullable UUID getIssuerUUID() {
+        return issuer instanceof OfflinePlayer ? ((Player)issuer).getUniqueId() : null;
+    }
+
+    public InfractionModel createInfraction(int id) {
+        return new InfractionModel(id,
                 type,
-                target.getUniqueId(),
-                issuer instanceof OfflinePlayer ? ((Player)issuer).getUniqueId() : null,
+                victim.getUniqueId(),
+                getIssuerUUID(),
                 reason,
-                duration
-        );
+                duration,
+                date);
     }
 }

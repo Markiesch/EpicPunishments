@@ -1,9 +1,9 @@
 package com.markiesch.listeners;
 
+import com.markiesch.modules.infraction.InfractionList;
+import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.infraction.InfractionType;
-import com.markiesch.modules.profile.ProfileController;
-import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,13 +15,13 @@ public class ChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
-        ProfileModel profile = new ProfileController().getProfile(player.getUniqueId());
+        InfractionList infractionList = InfractionManager.getInstance().getPlayer(player.getUniqueId());
 
-        if (!profile.isMuted()) return;
+        if (!infractionList.isMuted()) return;
 
         event.setCancelled(true);
 
-        InfractionModel infraction = profile.getActiveInfractions(InfractionType.MUTE).get(0);
+        InfractionModel infraction = InfractionManager.getInstance().getPlayer(player.getUniqueId()).getActiveByType(InfractionType.MUTE).get(0);
 
         String message = (
         infraction.isPermanent() ?

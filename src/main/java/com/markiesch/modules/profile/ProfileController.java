@@ -1,8 +1,6 @@
 package com.markiesch.modules.profile;
 
 import com.markiesch.storage.Storage;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

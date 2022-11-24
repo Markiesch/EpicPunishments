@@ -1,5 +1,7 @@
 package com.markiesch.listeners;
 
+import com.markiesch.modules.infraction.InfractionList;
+import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.profile.ProfileController;
@@ -20,7 +22,6 @@ public class PlayerJoin implements Listener {
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
-
         profileController.createProfile(uuid, event.getAddress().getHostName());
 
         ProfileModel profile = profileController.getProfile(uuid);
@@ -30,7 +31,11 @@ public class PlayerJoin implements Listener {
             return;
         }
 
-        InfractionModel activeBan = profile.getActiveInfraction(InfractionType.BAN);
+        InfractionList infractions = InfractionManager.getInstance().getPlayer(uuid);
+        InfractionModel activeBan = infractions.getActiveByType(InfractionType.BAN)
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         if (activeBan == null) return;
 

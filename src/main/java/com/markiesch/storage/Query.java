@@ -1,5 +1,7 @@
 package com.markiesch.storage;
 
+import org.intellij.lang.annotations.Language;
+
 public enum Query {
     CREATE_INFRACTION_TABLE(
             "CREATE TABLE IF NOT EXISTS Infraction (" +
@@ -30,7 +32,7 @@ public enum Query {
 
     private final String query;
 
-    Query(String query) {
+    Query(@Language("SQLite") String query) {
         this.query = query;
     }
 

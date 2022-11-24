@@ -91,7 +91,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     }
 
     @Override
-    public @NotNull List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+    public @NotNull List<String> tabComplete(CommandSender sender, @NotNull String alias, String[] args) {
         if (!sender.hasPermission(permission)) return new ArrayList<>();
         return onTabComplete(sender, alias, args);
     }

@@ -1,5 +1,7 @@
 package com.markiesch.utils;
 
+import com.markiesch.modules.infraction.InfractionList;
+import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
@@ -44,14 +46,13 @@ public class ItemUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         String formattedDate = sdf.format(date);
 
-        ProfileModel profile = new ProfileController().getProfile(uuid);
-        List<InfractionModel> infractions = profile.getInfractions();
+        InfractionList infractionList = InfractionManager.getInstance().getPlayer(uuid);
 
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD,
                 "§b§l" + player.getName(),
-                (infractions.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractions.size() + " punishments"),
-                (profile.isBanned() ? "§6✔ §7" + player.getName() + " is§a banned" : "§a✔ §a" + player.getName() + " §7is not§e banned"),
+                (infractionList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionList.size() + " punishments"),
+                (infractionList.isBanned() ? "§6✔ §7" + player.getName() + " is§a banned" : "§a✔ §a" + player.getName() + " §7is not§e banned"),
                 "",
                 "§7Joined at: " + formattedDate);
 
