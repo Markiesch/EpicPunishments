@@ -1,11 +1,89 @@
+event:
+    # [target] shows the username of the command issuer
+    # [command] shows the command input
+    command_spy: '&cCSpy &7[target]: [command]'
+    # [target] shows the username of the user that placed down the sign
+    # [content] shows the sign content
+    sign_spy: '&cSignSpy &7[target]: [content]'
+
+    kick:
+        success: '&7Successfully kicked &e[victim_name]'
+        offline: '&e[victim_name] &7is not online'
+        message: '&cYou have been kicked!\n\n&7Reason: &f[reason]\n&7Find out more:&f www.example.com'
+    mute:
+        success: '&7Successfully muted &e[victim_name]'
+        already: '&e[victim_name] &7is already&c muted'
+        temporarily_message: "&c———————————————————————————\n&c&lHey! &cYou are still muted for [duration]!\n&7Reason: &c[reason]\n&7Find out more here:&c www.example.com/faq#muted\n&c———————————————————————————"
+        permanently_message: "&c———————————————————————————\n&c&lHey! &cYou are currently muted!\n&7Reason: &c[reason]\n&7Find out more here:&c www.example.com/faq#muted\n&c———————————————————————————"
+    ban:
+        success: '&7Successfully banned &e[victim_name]'
+        already: '&e[victim_name] &7is already&c banned'
+        temporarily_message: "&cYou are temporarily banned for &f[duration]&c from this server!\n\n&7Reason: &f[reason]\n&7Find out more:&e&n www.example.com"
+        permanently_message: "&cYou are permanently banned from this server!\n\n&7Reason: &f[reason]\n&7Find out more:&e&n www.example.com"
+
 menu:
-  general:
-    previous: '&cPrevious Page'
-    next: '&cNext Page'
-    visit: '&7Click to visit page [page]'
-  players:
-    title: 'Overview > Punish'
-    manage: '&bLeft Click &7to manage player'
-    teleport: '§bRight Click §7to teleport'
-  main:
-    title: 'Overview > Punish'
+    general:
+        previous: '&cPrevious Page'
+        next: '&cNext Page'
+        visit: '&7Click to visit page [page]'
+        no_permission: '&7You do not have&c permissions&7 to open this menu'
+        back_button:
+            title: '&b&lBack'
+            lore:
+                - '&7Click to go back'
+        close_button:
+            title: '&c&lClose'
+            lore:
+                - '&7Click to close menu'
+    players:
+        title: 'Overview > Punish'
+        filter_button:
+            title: '&b&lVisibility'
+            lore:
+                - '&7Click to show &e[next_filter] &7users'
+        templates_button:
+            title: '&b&lTemplates'
+            lore:
+                - '&7Click to manage templates'
+        player_button:
+            title: '&b&l[player_name]'
+            lore:
+                - '&7Click to manage player'
+                - ''
+                - '[punishments_lore]'
+                - ''
+                - '&7Joined at: [player_first_join]'
+            punishments_empty: '&a✔ &7has not been punished yet'
+            punishments_not_empty: '&6✔ &7had received [punishments_size] punishments'
+    main:
+        title: 'Overview > Punish'
+    templates:
+        title: 'Templates'
+        no_templates_item:
+            title: '&6&lNo Templates!'
+            lore:
+                - '&7There are no templates yet!'
+        filter_button:
+            title: '&b&lSearch Template'
+            lore:
+                - '&7Click to search by name'
+                - ''
+                - '&7Current filter: &e[current_filter]'
+        create_button:
+            title: '&b&lNew template'
+            lore:
+                - '&7Click to create a new template'
+        template_button:
+            title: '&b&l[template_name]'
+            lore:
+                - '&bLeft Click &7to manage template'
+                - '&bPress Q &7to delete template'
+                - ''
+                - '&7Type: &e[template_type]'
+                - '&7Reason: &e[template_reason]'
+                - '&7Duration: &e[template_duration]'
+
+    createTemplate:
+        title: ''
+    editTemplate:
+        title: ''

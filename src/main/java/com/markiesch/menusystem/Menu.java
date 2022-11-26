@@ -1,11 +1,13 @@
 package com.markiesch.menusystem;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.locale.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -30,7 +32,7 @@ public abstract class Menu implements InventoryHolder {
         Player player = getOwner();
 
         if (getRequiredPermission() != null && !player.hasPermission(getRequiredPermission())) {
-            player.sendMessage("§7You do not have§c permissions§7 to view templates");
+            player.sendMessage(Locale.MENU_NO_PERMISSION.toString());
             player.closeInventory();
             return;
         }
@@ -44,7 +46,7 @@ public abstract class Menu implements InventoryHolder {
     }
 
     @Override
-    public Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return inventory;
     }
 }

@@ -2,8 +2,8 @@ package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.chat.PlayerChat;
+import com.markiesch.locale.Locale;
 import com.markiesch.menusystem.PaginatedMenu;
-import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
@@ -17,9 +17,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static java.util.Locale.ROOT;
 
 public class TemplateSelectorMenu extends PaginatedMenu {
     private static final byte SLOTS = 54;
@@ -43,7 +44,7 @@ public class TemplateSelectorMenu extends PaginatedMenu {
 
     @Override
     public String getMenuName() {
-        return "Templates";
+        return Locale.MENU_TEMPLATES_TITLE.toString();
     }
 
     @Override
@@ -80,34 +81,43 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                 });
             }
             case NEW_TEMPLATE_SLOT -> new CreateTemplateMenu(plugin, uuid);
-            case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0, PlayerSelectorSearchType.ALL);
+            case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0);
         }
     }
 
     @Override
     public void setMenuItems() {
-        ItemStack filterNameButton = ItemUtils.createItem(Material.COMPASS, "§b§lSearch Template", "§7Click to search by name", "", "§7Current filter: §e" + (filter.equals("") ? "none" : filter));
+        String displayFilter = filter.equals("") ? "none" : filter;
+
+        ItemStack filterNameButton = ItemUtils.createItem(Material.COMPASS,
+                Locale.MENU_TEMPLATES_FILTER_TITLE
+                        .addPlaceholder("current_filter", displayFilter)
+                        .toString(),
+                Locale.MENU_TEMPLATES_FILTER_LORE
+                        .addPlaceholder("current_filter", displayFilter)
+                        .toList());
         getInventory().setItem(SEARCH_NAME_SLOT, filterNameButton);
 
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
+        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, Locale.MENU_BACK_BUTTON_TITLE.toString(), Locale.MENU_BACK_BUTTON_LORE.toList());
         getInventory().setItem(BACK_SLOT, back);
 
-        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, "§b§lNew template", "§7Click to create a new template");
+        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL,  Locale.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(), Locale.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList());
         getInventory().setItem(NEW_TEMPLATE_SLOT, newTemplate);
 
         List<ItemStack> items = templates
                 .stream()
-                .filter(template -> template.name.toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT)))
+                .filter(template -> template.name.toLowerCase(ROOT).contains(filter.toLowerCase(ROOT)))
                 .map(template -> {
                     ItemStack item = ItemUtils.createItem(
                             TEMPLATE_MATERIAL,
-                            "§b§l" + template.name,
-                            "§bLeft Click §7to manage template",
-                            "§bPress Q §7to delete template",
-                            "",
-                            "§7Type: §e" + template.type,
-                            "§7Reason: §e" + (template.reason != null ? template.reason : "None"),
-                            "§7Duration: §e" + TimeUtils.makeReadable(template.duration)
+                            Locale.MENU_TEMPLATES_TEMPLATE_BUTTON_TITLE
+                                    .addPlaceholder("template_name", template.name)
+                                    .toString(),
+                            Locale.MENU_TEMPLATES_TEMPLATE_BUTTON_LORE
+                                    .addPlaceholder("template_type", template.type)
+                                    .addPlaceholder("template_reason", template.reason)
+                                    .addPlaceholder("template_duration", TimeUtils.makeReadable(template.duration))
+                                    .toList()
                     );
 
                     ItemMeta meta = item.getItemMeta();
@@ -121,7 +131,7 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                 .collect(Collectors.toList());
 
         if (items.isEmpty()) {
-            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, "§6§lNo Templates!", "§7There are no templates yet!");
+            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, Locale.MENU_TEMPLATES_EMPTY_TITLE.toString(), Locale.MENU_TEMPLATES_EMPTY_LORE.toList());
             getInventory().setItem(22, noTemplates);
             return;
         }

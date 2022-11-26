@@ -1,7 +1,6 @@
 package com.markiesch.modules.infraction;
 
-import com.markiesch.modules.profile.ProfileController;
-import com.markiesch.modules.profile.ProfileModel;
+import com.markiesch.locale.Locale;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,42 +26,45 @@ public class PreparedInfraction {
     }
 
     public void execute() {
-        ProfileModel targetProfile = new ProfileController().getProfile(victim.getUniqueId());
-
         InfractionList victimInfractionList = InfractionManager.getInstance().getPlayer(victim.getUniqueId());
 
         switch (type) {
+            case KICK -> {
+                if (!victim.isOnline()) {
+                    issuer.sendMessage(Locale.EVENT_KICK_OFFLINE.addPlaceholder("victim_name", victim.getName()).toString());
+                    return;
+                }
+                Player onlineTarget = victim.getPlayer();
+                if (onlineTarget != null) {
+                    onlineTarget.kickPlayer(Locale.EVENT_KICK_MESSAGE.addPlaceholder("message", reason).toString());
+
+                    issuer.sendMessage(Locale.EVENT_KICK_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+                }
+            }
+            case MUTE -> {
+                if (victimInfractionList.isMuted()) {
+                    issuer.sendMessage(
+                            Locale.EVENT_MUTE_ALREADY
+                                    .addPlaceholder("victim_name", victim.getName())
+                                    .toString());
+                    return;
+                }
+                issuer.sendMessage(Locale.EVENT_MUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+            }
             case BAN -> {
                 if (victimInfractionList.isBanned()) {
-                    issuer.sendMessage("This player is already banned");
+                    issuer.sendMessage(Locale.EVENT_BAN_ALREADY.addPlaceholder("victim_name", victim.getName()).toString());
                     return;
                 }
 
-                // TODO check if target is online
-                // TODO kick target
                 if (victim.isOnline()) {
                     Player onlineVictim = victim.getPlayer();
                     if (onlineVictim != null) {
                         onlineVictim.kickPlayer("You have been banned: \nReason:" + reason);
                     }
+
+                    issuer.sendMessage(Locale.EVENT_BAN_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
                 }
-            }
-            case KICK -> {
-                if (!victim.isOnline()) {
-                    issuer.sendMessage("This player is not online");
-                    return;
-                }
-                Player onlineTarget = victim.getPlayer();
-                if (onlineTarget != null) {
-                    onlineTarget.kickPlayer("You have been kicked: \nReason: " + reason);
-                }
-            }
-            case MUTE -> {
-                if (victimInfractionList.isMuted()) {
-                    issuer.sendMessage("§e" + victim.getName() + "§7 is already§c muted");
-                    return;
-                }
-                issuer.sendMessage("§7Successfully muted §e" + victim.getName());
             }
         }
 

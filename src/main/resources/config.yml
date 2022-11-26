@@ -2,19 +2,3 @@
 # When false you only need "epicpunishments.templates.use" + "epicpunishments.<templateType>"
 requireExactTemplatePermission: false
 
-messages:
-  # [target] shows the username of the command issuer
-  # [command] shows the command input
-  commandSpy: "&cCSpy &7[target]: [command]"
-  # [target] shows the username of the user that placed down the sign
-  # [command] shows the sign content
-  signSpy: "&cSignSpy &7[target]: [content]"
-
-  # [reason] shows the reason of the punishment
-  # [duration] shows the duration of the punishment (only when temporarily)
-  kickMessage: "§cYou have been kicked!\n\n§7Reason: §f[reason]\n§7Find out more:§f www.example.com"
-  warnMessage: "§cYou have been warned!\n\n§7Reason: §c[reason]\n§7Find out more:§c www.example.com"
-  temporarilyMute: "§c———————————————————————————\n§c§lHey! §cYou are still muted for [duration]!\n§7Reason: §c[reason]\n§7Find out more here:§c www.example.com/faq#muted\n§c———————————————————————————"
-  permanentlyMute: "§c———————————————————————————\n§c§lHey! §cYou are currently muted!\n§7Reason: §c[reason]\n§7Find out more here:§c www.example.com/faq#muted\n§c———————————————————————————"
-  tempBanMessage: "§cYou are temporarily banned for §f[duration]§c from this server!\n\n§7Reason: §f[reason]\n§7Find out more:§e§n www.example.com"
-  permBanMessage: "§cYou are permanently banned from this server!\n\n§7Reason: §f[reason]\n§7Find out more:§e§n www.example.com"

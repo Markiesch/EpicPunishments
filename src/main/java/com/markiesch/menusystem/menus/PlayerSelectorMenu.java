@@ -33,7 +33,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private final int closeSlot = 49;
     private final int filterSlot = 46;
 
-    public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid, int page, PlayerSelectorSearchType filter) {
+    public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid, int page) {
         super(
                 plugin,
                 uuid,
@@ -41,7 +41,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                 new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 }
         );
         this.plugin = plugin;
-        this.filter = filter;
+        this.filter = PlayerSelectorSearchType.ALL;
         this.page = page;
         profileController = new ProfileController();
         infractionController = new InfractionController();
@@ -51,7 +51,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
     @Override
     public String getMenuName() {
-        return Locale.PLAYER_SELECTOR_TITLE.toString();
+        return Locale.MENU_PLAYERS_TITLE.toString();
     }
 
     @Override
@@ -63,8 +63,6 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     protected ItemStack modelToItemStack(ProfileModel profile) {
         OfflinePlayer target = profile.getPlayer();
 
-        String headName = "§b§l" + profile.getPlayer().getName();
-
         long date = profile.getPlayer().getFirstPlayed();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.US);
         String formattedDate = sdf.format(date);
@@ -72,13 +70,20 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD,
-                headName,
-                "§7Click to manage player",
-                "",
-                (infractionsList.isEmpty() ? "§a✔ §7didn't received any punishments yet" : "§6✔ §7had received " + infractionsList.size() + " punishments"),
-                // (PlayerStorage.isPlayerBanned(target.getUniqueId()) ? "§6✔ §7" + target.getName() + " is§a banned §7on §e" + plugin.getServer().getName() : "§a✔ §a" + target.getName() + " §7is not§e banned"),
-                "",
-                "§7Joined at: " + formattedDate
+                Locale.MENU_PLAYERS_BUTTON_PLAYER_TITLE
+                        .addPlaceholder("player_name",  profile.getPlayer().getName())
+                        .toString(),
+                Locale.MENU_PLAYERS_BUTTON_PLAYER_LORE
+                        .addPlaceholder("punishments_size", infractionsList.size())
+                        .addPlaceholder("player_first_join", formattedDate)
+                        .addPlaceholder(
+                                "punishments_lore",
+                                (infractionsList.size() == 0 ?
+                                        Locale.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_EMPTY :
+                                        Locale.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_NOT_EMPTY)
+                                            .addPlaceholder("punishments_size", infractionsList.size())
+                                            .toString())
+                        .toList()
         );
 
         SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
@@ -125,13 +130,15 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
         if (filter.equals(PlayerSelectorSearchType.ALL)) nextFilter = "online";
         else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) nextFilter = "offline";
 
-        ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE, "§b§lVisibility", "§7Click to show §e" + nextFilter + " §7users");
+        ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE,
+                Locale.MENU_PLAYERS_BUTTON_FILTER_TITLE.toString(),
+                Locale.MENU_PLAYERS_BUTTON_FILTER_LORE.addPlaceholder("next_filter", nextFilter).toList());
         getInventory().setItem(filterSlot, filterItem);
 
-        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, "§c§lClose", "§7Click to close menu");
+        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, Locale.MENU_CLOSE_BUTTON_TITLE.toString(), Locale.MENU_CLOSE_BUTTON_LORE.toList());
         getInventory().setItem(closeSlot, closeButton);
 
-        ItemStack templates = ItemUtils.createItem(Material.ANVIL, "§b§lTemplates", "§7Click to manage templates");
+        ItemStack templates = ItemUtils.createItem(Material.ANVIL, Locale.MENU_PLAYERS_TEMPLATES_BUTTON_TITLE.toString(), Locale.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList());
         getInventory().setItem(TEMPLATE_BUTTON_SLOT, templates);
     }
 
