@@ -2,9 +2,6 @@ package com.markiesch.utils;
 
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
-import com.markiesch.modules.infraction.InfractionModel;
-import com.markiesch.modules.profile.ProfileController;
-import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -21,7 +18,15 @@ public class ItemUtils {
         return createItem(material, name, 1, lore);
     }
 
+    public static ItemStack createItem(Material material, String name, List<String> lore) {
+        return createItem(material, name, 1, lore);
+    }
+
     public static ItemStack createItem(Material material, String name, int amount, String... lore) {
+        return createItem(material, name, amount, new ArrayList<>(Arrays.asList(lore)));
+    }
+
+    public static ItemStack createItem(Material material, String name, int amount, List<String> lore) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
 
@@ -29,9 +34,8 @@ public class ItemUtils {
             meta.setDisplayName(name);
 
             // For removing "Effects" from banner pattern
-            List<String> loreList = new ArrayList<>(Arrays.asList(lore));
             meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-            meta.setLore(loreList);
+            meta.setLore(lore);
 
             item.setItemMeta(meta);
         }
