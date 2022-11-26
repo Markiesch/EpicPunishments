@@ -1,5 +1,6 @@
 package com.markiesch.utils;
 
+import com.google.common.base.Charsets;
 import com.markiesch.EpicPunishments;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -7,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.List;
 
 public abstract class Config {
     protected abstract String getResource();
@@ -26,7 +29,7 @@ public abstract class Config {
         InputStream defaultStream = plugin.getResource(getResource());
 
         if (defaultStream == null) return;
-        YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
+        YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream, Charsets.UTF_8));
         dataConfig.setDefaults(defaultConfig);
     }
 
@@ -41,5 +44,9 @@ public abstract class Config {
 
     public String getString(String string) {
         return getConfig().getString(string);
+    }
+
+    public List<String> getStringList(String string) {
+        return getConfig().getStringList(string);
     }
 }
