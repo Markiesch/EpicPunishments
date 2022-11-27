@@ -1,6 +1,7 @@
 package com.markiesch.modules.profile;
 
 import com.markiesch.storage.Storage;
+import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +31,7 @@ public class ProfileController {
             preparedStatement.setString(3, ip);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to write to database");
         } finally {
             storage.closeConnection();
         }
@@ -49,7 +50,7 @@ public class ProfileController {
                 models.add(new ProfileModel(uuid));
             }
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to read from database");
         }
 
         return models;
@@ -70,7 +71,7 @@ public class ProfileController {
             model = new ProfileModel(UUID.fromString(resultSet.getString("UUID")));
             resultSet.close();
         } catch(SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to read from database");
         } finally {
             storage.closeConnection();
         }

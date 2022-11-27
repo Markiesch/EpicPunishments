@@ -1,6 +1,7 @@
 package com.markiesch.storage;
 
 import com.markiesch.EpicPunishments;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class Storage {
             executeUpdate(Query.CREATE_TEMPLATE_TABLE);
             plugin.getLogger().info("Created SQLite tables!");
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to initialize SQL tables" + sqlException.getMessage());
         } finally {
             closeConnection();
         }
@@ -51,7 +52,7 @@ public class Storage {
             Connection connection = getConnection();
             connection.prepareStatement(query.getQuery()).executeUpdate();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to execute database query!");
         }
     }
 
@@ -82,7 +83,7 @@ public class Storage {
         try {
             if (connection != null && !connection.isClosed()) connection.close();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to close SQL connection");
         }
     }
 
@@ -91,7 +92,7 @@ public class Storage {
             statement.execute("SELECT last_insert_rowid()");
             return statement.getUpdateCount();
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
         }
 
         return null;

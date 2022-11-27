@@ -1,6 +1,7 @@
 package com.markiesch.modules.template;
 
 import com.markiesch.storage.Storage;
+import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,16 +24,9 @@ public class TemplateController {
             Connection connection = storage.getConnection();
             ResultSet result = connection.prepareStatement(TemplateQuery.SELECT_ALL_TEMPLATES).executeQuery();
 
-            while (result.next()) {
-                int id = result.getInt("id");
-                String name = result.getString("name");
-                String reason = result.getString("reason");
-                String type = result.getString("type");
-                Long duration = result.getLong("duration");
-                templates.add(new TemplateModel(id, name, reason, type, duration));
-            }
+            templates = ResultSetToModel(result);
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to read from database");
         }
 
         return templates;
@@ -46,18 +40,11 @@ public class TemplateController {
             PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.SELECT_SINGLE_TEMPLATE);
             preparedStatement.setInt(1, id);
 
-            ResultSet result = connection.prepareStatement(TemplateQuery.SELECT_ALL_TEMPLATES).executeQuery();
+            ResultSet result = preparedStatement.executeQuery();
 
-            while (result.next()) {
-                int templateId = result.getInt("id");
-                String templateName = result.getString("name");
-                String templateReason = result.getString("reason");
-                String templateType = result.getString("type");
-                Long templateDuration = result.getLong("duration");
-                templates.add(new TemplateModel(templateId, templateName, templateReason, templateType, templateDuration));
-            }
+            templates = ResultSetToModel(result);
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to read from database");
         }
 
         return templates.size() > 0 ? templates.get(0) : null;
@@ -74,7 +61,7 @@ public class TemplateController {
             preparedStatement.setLong(4, duration);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to write to database");
         } finally {
             storage.closeConnection();
         }
@@ -88,7 +75,7 @@ public class TemplateController {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to write to database");
         } finally {
             storage.closeConnection();
         }
@@ -106,9 +93,22 @@ public class TemplateController {
             preparedStatement.setInt(5, id);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to write to database");
         } finally {
             storage.closeConnection();
         }
+    }
+
+    private List<TemplateModel> ResultSetToModel(ResultSet result) throws SQLException {
+        List<TemplateModel> templates = new ArrayList<>();
+        while (result.next()) {
+            int templateId = result.getInt("id");
+            String templateName = result.getString("name");
+            String templateReason = result.getString("reason");
+            String templateType = result.getString("type");
+            Long templateDuration = result.getLong("duration");
+            templates.add(new TemplateModel(templateId, templateName, templateReason, templateType, templateDuration));
+        }
+        return templates;
     }
 }

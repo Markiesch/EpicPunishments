@@ -1,6 +1,7 @@
 package com.markiesch.modules.infraction;
 
 import com.markiesch.storage.Storage;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,7 @@ public class InfractionController {
 
             storage.closeConnection();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to write to database");
         }
 
         return infractionModel;
@@ -67,7 +68,7 @@ public class InfractionController {
                 infractions.add(new InfractionModel(id, type, victim, issuer, reason, duration, date));
             }
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to read from database");
         } finally {
             storage.closeConnection();
         }
@@ -83,7 +84,7 @@ public class InfractionController {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            Bukkit.getLogger().warning("Failed to write to database");
         } finally {
             storage.closeConnection();
         }
