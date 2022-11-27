@@ -11,6 +11,14 @@ public class InfractionManager {
         infractionsMap = new HashMap<>();
     }
 
+    private static class InfractionManagerHolder {
+        public static final InfractionManager INSTANCE = new InfractionManager();
+    }
+
+    public static InfractionManager getInstance() {
+        return InfractionManagerHolder.INSTANCE;
+    }
+
     public boolean createInfraction(PreparedInfraction preparedInfraction) {
         InfractionModel infractionModel = new InfractionController().create(preparedInfraction);
 
@@ -20,12 +28,18 @@ public class InfractionManager {
         return true;
     }
 
-    private static class InfractionManagerHolder {
-        public static final InfractionManager INSTANCE = new InfractionManager();
-    }
+    public boolean expirePunishments(UUID victim, InfractionType infractionType) {
+        InfractionList activeList = getPlayer(victim).getActiveByType(infractionType);
 
-    public static InfractionManager getInstance() {
-        return InfractionManagerHolder.INSTANCE;
+        if (activeList.isEmpty()) return false;
+
+        new InfractionController().expire(activeList);
+
+        for (InfractionModel infractionModel : activeList) {
+            infractionModel.setRevoked(true);
+        }
+
+        return true;
     }
 
     public void removePlayer(UUID uuid) {

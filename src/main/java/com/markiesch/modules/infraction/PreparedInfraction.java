@@ -82,6 +82,7 @@ public class PreparedInfraction {
                 getIssuerUUID(),
                 reason,
                 duration,
-                date);
+                date,
+                false);
     }
 }

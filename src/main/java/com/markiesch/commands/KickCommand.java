@@ -19,14 +19,12 @@ public class KickCommand extends CommandBase {
                 "§7Usage: §e/kick <target> (reason)",
                 1,
                 -1,
-                true
+                false
         );
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        Player issuer = (Player) sender;
-
         OfflinePlayer victim = Bukkit.getPlayer(args[0]);
         if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
 
@@ -35,7 +33,7 @@ public class KickCommand extends CommandBase {
 
         new PreparedInfraction(
                 InfractionType.KICK,
-                issuer,
+                sender,
                 victim,
                 reason,
                 0L

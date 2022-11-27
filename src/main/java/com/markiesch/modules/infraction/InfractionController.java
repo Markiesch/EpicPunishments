@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class InfractionController {
     private final Storage storage;
@@ -23,8 +25,8 @@ public class InfractionController {
 
         try {
             PreparedStatement preparedStatement = storage.getConnection().prepareStatement(
-                    "REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date)" +
-                            "VALUES (?, ?, ?, ?, ?, ?);"
+                    "REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date, revoked)" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?);"
             );
 
             // Insert model values
@@ -34,6 +36,7 @@ public class InfractionController {
             preparedStatement.setString(4, preparedInfraction.reason);
             preparedStatement.setLong(5, preparedInfraction.duration);
             preparedStatement.setLong(6, preparedInfraction.date);
+            preparedStatement.setInt(7, 0);
             preparedStatement.executeUpdate();
 
             infractionModel = preparedInfraction.createInfraction(storage.getLastInsertedId());
@@ -65,7 +68,8 @@ public class InfractionController {
                 String reason = result.getString("reason");
                 int duration = result.getInt("duration");
                 int date = result.getInt("date");
-                infractions.add(new InfractionModel(id, type, victim, issuer, reason, duration, date));
+                boolean revoked = result.getBoolean("revoked");
+                infractions.add(new InfractionModel(id, type, victim, issuer, reason, duration, date, revoked));
             }
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");
@@ -83,6 +87,26 @@ public class InfractionController {
             PreparedStatement preparedStatement = connection.prepareStatement(InfractionQuery.DELETE_INFRACTION);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            Bukkit.getLogger().warning("Failed to write to database");
+        } finally {
+            storage.closeConnection();
+        }
+    }
+
+    public void expire(InfractionList infractionList) {
+        try {
+            Connection connection = storage.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Infraction SET revoked = 1 WHERE id = ?");
+
+            List<Integer> keys = infractionList.stream().map(infractionModel -> infractionModel.id).collect(Collectors.toList());
+            for (Integer key : keys) {
+                preparedStatement.setInt(1, key);
+                preparedStatement.addBatch();
+            }
+            preparedStatement.executeBatch();
+            connection.commit();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
         } finally {

@@ -7,7 +7,6 @@ import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,14 +19,12 @@ public class BanCommand extends CommandBase {
             "§7Usage: §e/ban <target> <duration | permanent> (reason)",
             2,
             -1,
-            true
+            false
         );
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        Player issuer = (Player) sender;
-
         OfflinePlayer victim = Bukkit.getPlayer(args[0]);
         if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
 
@@ -37,7 +34,7 @@ public class BanCommand extends CommandBase {
 
         new PreparedInfraction(
             InfractionType.BAN,
-            issuer,
+            sender,
             victim,
             reason,
             duration

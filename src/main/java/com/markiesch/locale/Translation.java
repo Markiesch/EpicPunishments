@@ -13,13 +13,16 @@ public enum Translation {
     COMMAND_NO_PERMISSION("command.no_permission"),
     COMMAND_PLAYER_ONLY("command.player_only"),
 
+    COMMAND_UNBAN_NOT_BANNED("command.unban.not_banned"),
+
     EVENT_KICK_SUCCESS("event.kick.success"),
     EVENT_KICK_OFFLINE("event.kick.offline"),
     EVENT_KICK_MESSAGE("event.kick.message"),
 
     EVENT_MUTE_SUCCESS("event.mute.success"),
     EVENT_MUTE_ALREADY("event.mute.already"),
-    EVENT_MUTE_MESSAGE("event.mute.message"),
+    EVENT_MUTE_TEMPORARILY_MESSAGE("event.mute.temporarily_message"),
+    EVENT_MUTE_PERMANENTLY_MESSAGE("event.mute.permanently_message"),
 
     EVENT_BAN_SUCCESS("event.ban.success"),
     EVENT_BAN_ALREADY("event.ban.already"),

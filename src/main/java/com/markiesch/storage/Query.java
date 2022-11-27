@@ -11,7 +11,8 @@ public enum Query {
                 "[type]         VARCHAR(10)," +
                 "[reason]       VARCHAR(100)," +
                 "[duration]     INTEGER," +
-                "[date]         DATE                    NOT NULL" +
+                "[date]         DATE                    NOT NULL," +
+                "[revoked]      NUMBER(1)               NOT NULL" +
             ");"
     ),
     CREATE_PLAYER_TABLE(

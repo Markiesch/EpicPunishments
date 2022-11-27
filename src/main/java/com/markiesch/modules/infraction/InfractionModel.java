@@ -13,8 +13,9 @@ public class InfractionModel {
     public String reason;
     public long duration;
     public long date;
+    public boolean revoked;
 
-    public InfractionModel(int id, InfractionType type, UUID victim, @Nullable UUID issuer, String reason, long duration, long date) {
+    public InfractionModel(int id, InfractionType type, UUID victim, @Nullable UUID issuer, String reason, long duration, long date, boolean revoked) {
         this.id = id;
         this.type = type;
         this.victim = victim;
@@ -22,6 +23,7 @@ public class InfractionModel {
         this.reason = reason;
         this.duration = duration;
         this.date = date;
+        this.revoked = revoked;
     }
 
     public String getIssuer() {
@@ -29,6 +31,7 @@ public class InfractionModel {
     }
 
     public boolean isActive() {
+        if (revoked) return false;
         if (duration == 0L) return true;
 
         long currentUnixTime = System.currentTimeMillis() / 1000L;
@@ -37,5 +40,9 @@ public class InfractionModel {
 
     public boolean isPermanent() {
         return duration == 0L;
+    }
+
+    public void setRevoked(boolean value) {
+        revoked = value;
     }
 }
