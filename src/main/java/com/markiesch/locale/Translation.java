@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public enum Locale {
+public enum Translation {
+    COMMAND_NO_PERMISSION("command.no_permission"),
+    COMMAND_PLAYER_ONLY("command.player_only"),
+
     EVENT_KICK_SUCCESS("event.kick.success"),
     EVENT_KICK_OFFLINE("event.kick.offline"),
     EVENT_KICK_MESSAGE("event.kick.message"),
@@ -68,7 +71,7 @@ public enum Locale {
     private final String path;
     private final Map<String, Object> placeholders;
 
-    Locale(String configPath) {
+    Translation(String configPath) {
         path = configPath;
         placeholders = new HashMap<>();
     }
@@ -96,7 +99,7 @@ public enum Locale {
                 .collect(Collectors.toList());
     }
 
-    public Locale addPlaceholder(String placeholder, Object value) {
+    public Translation addPlaceholder(String placeholder, Object value) {
         placeholders.put("[" + placeholder + "]", value);
         return this;
     }

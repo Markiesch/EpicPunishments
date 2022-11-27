@@ -1,7 +1,7 @@
 package com.markiesch.menusystem;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.locale.Locale;
+import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -32,7 +32,7 @@ public abstract class Menu implements InventoryHolder {
         Player player = getOwner();
 
         if (getRequiredPermission() != null && !player.hasPermission(getRequiredPermission())) {
-            player.sendMessage(Locale.MENU_NO_PERMISSION.toString());
+            player.sendMessage(Translation.MENU_NO_PERMISSION.toString());
             player.closeInventory();
             return;
         }

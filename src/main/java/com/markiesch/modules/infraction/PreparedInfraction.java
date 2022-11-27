@@ -1,6 +1,6 @@
 package com.markiesch.modules.infraction;
 
-import com.markiesch.locale.Locale;
+import com.markiesch.locale.Translation;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,29 +31,29 @@ public class PreparedInfraction {
         switch (type) {
             case KICK -> {
                 if (!victim.isOnline()) {
-                    issuer.sendMessage(Locale.EVENT_KICK_OFFLINE.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_KICK_OFFLINE.addPlaceholder("victim_name", victim.getName()).toString());
                     return;
                 }
                 Player onlineTarget = victim.getPlayer();
                 if (onlineTarget != null) {
-                    onlineTarget.kickPlayer(Locale.EVENT_KICK_MESSAGE.addPlaceholder("message", reason).toString());
+                    onlineTarget.kickPlayer(Translation.EVENT_KICK_MESSAGE.addPlaceholder("message", reason).toString());
 
-                    issuer.sendMessage(Locale.EVENT_KICK_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_KICK_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
                 }
             }
             case MUTE -> {
                 if (victimInfractionList.isMuted()) {
                     issuer.sendMessage(
-                            Locale.EVENT_MUTE_ALREADY
+                            Translation.EVENT_MUTE_ALREADY
                                     .addPlaceholder("victim_name", victim.getName())
                                     .toString());
                     return;
                 }
-                issuer.sendMessage(Locale.EVENT_MUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+                issuer.sendMessage(Translation.EVENT_MUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
             }
             case BAN -> {
                 if (victimInfractionList.isBanned()) {
-                    issuer.sendMessage(Locale.EVENT_BAN_ALREADY.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_BAN_ALREADY.addPlaceholder("victim_name", victim.getName()).toString());
                     return;
                 }
 
@@ -63,7 +63,7 @@ public class PreparedInfraction {
                         onlineVictim.kickPlayer("You have been banned: \nReason:" + reason);
                     }
 
-                    issuer.sendMessage(Locale.EVENT_BAN_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_BAN_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
                 }
             }
         }

@@ -2,7 +2,7 @@ package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.chat.PlayerChat;
-import com.markiesch.locale.Locale;
+import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
@@ -44,7 +44,7 @@ public class TemplateSelectorMenu extends PaginatedMenu {
 
     @Override
     public String getMenuName() {
-        return Locale.MENU_TEMPLATES_TITLE.toString();
+        return Translation.MENU_TEMPLATES_TITLE.toString();
     }
 
     @Override
@@ -90,18 +90,18 @@ public class TemplateSelectorMenu extends PaginatedMenu {
         String displayFilter = filter.equals("") ? "none" : filter;
 
         ItemStack filterNameButton = ItemUtils.createItem(Material.COMPASS,
-                Locale.MENU_TEMPLATES_FILTER_TITLE
+                Translation.MENU_TEMPLATES_FILTER_TITLE
                         .addPlaceholder("current_filter", displayFilter)
                         .toString(),
-                Locale.MENU_TEMPLATES_FILTER_LORE
+                Translation.MENU_TEMPLATES_FILTER_LORE
                         .addPlaceholder("current_filter", displayFilter)
                         .toList());
         getInventory().setItem(SEARCH_NAME_SLOT, filterNameButton);
 
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, Locale.MENU_BACK_BUTTON_TITLE.toString(), Locale.MENU_BACK_BUTTON_LORE.toList());
+        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
         getInventory().setItem(BACK_SLOT, back);
 
-        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL,  Locale.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(), Locale.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList());
+        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL,  Translation.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(), Translation.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList());
         getInventory().setItem(NEW_TEMPLATE_SLOT, newTemplate);
 
         List<ItemStack> items = templates
@@ -110,10 +110,10 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                 .map(template -> {
                     ItemStack item = ItemUtils.createItem(
                             TEMPLATE_MATERIAL,
-                            Locale.MENU_TEMPLATES_TEMPLATE_BUTTON_TITLE
+                            Translation.MENU_TEMPLATES_TEMPLATE_BUTTON_TITLE
                                     .addPlaceholder("template_name", template.name)
                                     .toString(),
-                            Locale.MENU_TEMPLATES_TEMPLATE_BUTTON_LORE
+                            Translation.MENU_TEMPLATES_TEMPLATE_BUTTON_LORE
                                     .addPlaceholder("template_type", template.type)
                                     .addPlaceholder("template_reason", template.reason)
                                     .addPlaceholder("template_duration", TimeUtils.makeReadable(template.duration))
@@ -131,7 +131,7 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                 .collect(Collectors.toList());
 
         if (items.isEmpty()) {
-            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, Locale.MENU_TEMPLATES_EMPTY_TITLE.toString(), Locale.MENU_TEMPLATES_EMPTY_LORE.toList());
+            ItemStack noTemplates = ItemUtils.createItem(Material.MAP, Translation.MENU_TEMPLATES_EMPTY_TITLE.toString(), Translation.MENU_TEMPLATES_EMPTY_LORE.toList());
             getInventory().setItem(22, noTemplates);
             return;
         }

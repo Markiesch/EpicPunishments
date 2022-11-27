@@ -1,3 +1,7 @@
+command:
+    no_permission: '&7You do not have&c permissions &7to use this command!'
+    player_only: '&cOnly players can use this command.'
+
 event:
     # [target] shows the username of the command issuer
     # [command] shows the command input

@@ -1,7 +1,7 @@
 package com.markiesch.menusystem;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.locale.Locale;
+import com.markiesch.locale.Translation;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -48,12 +48,12 @@ public abstract class PaginatedMenu extends Menu {
         int maxPages = items.size() / itemSlots.length;
 
         if (page >= 1) {
-            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, Locale.PREVIOUS_PAGE.toString(), Locale.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page)));
+            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, Translation.PREVIOUS_PAGE.toString(), Translation.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page)));
             getInventory().setItem(prevPageSlot, prevPage);
         }
 
         if (page < maxPages) {
-            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, Locale.NEXT_PAGE.toString(), Locale.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page + 2)));
+            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, Translation.NEXT_PAGE.toString(), Translation.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page + 2)));
             onLastPage = false;
             getInventory().setItem(nextPageSlot, nextPage);
         }

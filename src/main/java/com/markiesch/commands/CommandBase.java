@@ -1,5 +1,6 @@
 package com.markiesch.commands;
 
+import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -73,7 +74,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         }
 
         if (playerOnly && !(sender instanceof Player)) {
-            sender.sendMessage("§cOnly players can use this command.");
+            sender.sendMessage(Translation.COMMAND_PLAYER_ONLY.toString());
             return true;
         }
 
@@ -82,7 +83,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
     }
 
     private void sendPermissionMessage(CommandSender sender) {
-        sender.sendMessage("§7You do not have§c permissions §7to use this command!");
+        sender.sendMessage(Translation.COMMAND_NO_PERMISSION.toString());
     }
 
     @Override

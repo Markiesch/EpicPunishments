@@ -1,7 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.locale.Locale;
+import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.modules.infraction.InfractionController;
@@ -51,7 +51,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
     @Override
     public String getMenuName() {
-        return Locale.MENU_PLAYERS_TITLE.toString();
+        return Translation.MENU_PLAYERS_TITLE.toString();
     }
 
     @Override
@@ -70,17 +70,17 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD,
-                Locale.MENU_PLAYERS_BUTTON_PLAYER_TITLE
+                Translation.MENU_PLAYERS_BUTTON_PLAYER_TITLE
                         .addPlaceholder("player_name",  profile.getPlayer().getName())
                         .toString(),
-                Locale.MENU_PLAYERS_BUTTON_PLAYER_LORE
+                Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE
                         .addPlaceholder("punishments_size", infractionsList.size())
                         .addPlaceholder("player_first_join", formattedDate)
                         .addPlaceholder(
                                 "punishments_lore",
                                 (infractionsList.size() == 0 ?
-                                        Locale.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_EMPTY :
-                                        Locale.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_NOT_EMPTY)
+                                        Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_EMPTY :
+                                        Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_NOT_EMPTY)
                                             .addPlaceholder("punishments_size", infractionsList.size())
                                             .toString())
                         .toList()
@@ -131,14 +131,14 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
         else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) nextFilter = "offline";
 
         ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE,
-                Locale.MENU_PLAYERS_BUTTON_FILTER_TITLE.toString(),
-                Locale.MENU_PLAYERS_BUTTON_FILTER_LORE.addPlaceholder("next_filter", nextFilter).toList());
+                Translation.MENU_PLAYERS_BUTTON_FILTER_TITLE.toString(),
+                Translation.MENU_PLAYERS_BUTTON_FILTER_LORE.addPlaceholder("next_filter", nextFilter).toList());
         getInventory().setItem(filterSlot, filterItem);
 
-        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, Locale.MENU_CLOSE_BUTTON_TITLE.toString(), Locale.MENU_CLOSE_BUTTON_LORE.toList());
+        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, Translation.MENU_CLOSE_BUTTON_TITLE.toString(), Translation.MENU_CLOSE_BUTTON_LORE.toList());
         getInventory().setItem(closeSlot, closeButton);
 
-        ItemStack templates = ItemUtils.createItem(Material.ANVIL, Locale.MENU_PLAYERS_TEMPLATES_BUTTON_TITLE.toString(), Locale.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList());
+        ItemStack templates = ItemUtils.createItem(Material.ANVIL, Translation.MENU_PLAYERS_TEMPLATES_BUTTON_TITLE.toString(), Translation.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList());
         getInventory().setItem(TEMPLATE_BUTTON_SLOT, templates);
     }
 
