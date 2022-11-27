@@ -5,6 +5,7 @@ import com.markiesch.menusystem.menus.TemplateSelectorMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TemplatesCommand extends CommandBase {
@@ -32,6 +33,6 @@ public class TemplatesCommand extends CommandBase {
 
     @Override
     protected List<String> onTabComplete(CommandSender sender, String alias, String[] args) {
-        return null;
+        return new ArrayList<>();
     }
 }

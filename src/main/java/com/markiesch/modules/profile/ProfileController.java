@@ -66,9 +66,10 @@ public class ProfileController {
             preparedStatement.setString(1, uuid.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
 
-            model = new ProfileModel(UUID.fromString(resultSet.getString("UUID")));
+            if (resultSet.next()) {
+                model = new ProfileModel(UUID.fromString(resultSet.getString("UUID")));
+            }
             resultSet.close();
         } catch(SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");

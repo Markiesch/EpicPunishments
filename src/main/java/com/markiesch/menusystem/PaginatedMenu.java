@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class PaginatedMenu extends Menu {
-    protected final int prevPageSlot = 45;
-    protected final int nextPageSlot = 53;
+    protected static final int PREV_PAGE_SLOT = 45;
+    protected static final int NEXT_PAGE_SLOT = 53;
     protected boolean onLastPage = true;
 
     protected int page = 0;
@@ -25,13 +25,13 @@ public abstract class PaginatedMenu extends Menu {
 
     @Override
     public void handleMenu(InventoryClickEvent event) {
-        if (event.getSlot() == prevPageSlot && page != 0) {
+        if (event.getSlot() == PREV_PAGE_SLOT && page != 0) {
           page--;
           getInventory().clear();
           setMenuItems();
         }
 
-        if (event.getSlot() == nextPageSlot && !onLastPage) {
+        if (event.getSlot() == NEXT_PAGE_SLOT && !onLastPage) {
             page++;
             getInventory().clear();
             setMenuItems();
@@ -49,13 +49,13 @@ public abstract class PaginatedMenu extends Menu {
 
         if (page >= 1) {
             ItemStack prevPage = ItemUtils.createItem(Material.ARROW, Translation.PREVIOUS_PAGE.toString(), Translation.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page)));
-            getInventory().setItem(prevPageSlot, prevPage);
+            getInventory().setItem(PREV_PAGE_SLOT, prevPage);
         }
 
         if (page < maxPages) {
             ItemStack nextPage = ItemUtils.createItem(Material.ARROW, Translation.NEXT_PAGE.toString(), Translation.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page + 2)));
             onLastPage = false;
-            getInventory().setItem(nextPageSlot, nextPage);
+            getInventory().setItem(NEXT_PAGE_SLOT, nextPage);
         }
     }
 }

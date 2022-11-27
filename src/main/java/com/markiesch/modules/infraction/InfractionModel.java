@@ -3,7 +3,6 @@ package com.markiesch.modules.infraction;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class InfractionModel {

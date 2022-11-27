@@ -2,6 +2,7 @@ package com.markiesch.modules.template;
 
 import com.markiesch.storage.Storage;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public class TemplateController {
         return templates;
     }
 
-    public TemplateModel readSingle(int id) {
+    public @Nullable TemplateModel readSingle(int id) {
         List<TemplateModel> templates = new ArrayList<>();
         try {
             Connection connection = storage.getConnection();
@@ -47,7 +48,7 @@ public class TemplateController {
             Bukkit.getLogger().warning("Failed to read from database");
         }
 
-        return templates.size() > 0 ? templates.get(0) : null;
+        return templates.isEmpty() ? null : templates.get(0);
     }
 
     public void create(String name, String reason, String type, Long duration) {

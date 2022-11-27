@@ -1,7 +1,6 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.menusystem.PlayerSelectorSearchType;
 import com.markiesch.menusystem.menus.PlayerSelectorMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
