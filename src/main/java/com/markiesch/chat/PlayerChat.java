@@ -31,7 +31,7 @@ public class PlayerChat implements Listener {
         start();
     }
 
-    public void start() {
+    private void start() {
         player.closeInventory();
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             if (player.isOnline() && !player.isDead()) {

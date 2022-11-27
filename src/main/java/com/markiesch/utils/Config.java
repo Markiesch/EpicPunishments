@@ -41,7 +41,7 @@ public abstract class Config {
         return dataConfig;
     }
 
-    public void saveDefaultConfig() {
+    private void saveDefaultConfig() {
         if (!configFile.exists()) plugin.saveResource(getResource(), false);
     }
 
