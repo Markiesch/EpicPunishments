@@ -1,6 +1,7 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,15 +19,20 @@ public class SignSpy implements Listener {
     public boolean onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
         if (player.hasPermission("epicpunishments.spy.sign.bypass")) return true;
-        String lines = event.getLine(0) + " " + event.getLine(1) + " " + event.getLine(2) + " " + event.getLine(3);
+
+        player.sendMessage(Translation.EVENT_SIGN_SPY
+                .addPlaceholder("target", player.getName())
+                .addPlaceholder("content", String.join(", ", event.getLines()))
+                .toString());
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (onlinePlayer.equals(player)) break;
+            if (onlinePlayer.equals(player)) continue;
             if (onlinePlayer.hasPermission("epicpunishments.spy.sign")) {
-                String config = plugin.getConfig().getString("messages.signspy");
-                if (config == null) return true;
-                String message = config.replace("[target]", player.getName()).replace("[content]", "" + lines);
-                onlinePlayer.sendMessage(plugin.changeColor(message));
+                player.sendMessage(Translation.EVENT_SIGN_SPY
+                        .addPlaceholder("target", player.getName())
+                        .addPlaceholder("content", String.join(" ", event.getLines()))
+                        .toString()
+                );
             }
         }
         return true;
