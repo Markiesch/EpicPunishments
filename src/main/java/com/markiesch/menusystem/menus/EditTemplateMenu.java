@@ -2,6 +2,7 @@ package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.chat.PlayerChat;
+import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
@@ -15,22 +16,16 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public class EditTemplateMenu extends Menu {
-    private static final byte SLOTS = 54;
+    private static final byte SLOTS = 45;
 
-    private static final byte INFO_SLOT = 4;
     private static final byte NAME_SLOT = 20;
     private static final byte REASON_SLOT = 21;
     private static final byte TYPE_SLOT = 23;
     private static final byte DURATION_SLOT = 24;
-    private static final byte SAVE_SLOT = 40;
+    private static final byte CREATE_SLOT = 40;
 
     private final TemplateController templateController;
     private final TemplateModel template;
-
-    private String name;
-    private String reason;
-    private long duration;
-    private String type;
 
     public EditTemplateMenu(EpicPunishments plugin, UUID uuid, int id) {
         super(plugin, uuid, SLOTS);
@@ -38,16 +33,12 @@ public class EditTemplateMenu extends Menu {
         templateController = new TemplateController();
         template = templateController.readSingle(id);
 
-        this.name = template.name;
-        this.reason = template.reason;
-        this.duration = template.duration;
-        this.type = template.type;
         open();
     }
 
     @Override
     public String getMenuName() {
-        return "Templates > Edit Template";
+        return Translation.MENU_EDIT_TEMPLATE_TITLE.toString();
     }
 
     @Override
@@ -62,35 +53,49 @@ public class EditTemplateMenu extends Menu {
 
         switch (event.getSlot()) {
             case NAME_SLOT -> {
-                new PlayerChat(plugin, getOwner(), "§bTemplate Name", "§7Type in a new name", (String message) -> {
-                    this.name = message;
-                    open();
-                });
+                new PlayerChat(
+                        plugin,
+                        getOwner(),
+                        Translation.MENU_EDIT_TEMPLATE_INSERT_NAME_TITLE.toString(),
+                        Translation.MENU_EDIT_TEMPLATE_INSERT_NAME_SUBTITLE.toString(),
+                        (String message) -> {
+                            template.name = message;
+                            open();
+                        });
             }
             case TYPE_SLOT -> {
-                if ("BAN".equalsIgnoreCase(type)) type = "KICK";
-                else if ("KICK".equalsIgnoreCase(type)) type = "WARN";
-                else if ("WARN".equalsIgnoreCase(type)) type = "MUTE";
-                else if ("MUTE".equalsIgnoreCase(type)) type = "BAN";
+                if ("BAN".equalsIgnoreCase(template.type)) template.type = "KICK";
+                else if ("KICK".equalsIgnoreCase(template.type)) template.type = "WARN";
+                else if ("WARN".equalsIgnoreCase(template.type)) template.type = "MUTE";
+                else if ("MUTE".equalsIgnoreCase(template.type)) template.type = "BAN";
                 setMenuItems();
             }
             case DURATION_SLOT -> {
                 player.sendMessage("§7Please type in a valid time\n§ay §7- §eYear\n§ad §7- §eDay\n§am §7- §eMinute\n§as §7- §eSecond");
-
-                new PlayerChat(plugin, getOwner(), "§bTemplate Duration", "§7Type in a template duration", (String message) -> {
-                    this.duration = TimeUtils.parseTime(message);
-                    open();
-                });
+                new PlayerChat(
+                        plugin,
+                        getOwner(),
+                        Translation.MENU_EDIT_TEMPLATE_INSERT_DURATION_TITLE.toString(),
+                        Translation.MENU_EDIT_TEMPLATE_INSERT_DURATION_SUBTITLE.toString(),
+                        (String message) -> {
+                            template.duration = TimeUtils.parseTime(message);
+                            open();
+                        });
             }
             case REASON_SLOT -> {
-                new PlayerChat(plugin, getOwner(), "§bTemplate Reason", "§7Type in a template reason", (String message) -> {
-                    this.reason = message;
-                    open();
-                });
+                new PlayerChat(
+                        plugin,
+                        getOwner(),
+                        Translation.MENU_EDIT_TEMPLATE_INSERT_REASON_TITLE.toString(),
+                        Translation.MENU_EDIT_TEMPLATE_INSERT_REASON_SUBTITLE.toString(),
+                        (String message) -> {
+                            template.reason = message;
+                            open();
+                        });
             }
-            case SAVE_SLOT -> {
-                templateController.updateTemplate(template.id, name, type, reason, duration);
-                player.sendMessage("§7Successfully§a saved§7 template §e" + name);
+            case CREATE_SLOT -> {
+                templateController.updateTemplate(template.id, template.name, template.type, template.reason, template.duration);
+                player.sendMessage(Translation.MENU_EDIT_TEMPLATE_SUCCESS.addPlaceholder("name", template.name).toString());
                 new TemplateSelectorMenu(plugin, uuid);
             }
         }
@@ -98,42 +103,39 @@ public class EditTemplateMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        ItemStack infoItem = ItemUtils.createItem(
-                Material.NETHER_STAR,
-                "§b§lEdit template",
-                "",
-                "§eName: §7" + name,
-                "§eType: §7" + type,
-                "§eReason: §7" + reason,
-                "§eDuration: §7" + TimeUtils.makeReadable(duration)
-        );
-        getInventory().setItem(INFO_SLOT, infoItem);
-
         ItemStack nameItem = ItemUtils.createItem(
                 Material.PAPER,
-                "§b§lName",
-                "§7Click to insert a new name",
-                "",
-                "§eCurrent name: §7" + name
+                Translation.MENU_EDIT_TEMPLATE_NAME_BUTTON_TITLE.toString(),
+                Translation.MENU_EDIT_TEMPLATE_NAME_BUTTON_LORE.addPlaceholder("name", template.name).toList()
         );
         getInventory().setItem(NAME_SLOT, nameItem);
 
         ItemStack typeItem = ItemUtils.createItem(
                 Material.OAK_DOOR,
-                "§b§lType",
-                "§7Click to toggle type",
-                "",
-                "§eCurrent type: §7" + type
+                Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_TITLE.toString(),
+                Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_LORE.addPlaceholder("type", template.type).toList()
         );
         getInventory().setItem(TYPE_SLOT, typeItem);
 
-        ItemStack timeItem = ItemUtils.createItem(Material.CLOCK, "§b§lDuration", "§7Click to insert duration", "", "§7Duration set: §e" + TimeUtils.makeReadable(duration));
+        ItemStack timeItem = ItemUtils.createItem(
+                Material.CLOCK,
+                Translation.MENU_EDIT_TEMPLATE_TIME_BUTTON_TITLE.toString(),
+                Translation.MENU_EDIT_TEMPLATE_TIME_BUTTON_LORE.addPlaceholder("duration", TimeUtils.makeReadable(template.duration)).toList()
+        );
         getInventory().setItem(DURATION_SLOT, timeItem);
 
-        ItemStack reasonItem = ItemUtils.createItem(Material.WRITABLE_BOOK, "§b§lReason", "§7Click to insert reason", "", "§7Reason set: §e" + reason);
+        ItemStack reasonItem = ItemUtils.createItem(
+                Material.WRITABLE_BOOK,
+                Translation.MENU_EDIT_TEMPLATE_REASON_BUTTON_TITLE.toString(),
+                Translation.MENU_EDIT_TEMPLATE_REASON_BUTTON_LORE.addPlaceholder("reason", template.reason).toList()
+        );
         getInventory().setItem(REASON_SLOT, reasonItem);
 
-        ItemStack saveItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§b§lSave Template", "§7Click to save changes");
-        getInventory().setItem(SAVE_SLOT, saveItem);
+        ItemStack createItem = ItemUtils.createItem(
+                Material.EMERALD_BLOCK,
+                Translation.MENU_EDIT_TEMPLATE_CONFIRM_TITLE.toString(),
+                Translation.MENU_EDIT_TEMPLATE_CONFIRM_LORE.toList()
+        );
+        getInventory().setItem(CREATE_SLOT, createItem);
     }
 }

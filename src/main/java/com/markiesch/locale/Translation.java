@@ -14,6 +14,13 @@ public enum Translation {
     COMMAND_PLAYER_ONLY("command.player_only"),
 
     COMMAND_UNBAN_NOT_BANNED("command.unban.not_banned"),
+    COMMAND_UNBAN_SUCCESS("command.unban.success"),
+
+    COMMAND_UNMUTE_NOT_MUTED("command.unmute.not_muted"),
+    COMMAND_UNMUTE_SUCCESS("command.unmute.success"),
+
+    EVENT_COMMAND_SPY("event.command_spy"),
+    EVENT_SIGN_SPY("event.sign_spy"),
 
     EVENT_KICK_SUCCESS("event.kick.success"),
     EVENT_KICK_OFFLINE("event.kick.offline"),
@@ -27,6 +34,9 @@ public enum Translation {
     EVENT_BAN_SUCCESS("event.ban.success"),
     EVENT_BAN_ALREADY("event.ban.already"),
 
+
+    EVENT_BAN_TEMPORARILY_MESSAGE("event.ban.temporarily_message"),
+    EVENT_BAN_PERMANENTLY_MESSAGE("event.ban.permanently_message"),
 
     PREVIOUS_PAGE("menu.general.previous"),
     NEXT_PAGE("menu.general.next"),
@@ -67,8 +77,39 @@ public enum Translation {
     MENU_TEMPLATES_TEMPLATE_BUTTON_LORE("menu.templates.template_button.lore"),
 
     MENU_TEMPLATES_EMPTY_TITLE("menu.templates.no_templates_item.title"),
-    MENU_TEMPLATES_EMPTY_LORE("menu.templates.no_templates_item.lore");
+    MENU_TEMPLATES_EMPTY_LORE("menu.templates.no_templates_item.lore"),
 
+    MENU_TEMPLATES_CREATE_SUCCESS("menu.create_template.success"),
+    MENU_TEMPLATES_CREATE_TITLE("menu.create_template.title"),
+    MENU_TEMPLATES_CREATE_SUBTITLE("menu.create_template.subtitle"),
+
+    MENU_EDIT_TEMPLATE_TITLE("menu.edit_template.title"),
+
+    MENU_EDIT_TEMPLATE_CONFIRM_TITLE("menu.edit_template.confirm_button.title"),
+    MENU_EDIT_TEMPLATE_CONFIRM_LORE("menu.edit_template.confirm_button.lore"),
+
+    MENU_EDIT_TEMPLATE_NAME_BUTTON_TITLE("menu.edit_template.name_button.title"),
+    MENU_EDIT_TEMPLATE_NAME_BUTTON_LORE("menu.edit_template.name_button.lore"),
+
+    MENU_EDIT_TEMPLATE_TYPE_BUTTON_TITLE("menu.edit_template.type_button.title"),
+    MENU_EDIT_TEMPLATE_TYPE_BUTTON_LORE("menu.edit_template.type_button.lore"),
+
+    MENU_EDIT_TEMPLATE_TIME_BUTTON_TITLE("menu.edit_template.time_button.title"),
+    MENU_EDIT_TEMPLATE_TIME_BUTTON_LORE("menu.edit_template.time_button.lore"),
+
+    MENU_EDIT_TEMPLATE_REASON_BUTTON_TITLE("menu.edit_template.reason_button.title"),
+    MENU_EDIT_TEMPLATE_REASON_BUTTON_LORE("menu.edit_template.reason_button.lore"),
+
+    MENU_EDIT_TEMPLATE_INSERT_NAME_TITLE("menu.edit_template.insert_name.title"),
+    MENU_EDIT_TEMPLATE_INSERT_NAME_SUBTITLE("menu.edit_template.insert_name.subtitle"),
+
+    MENU_EDIT_TEMPLATE_INSERT_REASON_TITLE("menu.edit_template.insert_reason.title"),
+    MENU_EDIT_TEMPLATE_INSERT_REASON_SUBTITLE("menu.edit_template.insert_reason.subtitle"),
+
+    MENU_EDIT_TEMPLATE_INSERT_DURATION_TITLE("menu.edit_template.insert_duration.title"),
+    MENU_EDIT_TEMPLATE_INSERT_DURATION_SUBTITLE("menu.edit_template.insert_duration.subtitle"),
+
+    MENU_EDIT_TEMPLATE_SUCCESS("menu.edit_template.success");
 
 
     private final String path;

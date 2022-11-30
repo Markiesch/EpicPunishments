@@ -2,10 +2,6 @@ package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
 import com.markiesch.menusystem.Menu;
-import com.markiesch.menusystem.PlayerSelectorSearchType;
-import com.markiesch.modules.infraction.InfractionModel;
-import com.markiesch.modules.profile.ProfileController;
-import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,12 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class PlayerMenu extends Menu implements Listener {

@@ -4,6 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.modules.template.TemplateController;
+import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Material;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class CreateTemplateMenu extends Menu {
+public class OLDEditTemplateMenu extends Menu {
     private static final byte SLOTS = 54;
 
     private static final byte INFO_SLOT = 4;
@@ -21,25 +22,32 @@ public class CreateTemplateMenu extends Menu {
     private static final byte REASON_SLOT = 21;
     private static final byte TYPE_SLOT = 23;
     private static final byte DURATION_SLOT = 24;
-    private static final byte CREATE_SLOT = 40;
+    private static final byte SAVE_SLOT = 40;
 
     private final TemplateController templateController;
+    private final TemplateModel template;
 
-    private String name = "New template";
-    private String reason = "none";
-    private String type = "KICK";
-    private long duration = 0L;
+    private String name;
+    private String reason;
+    private long duration;
+    private String type;
 
-    public CreateTemplateMenu(EpicPunishments plugin, UUID uuid) {
+    public OLDEditTemplateMenu(EpicPunishments plugin, UUID uuid, int id) {
         super(plugin, uuid, SLOTS);
 
         templateController = new TemplateController();
+        template = templateController.readSingle(id);
+
+        this.name = template.name;
+        this.reason = template.reason;
+        this.duration = template.duration;
+        this.type = template.type;
         open();
     }
 
     @Override
     public String getMenuName() {
-        return "Templates > Create";
+        return "Templates > Edit Template";
     }
 
     @Override
@@ -68,6 +76,7 @@ public class CreateTemplateMenu extends Menu {
             }
             case DURATION_SLOT -> {
                 player.sendMessage("§7Please type in a valid time\n§ay §7- §eYear\n§ad §7- §eDay\n§am §7- §eMinute\n§as §7- §eSecond");
+
                 new PlayerChat(plugin, getOwner(), "§bTemplate Duration", "§7Type in a template duration", (String message) -> {
                     this.duration = TimeUtils.parseTime(message);
                     open();
@@ -79,9 +88,9 @@ public class CreateTemplateMenu extends Menu {
                     open();
                 });
             }
-            case CREATE_SLOT -> {
-                templateController.create(name, reason, type, duration);
-                player.sendMessage("§7Successfully§a created§7 the template with the name of §e" + name);
+            case SAVE_SLOT -> {
+                templateController.updateTemplate(template.id, name, type, reason, duration);
+                player.sendMessage("§7Successfully§a saved§7 template §e" + name);
                 new TemplateSelectorMenu(plugin, uuid);
             }
         }
@@ -89,12 +98,9 @@ public class CreateTemplateMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        String reason = this.reason;
-        if (reason == null) reason = "None";
-
         ItemStack infoItem = ItemUtils.createItem(
                 Material.NETHER_STAR,
-                "§b§lNew template",
+                "§b§lEdit template",
                 "",
                 "§eName: §7" + name,
                 "§eType: §7" + type,
@@ -127,7 +133,7 @@ public class CreateTemplateMenu extends Menu {
         ItemStack reasonItem = ItemUtils.createItem(Material.WRITABLE_BOOK, "§b§lReason", "§7Click to insert reason", "", "§7Reason set: §e" + reason);
         getInventory().setItem(REASON_SLOT, reasonItem);
 
-        ItemStack createItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§b§lCreate Template", "§7Click to create template");
-        getInventory().setItem(CREATE_SLOT, createItem);
+        ItemStack saveItem = ItemUtils.createItem(Material.EMERALD_BLOCK, "§b§lSave Template", "§7Click to save changes");
+        getInventory().setItem(SAVE_SLOT, saveItem);
     }
 }

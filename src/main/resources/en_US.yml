@@ -4,8 +4,10 @@ command:
 
     unban:
         not_banned: '&e[victim_name] &7is not banned'
+        success: '&7Successfully unbanned &e[victim_name]'
     unmute:
-
+        not_muted: '&e[victim_name] &7is not muted'
+        success: '&7Successfully unmuted &e[victim_name]'
 
 event:
     # [target] shows the username of the command issuer
@@ -91,8 +93,47 @@ menu:
                 - '&7Type: &e[template_type]'
                 - '&7Reason: &e[template_reason]'
                 - '&7Duration: &e[template_duration]'
-
-    createTemplate:
-        title: ''
-    editTemplate:
-        title: ''
+    create_template:
+        title: '§bNew Template'
+        subtitle: '§7Type in a template name'
+        success: '&7Successfully&a created&7 the template &e[name]'
+    edit_template:
+        title: 'Templates > Edit'
+        success: '&7Successfully&a updated&7 the template &e[name]'
+        name_button:
+            title: '&b&lName'
+            lore:
+                - '&7Click to insert a new name'
+                - ''
+                - '&7Current name: &e[name]'
+        type_button:
+            title: '&b&lType'
+            lore:
+                - '&7Click to toggle type'
+                - ''
+                - '&7Current type: &e[type]'
+        time_button:
+            title: '&b&lDuration'
+            lore:
+                - '&7Click to insert duration'
+                - ''
+                - '&7Duration set: &e[duration]'
+        reason_button:
+            title: '&b&lReason'
+            lore:
+                - '&7Click to insert reason'
+                - ''
+                - '&7Reason set: &e[reason]'
+        confirm_button:
+            title: '&b&lEdit Template'
+            lore:
+                - '&7Click to confirm changes'
+        insert_name:
+            title: '§bTemplate Name'
+            subtitle: '§7Type in a new name'
+        insert_reason:
+            title: '§bTemplate Reason'
+            subtitle: '§7Type in a template reason'
+        insert_duration:
+            title: '§bTemplate Duration'
+            subtitle: '§7Type in a template duration'

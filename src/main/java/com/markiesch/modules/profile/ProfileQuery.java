@@ -5,7 +5,7 @@ public class ProfileQuery {
             "INSERT OR REPLACE INTO Profile (UUID, ipHistory) " +
             "VALUES(?, ?) " +
             "ON CONFLICT(UUID) DO UPDATE SET " +
-            "ipHistory = ipHistory || ';' || ?;";
+            "ipHistory = ?;";
     public static final String SELECT_PROFILE = "SELECT * FROM Profile WHERE UUID = ?;";
     public static final String SELECT_PROFILES = "SELECT * FROM Profile;";
 }

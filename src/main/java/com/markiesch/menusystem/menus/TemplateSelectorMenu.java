@@ -4,6 +4,7 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedMenu;
+import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.template.TemplateController;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
@@ -24,7 +25,7 @@ import static java.util.Locale.ROOT;
 
 public class TemplateSelectorMenu extends PaginatedMenu {
     private static final byte SLOTS = 54;
-    private static final int[] ITEM_SLOTS = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
+    private static final int[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
     private static final byte NEW_TEMPLATE_SLOT = 52;
     private static final byte BACK_SLOT = 49;
@@ -80,7 +81,23 @@ public class TemplateSelectorMenu extends PaginatedMenu {
                     open();
                 });
             }
-            case NEW_TEMPLATE_SLOT -> new CreateTemplateMenu(plugin, uuid);
+            case NEW_TEMPLATE_SLOT -> {
+                new PlayerChat(
+                        plugin,
+                        getOwner(),
+                        Translation.MENU_TEMPLATES_CREATE_TITLE.toString(),
+                        Translation.MENU_TEMPLATES_CREATE_SUBTITLE.toString(),
+                        (String name) -> {
+                            new TemplateController().create(
+                                    name,
+                                    "None",
+                                    InfractionType.BAN.name(),
+                                    0L
+                            );
+                            getOwner().sendMessage(Translation.MENU_TEMPLATES_CREATE_SUCCESS.addPlaceholder("name", name).toString());
+                            new TemplateSelectorMenu(plugin, uuid);
+                        });
+            }
             case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0);
         }
     }
@@ -101,7 +118,7 @@ public class TemplateSelectorMenu extends PaginatedMenu {
         ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
         getInventory().setItem(BACK_SLOT, back);
 
-        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL,  Translation.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(), Translation.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList());
+        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, Translation.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(), Translation.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList());
         getInventory().setItem(NEW_TEMPLATE_SLOT, newTemplate);
 
         List<ItemStack> items = templates
