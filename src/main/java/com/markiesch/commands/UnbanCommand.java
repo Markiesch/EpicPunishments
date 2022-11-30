@@ -4,6 +4,7 @@ import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
+import com.markiesch.modules.infraction.InfractionType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,10 @@ public class UnbanCommand extends CommandBase {
             return true;
         }
 
-        return false;
+        infractionManager.expirePunishments(victim.getUniqueId(), InfractionType.MUTE);
+        sender.sendMessage(Translation.COMMAND_UNMUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+
+        return true;
     }
 
     @Override

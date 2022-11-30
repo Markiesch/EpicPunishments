@@ -1,5 +1,6 @@
 package com.markiesch.commands;
 
+import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionType;
@@ -28,11 +29,12 @@ public class UnmuteCommand extends CommandBase {
         InfractionList infractionList = infractionManager.getPlayer(victim.getUniqueId());
 
         if (!infractionList.isMuted()) {
-            sender.sendMessage("Not muted");
+            sender.sendMessage(Translation.COMMAND_UNMUTE_NOT_MUTED.addPlaceholder("victim_name", victim.getName()).toString());
             return true;
         }
 
         infractionManager.expirePunishments(victim.getUniqueId(), InfractionType.MUTE);
+        sender.sendMessage(Translation.COMMAND_UNMUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
 
         return true;
     }
