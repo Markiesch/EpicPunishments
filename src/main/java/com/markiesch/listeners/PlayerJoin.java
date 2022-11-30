@@ -1,11 +1,13 @@
 package com.markiesch.listeners;
 
+import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.profile.ProfileController;
 import com.markiesch.modules.profile.ProfileModel;
+import com.markiesch.utils.TimeUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -39,6 +41,13 @@ public class PlayerJoin implements Listener {
 
         if (activeBan == null) return;
 
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, activeBan.reason);
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED,
+                (activeBan.isPermanent() ?
+                        Translation.EVENT_BAN_PERMANENTLY_MESSAGE :
+                        Translation.EVENT_BAN_TEMPORARILY_MESSAGE)
+                        .addPlaceholder("reason", activeBan.reason)
+                        .addPlaceholder("duration", TimeUtils.makeReadable(activeBan.duration))
+                        .toString()
+        );
     }
 }
