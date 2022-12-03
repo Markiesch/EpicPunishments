@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,10 +61,6 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     @Override
     protected ItemStack modelToItemStack(ProfileModel profile) {
         OfflinePlayer target = profile.getPlayer();
-
-        long date = profile.getPlayer().getFirstPlayed();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.US);
-        String formattedDate = sdf.format(date);
         List<InfractionModel> infractionsList = infractionController.readAll(target.getUniqueId());
 
         ItemStack playerHead = ItemUtils.createItem(
@@ -75,7 +70,6 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                         .toString(),
                 Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE
                         .addPlaceholder("punishments_size", infractionsList.size())
-                        .addPlaceholder("player_first_join", formattedDate)
                         .addPlaceholder(
                                 "punishments_lore",
                                 (infractionsList.size() == 0 ?
@@ -126,19 +120,29 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     public void setMenuItems() {
         super.setMenuItems();
 
-        String nextFilter = "all";
-        if (filter.equals(PlayerSelectorSearchType.ALL)) nextFilter = "online";
-        else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) nextFilter = "offline";
+        String nextFilter = Translation.WORD_ALL.getRawString();
+        if (filter.equals(PlayerSelectorSearchType.ALL)) nextFilter = Translation.WORD_ONLINE.getRawString();
+        else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) nextFilter = Translation.WORD_OFFLINE.getRawString();
 
-        ItemStack filterItem = ItemUtils.createItem(Material.ENDER_EYE,
+        ItemStack filterItem = ItemUtils.createItem(
+                Material.ENDER_EYE,
                 Translation.MENU_PLAYERS_BUTTON_FILTER_TITLE.toString(),
-                Translation.MENU_PLAYERS_BUTTON_FILTER_LORE.addPlaceholder("next_filter", nextFilter).toList());
+                Translation.MENU_PLAYERS_BUTTON_FILTER_LORE.addPlaceholder("next_filter", nextFilter).toList()
+        );
         getInventory().setItem(filterSlot, filterItem);
 
-        ItemStack closeButton = ItemUtils.createItem(Material.NETHER_STAR, Translation.MENU_CLOSE_BUTTON_TITLE.toString(), Translation.MENU_CLOSE_BUTTON_LORE.toList());
+        ItemStack closeButton = ItemUtils.createItem(
+                Material.NETHER_STAR,
+                Translation.MENU_CLOSE_BUTTON_TITLE.toString(),
+                Translation.MENU_CLOSE_BUTTON_LORE.toList()
+        );
         getInventory().setItem(closeSlot, closeButton);
 
-        ItemStack templates = ItemUtils.createItem(Material.ANVIL, Translation.MENU_PLAYERS_TEMPLATES_BUTTON_TITLE.toString(), Translation.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList());
+        ItemStack templates = ItemUtils.createItem(
+                Material.ANVIL,
+                Translation.MENU_PLAYERS_TEMPLATES_BUTTON_TITLE.toString(),
+                Translation.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList()
+        );
         getInventory().setItem(TEMPLATE_BUTTON_SLOT, templates);
     }
 

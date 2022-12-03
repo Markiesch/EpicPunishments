@@ -1,5 +1,6 @@
 package com.markiesch.modules.template;
 
+import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.storage.Storage;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
@@ -51,13 +52,13 @@ public class TemplateController {
         return templates.isEmpty() ? null : templates.get(0);
     }
 
-    public void create(String name, String reason, String type, Long duration) {
+    public void create(String name, String reason, InfractionType type, Long duration) {
         try {
             Connection connection = storage.getConnection();
 
             PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.CREATE_TEMPLATE);
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, type);
+            preparedStatement.setString(2, type.name());
             preparedStatement.setString(3, reason);
             preparedStatement.setLong(4, duration);
             preparedStatement.executeUpdate();
@@ -82,13 +83,13 @@ public class TemplateController {
         }
     }
 
-    public void updateTemplate(int id, String name, String type, String reason, long duration) {
+    public void updateTemplate(int id, String name, InfractionType type, String reason, long duration) {
         try {
             Connection connection = storage.getConnection();
 
             PreparedStatement preparedStatement = connection.prepareStatement(TemplateQuery.UPDATE_TEMPLATE);
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, type);
+            preparedStatement.setString(2, type.name());
             preparedStatement.setString(3, reason);
             preparedStatement.setLong(4, duration);
             preparedStatement.setInt(5, id);
@@ -106,7 +107,7 @@ public class TemplateController {
             int templateId = result.getInt("id");
             String templateName = result.getString("name");
             String templateReason = result.getString("reason");
-            String templateType = result.getString("type");
+            InfractionType templateType = InfractionType.valueOf(result.getString("type"));
             Long templateDuration = result.getLong("duration");
             templates.add(new TemplateModel(templateId, templateName, templateReason, templateType, templateDuration));
         }

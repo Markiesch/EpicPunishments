@@ -64,14 +64,14 @@ public class EditTemplateMenu extends Menu {
                         });
             }
             case TYPE_SLOT -> {
-                if ("BAN".equalsIgnoreCase(template.type)) template.type = "KICK";
-                else if ("KICK".equalsIgnoreCase(template.type)) template.type = "WARN";
-                else if ("WARN".equalsIgnoreCase(template.type)) template.type = "MUTE";
-                else if ("MUTE".equalsIgnoreCase(template.type)) template.type = "BAN";
+                template.type = template.type.getNextType();
                 setMenuItems();
             }
             case DURATION_SLOT -> {
-                player.sendMessage("§7Please type in a valid time\n§ay §7- §eYear\n§ad §7- §eDay\n§am §7- §eMinute\n§as §7- §eSecond");
+                for (String line : Translation.MENU_EDIT_TEMPLATE_INSERT_DURATION_INFO.toList()) {
+                    player.sendMessage(line);
+                }
+
                 new PlayerChat(
                         plugin,
                         getOwner(),
@@ -111,7 +111,7 @@ public class EditTemplateMenu extends Menu {
         getInventory().setItem(NAME_SLOT, nameItem);
 
         ItemStack typeItem = ItemUtils.createItem(
-                Material.OAK_DOOR,
+                template.type.getMaterial(),
                 Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_TITLE.toString(),
                 Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_LORE.addPlaceholder("type", template.type).toList()
         );

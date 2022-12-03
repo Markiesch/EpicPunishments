@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Bukkit;
@@ -13,15 +14,15 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public class PlayerMenu extends Menu implements Listener {
-    private final byte TELEPORT_BUTTON_SLOT = 29;
-    private final byte PUNISH_BUTTON_SLOT = 31;
-    private final byte INFRACTIONS_BUTTON_SLOT = 33;
-    private final byte BACK_BUTTON_SLOT = 49;
+    private final byte TELEPORT_BUTTON_SLOT = 20;
+    private final byte PUNISH_BUTTON_SLOT = 22;
+    private final byte INFRACTIONS_BUTTON_SLOT = 24;
+    private final byte BACK_BUTTON_SLOT = 40;
 
     public OfflinePlayer target;
 
     public PlayerMenu(EpicPunishments plugin, UUID uuid, UUID player) {
-        super(plugin, uuid, 54);
+        super(plugin, uuid, 45);
 
         target = Bukkit.getOfflinePlayer(player);
         open();
@@ -29,7 +30,12 @@ public class PlayerMenu extends Menu implements Listener {
 
     @Override
     public String getMenuName() {
-        return "Player > " + target.getName();
+        return Translation.MENU_PLAYER_TITLE.addPlaceholder("name", target.getName()).toString();
+    }
+
+    @Override
+    public String getRequiredPermission() {
+        return "epicpunishments.templates";
     }
 
     public void handleMenu(InventoryClickEvent event) {
@@ -49,28 +55,37 @@ public class PlayerMenu extends Menu implements Listener {
 
     public void setMenuItems() {
         if (target == null) {
-            getOwner().sendMessage("§cCouldn't find player. Closing menu...");
+            getOwner().sendMessage(Translation.MENU_PLAYER_NOT_FOUND.toString());
             getOwner().closeInventory();
             return;
         }
 
-        ItemStack teleportButton = ItemUtils.createItem(Material.ENDER_EYE, "§b§lTeleport", "§7Click to teleport to §e" + target.getName());
+        ItemStack teleportButton = ItemUtils.createItem(
+                Material.ENDER_EYE,
+                Translation.MENU_PLAYER_TELEPORT_TITLE.toString(),
+                Translation.MENU_PLAYER_TELEPORT_LORE.addPlaceholder("name", target.getName()).toList()
+        );
         getInventory().setItem(TELEPORT_BUTTON_SLOT, teleportButton);
 
-        ItemStack punishButton = ItemUtils.createItem(Material.ANVIL, "§c§lPunish", "§7Click to punish §e" + target.getName());
+        ItemStack punishButton = ItemUtils.createItem(
+                Material.ANVIL,
+                Translation.MENU_PLAYER_PUNISH_TITLE.toString(),
+                Translation.MENU_PLAYER_PUNISH_LORE.addPlaceholder("name", target.getName()).toList()
+        );
         getInventory().setItem(PUNISH_BUTTON_SLOT, punishButton);
 
-        ItemStack infractions = ItemUtils.createItem(Material.FLOWER_BANNER_PATTERN, "§c§lInfractions", "§7Click to view infractions");
+        ItemStack infractions = ItemUtils.createItem(
+                Material.FLOWER_BANNER_PATTERN,
+                Translation.MENU_PLAYER_INFRACTIONS_TITLE.toString(),
+                Translation.MENU_PLAYER_INFRACTIONS_LORE.addPlaceholder("name", target.getName()).toList()
+        );
         getInventory().setItem(INFRACTIONS_BUTTON_SLOT, infractions);
 
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
+        ItemStack back = ItemUtils.createItem(
+                Material.OAK_SIGN,
+                Translation.MENU_BACK_BUTTON_TITLE.toString(),
+                Translation.MENU_BACK_BUTTON_LORE.toList()
+        );
         getInventory().setItem(BACK_BUTTON_SLOT, back);
-
-        getInventory().setItem(13, ItemUtils.createPlayerInfoHead(target.getUniqueId()));
-    }
-
-    @Override
-    public String getRequiredPermission() {
-        return "epicpunishments.templates";
     }
 }

@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedMenu;
 import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.infraction.InfractionModel;
@@ -35,7 +36,7 @@ public class InfractionsMenu extends PaginatedMenu {
 
     @Override
     public String getMenuName() {
-        return "Infractions > " + target.getName();
+        return Translation.MENU_INFRACTIONS_TITLE.addPlaceholder("name", target.getName()).toString();
     }
 
     @Override
@@ -65,7 +66,7 @@ public class InfractionsMenu extends PaginatedMenu {
 
     @Override
     public void setMenuItems() {
-        ItemStack backButton = ItemUtils.createItem(Material.OAK_SIGN, "§b§lBack", "§7Click to go back");
+        ItemStack backButton = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
         getInventory().setItem(BACK_BUTTON_SLOT, backButton);
 
         List<InfractionModel> infractions = new InfractionController().readAll(target.getUniqueId());
@@ -75,12 +76,14 @@ public class InfractionsMenu extends PaginatedMenu {
                 .map(infraction -> {
                     ItemStack item = ItemUtils.createItem(
                             Material.PAPER,
-                            "§b§l" + infraction.type,
-                            "§bPress Q §7to revoke punishment",
-                            "",
-                            "§7reason: §a" + infraction.reason,
-                            "§7Duration: §a" + TimeUtils.makeReadable(infraction.duration),
-                            "§7Issuer: §a" + infraction.getIssuer()
+                            Translation.MENU_INFRACTIONS_BUTTON_TITLE
+                                    .addPlaceholder("type", infraction.type)
+                                    .toString(),
+                            Translation.MENU_INFRACTIONS_BUTTON_LORE
+                                    .addPlaceholder("reason", infraction.reason)
+                                    .addPlaceholder("duration", TimeUtils.makeReadable(infraction.duration))
+                                    .addPlaceholder("issuer", infraction.getIssuer())
+                                    .toList()
                     );
 
                     ItemMeta meta = item.getItemMeta();

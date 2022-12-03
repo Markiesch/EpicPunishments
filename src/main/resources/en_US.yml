@@ -1,3 +1,8 @@
+word:
+    online: 'online'
+    offline: 'offline'
+    all: 'all'
+
 command:
     no_permission: '&7You do not have&c permissions &7to use this command!'
     player_only: '&cOnly players can use this command.'
@@ -34,8 +39,8 @@ event:
 
 menu:
     general:
-        previous: '&cPrevious Page'
-        next: '&cNext Page'
+        previous: '&b&lPrevious Page'
+        next: '&b&lNext Page'
         visit: '&7Click to visit page [page]'
         no_permission: '&7You do not have&c permissions&7 to open this menu'
         back_button:
@@ -62,14 +67,80 @@ menu:
                 - '&7Click to manage player'
                 - ''
                 - '[punishments_lore]'
-                - ''
-                - '&7Joined at: [player_first_join]'
             punishments_empty: '&a✔ &7has not been punished yet'
             punishments_not_empty: '&6✔ &7had received [punishments_size] punishments'
-    main:
-        title: 'Overview > Punish'
+    player:
+        title: 'Player > [name]'
+        not_found: '&cCould not find player. Closing menu...'
+        teleport_button:
+            title: '&b&lTeleport'
+            lore:
+                - '&7Click to teleport to &e[name]'
+        punish_button:
+            title: '&c&lPunish'
+            lore:
+                - '&7Click to punish &e[name]'
+        infractions_button:
+            title: '&c&lInfractions'
+            lore:
+                - '&7Click to view infractions'
+    punish:
+        title: 'Punish > [name]'
+        reason_button:
+            title: '&b&lReason'
+            lore:
+                - '&7Click to insert reason'
+                - ''
+                - '&7Reason set: &e[reason]'
+        type_button:
+            title: '&b&lType'
+            lore:
+                - '&7Click to toggle type'
+                - ''
+                - '&7Current type: &e[type]'
+        duration_button:
+            title: '&b&lDuration'
+            lore:
+                - '&7Click to insert duration'
+                - ''
+                - '&7Duration set: &e[duration]'
+        template_button:
+            title: '§b§lUse template'
+            lore:
+                - '§7Click to use a template'
+        confirm_button:
+            title: '§c§lConfirm'
+            lore:
+                - '§7Click to punish [name]'
+                - ''
+                - '§7Reason: §e[reason]'
+                - '§7Duration: §e[duration]'
+                - '§7Type: §e[type]'
+    infractions:
+        title: 'Infractions > [name]'
+        infraction_button:
+            title: '&b&l[type]'
+            lore:
+                - '&bPress Q &7to revoke punishment'
+                - ''
+                - '&7reason: &a[reason]'
+                - '&7Duration: &a[duration]'
+                - '&7Issuer: &a[issuer]'
+    select_template:
+        title: 'Select template'
+        template_button:
+            title: '&b&l[name]'
+            lore:
+                - '&7Reason: &e[reason]'
+                - '&7Duration: &e[duration]'
+                - '&7Type: &e[type]'
+                - ''
+                - '&7Click to select template'
     templates:
         title: 'Templates'
+        search_by_name:
+            title: '&bFilter by name'
+            subtitle: '&7Type in a filter'
         no_templates_item:
             title: '&6&lNo Templates!'
             lore:
@@ -94,8 +165,8 @@ menu:
                 - '&7Reason: &e[template_reason]'
                 - '&7Duration: &e[template_duration]'
     create_template:
-        title: '§bNew Template'
-        subtitle: '§7Type in a template name'
+        title: '&bNew Template'
+        subtitle: '&7Type in a template name'
         success: '&7Successfully&a created&7 the template &e[name]'
     edit_template:
         title: 'Templates > Edit'
@@ -129,11 +200,17 @@ menu:
             lore:
                 - '&7Click to confirm changes'
         insert_name:
-            title: '§bTemplate Name'
-            subtitle: '§7Type in a new name'
+            title: '&bTemplate Name'
+            subtitle: '&7Type in a new name'
         insert_reason:
-            title: '§bTemplate Reason'
-            subtitle: '§7Type in a template reason'
+            title: '&bTemplate Reason'
+            subtitle: '&7Type in a template reason'
         insert_duration:
-            title: '§bTemplate Duration'
-            subtitle: '§7Type in a template duration'
+            info:
+                - '&7Please type in a valid time'
+                - '&ay &7- &eYear'
+                - '&ad &7- &eDay'
+                - '&am &7- &eMinute'
+                - '&as &7- &eSecond'
+            title: '&bTemplate Duration'
+            subtitle: '&7Type in a template duration'

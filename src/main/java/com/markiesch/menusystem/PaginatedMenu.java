@@ -48,12 +48,20 @@ public abstract class PaginatedMenu extends Menu {
         int maxPages = items.size() / itemSlots.length;
 
         if (page >= 1) {
-            ItemStack prevPage = ItemUtils.createItem(Material.ARROW, Translation.PREVIOUS_PAGE.toString(), Translation.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page)));
+            ItemStack prevPage = ItemUtils.createItem(
+                    Material.ARROW,
+                    Translation.PREVIOUS_PAGE.toString(),
+                    Translation.VISIT_PAGE.addPlaceholder("page", page).toString()
+            );
             getInventory().setItem(PREV_PAGE_SLOT, prevPage);
         }
 
         if (page < maxPages) {
-            ItemStack nextPage = ItemUtils.createItem(Material.ARROW, Translation.NEXT_PAGE.toString(), Translation.VISIT_PAGE.toString().replaceAll("[page]", Integer.toString(page + 2)));
+            ItemStack nextPage = ItemUtils.createItem(
+                    Material.ARROW,
+                    Translation.NEXT_PAGE.toString(),
+                    Translation.VISIT_PAGE.addPlaceholder("page", page + 2).toString()
+            );
             onLastPage = false;
             getInventory().setItem(NEXT_PAGE_SLOT, nextPage);
         }

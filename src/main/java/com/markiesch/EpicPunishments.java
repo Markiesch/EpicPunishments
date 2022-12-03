@@ -39,6 +39,12 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         getServer().getConsoleSender().sendMessage("§aEpicPunishments is now enabled");
     }
 
+    public void onDisable() {
+        Storage.getInstance().closeConnection();
+
+        getServer().getConsoleSender().sendMessage("§cEpicPunishments is now disabled");
+    }
+
     private void registerCommands() {
         new BanCommand();
         new KickCommand();
@@ -49,11 +55,5 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
         new PunishCommand(this);
         new TemplatesCommand(this);
-    }
-
-    public void onDisable() {
-        Storage.getInstance().closeConnection();
-        
-        getServer().getConsoleSender().sendMessage("§cEpicPunishments is now disabled");
     }
 }

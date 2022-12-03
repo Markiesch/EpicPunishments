@@ -12,6 +12,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
+    protected boolean isEmpty = false;
+
     public PaginatedModelMenu(EpicPunishments plugin, UUID uuid, int slots, int[] itemSlots) {
         super(plugin, uuid, slots, itemSlots);
     }
@@ -30,7 +32,7 @@ public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
-        Integer index = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "modelId"), PersistentDataType.INTEGER);
+        Integer index = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "index"), PersistentDataType.INTEGER);
         if (index == null) return;
 
         handleModelClick(event, this.getModels().get(index));
@@ -44,11 +46,12 @@ public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
             ItemStack item = items.get(i);
             ItemMeta itemMeta = item.getItemMeta();
             if (itemMeta != null) {
-                itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "modelId"), PersistentDataType.INTEGER, i);
+                itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "index"), PersistentDataType.INTEGER, i);
                 item.setItemMeta(itemMeta);
             }
         }
 
+        isEmpty = items.size() == 0;
         setPaginatedItems(items);
     }
 }
