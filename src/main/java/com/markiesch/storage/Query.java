@@ -17,8 +17,9 @@ public enum Query {
     ),
     CREATE_PLAYER_TABLE(
             "CREATE TABLE IF NOT EXISTS Profile (" +
-                "[UUID]         VARCHAR(36)     PRIMARY KEY," +
-                "[ipHistory]    LONGTEXT" +
+                "[UUID]         VARCHAR(36)     NOT NULL    PRIMARY KEY," +
+                "[ip]           VARCHAR(39)     NOT NULL," +
+                "[name]         VARCHAR(16)     NOT NULL" +
             ");"
     ),
     CREATE_TEMPLATE_TABLE(

@@ -19,6 +19,14 @@ public class ProfileManager {
         }
     }
 
+    public boolean handlePlayerLogin(UUID uuid, String name, String hostAddress) {
+        boolean success = profileController.createProfile(uuid, name, hostAddress);
+        if (!success) return false;
+
+        profileModelMap.put(uuid, new ProfileModel(uuid, name, hostAddress));
+        return true;
+    }
+
     private static class ProfileManagerHolder {
         public static final ProfileManager INSTANCE = new ProfileManager();
     }

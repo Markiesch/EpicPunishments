@@ -85,7 +85,7 @@ public class Storage {
 
     public Integer getLastInsertedId() {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT last_insert_rowid();");
+            PreparedStatement preparedStatement = getConnection().prepareStatement("SELECT last_insert_rowid();");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {

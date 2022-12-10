@@ -21,18 +21,26 @@ public class ProfileController {
     /**
      * Creates a profile for the given player
      */
-    public void createProfile(UUID uuid, String ip) {
+    public boolean createProfile(UUID uuid, String name, String ip) {
         try {
             Connection connection = storage.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement(ProfileQuery.ADD_PROFILE);
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT OR REPLACE INTO Profile (UUID, ip, name) " +
+                            "VALUES(?, ?, ?) " +
+                            "ON CONFLICT(UUID) " +
+                            "DO UPDATE SET ip = ?; " +
+                            "SELECT changes();"
+            );
             preparedStatement.setString(1, uuid.toString());
             preparedStatement.setString(2, ip);
-            preparedStatement.setString(3, ip);
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(3, name);
+            preparedStatement.setString(4, ip);
+            return preparedStatement.executeUpdate() == 1;
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
         }
+        return false;
     }
 
     public List<ProfileModel> getProfiles() {
@@ -45,7 +53,9 @@ public class ProfileController {
 
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("UUID"));
-                models.add(new ProfileModel(uuid));
+                String name = result.getString("name");
+                String ip = result.getString("ip");
+                models.add(new ProfileModel(uuid, name, ip));
             }
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");
@@ -66,10 +76,14 @@ public class ProfileController {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                model = new ProfileModel(UUID.fromString(resultSet.getString("UUID")));
+                model = new ProfileModel(
+                        UUID.fromString(resultSet.getString("UUID")),
+                        resultSet.getString("name"),
+                        resultSet.getString("ip")
+                );
             }
             resultSet.close();
-        } catch(SQLException sqlException) {
+        } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");
         }
 
