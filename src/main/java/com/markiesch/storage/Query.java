@@ -19,7 +19,8 @@ public enum Query {
             "CREATE TABLE IF NOT EXISTS Profile (" +
                 "[UUID]         VARCHAR(36)     NOT NULL    PRIMARY KEY," +
                 "[ip]           VARCHAR(39)     NOT NULL," +
-                "[name]         VARCHAR(16)     NOT NULL" +
+                "[name]         VARCHAR(16)     NOT NULL," +
+                "[textureURL]   TEXT" +
             ");"
     ),
     CREATE_TEMPLATE_TABLE(

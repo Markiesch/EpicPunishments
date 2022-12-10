@@ -37,7 +37,7 @@ public class InfractionController extends SqlController<InfractionModel> {
 
     public @Nullable InfractionModel create(PreparedInfraction preparedInfraction) {
         Object[] parameters = {
-                preparedInfraction.victim.getUniqueId().toString(),
+                preparedInfraction.victimUUID.toString(),
                 preparedInfraction.issuer == null ? null : ((Player) preparedInfraction.issuer).getUniqueId().toString(),
                 preparedInfraction.type.name(),
                 preparedInfraction.reason,

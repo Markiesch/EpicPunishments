@@ -1,5 +1,7 @@
 package com.markiesch.modules.profile;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 public class ProfileManager {
@@ -23,9 +25,10 @@ public class ProfileManager {
         boolean success = profileController.createProfile(uuid, name, hostAddress);
         if (!success) return false;
 
-        profileModelMap.put(uuid, new ProfileModel(uuid, name, hostAddress));
+        profileModelMap.put(uuid, new ProfileModel(uuid, name, hostAddress, null));
         return true;
     }
+
 
     private static class ProfileManagerHolder {
         public static final ProfileManager INSTANCE = new ProfileManager();
@@ -35,11 +38,33 @@ public class ProfileManager {
         return ProfileManagerHolder.INSTANCE;
     }
 
-    public ProfileModel getPlayer(UUID uuid) {
+    public @Nullable ProfileModel getPlayer(UUID uuid) {
         return profileModelMap.get(uuid);
     }
 
+    public @Nullable ProfileModel getPlayer(String name) {
+        return profileModelMap
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().name.equals(name))
+                .findFirst()
+                .map(Map.Entry::getValue)
+                .orElse(null);
+    }
+
+
     public List<ProfileModel> getPlayers() {
         return new ArrayList<>(profileModelMap.values());
+    }
+
+    public void updateSkullTexture(UUID uuid, String url) {
+        ProfileModel profileModel = getPlayer(uuid);
+
+        System.out.println(url);
+
+        if (profileModel == null || (url != null && url.equals(profileModel.textureURL))) return;
+
+        profileController.updateTextureURL(uuid, url);
+        profileModel.textureURL = url;
     }
 }

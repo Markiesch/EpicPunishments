@@ -23,10 +23,10 @@ public class TimeUtils {
     }
 
     public static long parseTime(String input) {
-        long result = 0L;
         StringBuilder number = new StringBuilder();
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
+        long result = 0L;
+
+        for (char c : input.toCharArray()) {
             if (Character.isDigit(c)) {
                 number.append(c);
             } else if (Character.isLetter(c) && number.length() > 0) {
@@ -39,7 +39,7 @@ public class TimeUtils {
 
     private static long convert(long value, char unit) {
         return switch (Character.toLowerCase(unit)) {
-            case 'y' -> value * 60L * 60L * 24L * 365;
+            case 'y' -> value * 60L * 60L * 24L * 365L;
             case 'w' -> value * 60L * 60L * 24L * 7L;
             case 'd' -> value * 60L * 60L * 24L;
             case 'h' -> value * 60L * 60L;

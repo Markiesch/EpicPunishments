@@ -1,16 +1,16 @@
 package com.markiesch.utils;
 
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommandUtils {
     public static List<String> getAllOfflinePlayerNames() {
-        return Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).collect(Collectors.toList());
+        return ProfileManager.getInstance().getPlayers().stream().map(ProfileModel::getName).collect(Collectors.toList());
     }
 
     public static List<String> getAllOnlinePlayerNames() {

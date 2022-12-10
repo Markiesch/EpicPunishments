@@ -34,8 +34,8 @@ public class UnbanCommand extends CommandBase {
             return true;
         }
 
-        infractionManager.expirePunishments(victim.getUniqueId(), InfractionType.MUTE);
-        sender.sendMessage(Translation.COMMAND_UNMUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+        infractionManager.expirePunishments(victim.getUniqueId(), InfractionType.BAN);
+        sender.sendMessage(Translation.COMMAND_UNBAN_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
 
         return true;
     }

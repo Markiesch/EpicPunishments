@@ -1,10 +1,11 @@
 package com.markiesch.commands;
 
+import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.infraction.PreparedInfraction;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.CommandUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -24,8 +25,12 @@ public class KickCommand extends CommandBase {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        OfflinePlayer victim = Bukkit.getPlayer(args[0]);
-        if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
+        final ProfileModel profileModel = ProfileManager.getInstance().getPlayer(args[0]);
+
+        if (profileModel == null) {
+            sender.sendMessage(Translation.COMMAND_PLAYER_NOT_FOUND.addPlaceholder("name", args[0]).toString());
+            return true;
+        }
 
         List<String> arguments = Arrays.asList(args);
         String reason = String.join(" ", arguments.subList(1, arguments.size()));
@@ -33,7 +38,7 @@ public class KickCommand extends CommandBase {
         new PreparedInfraction(
                 InfractionType.KICK,
                 sender,
-                victim,
+                profileModel.uuid,
                 reason,
                 0L
         ).execute();

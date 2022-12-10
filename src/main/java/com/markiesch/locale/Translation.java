@@ -17,6 +17,7 @@ public enum Translation {
 
     COMMAND_NO_PERMISSION("command.no_permission"),
     COMMAND_PLAYER_ONLY("command.player_only"),
+    COMMAND_PLAYER_NOT_FOUND("command.player_not_found"),
 
     COMMAND_UNBAN_NOT_BANNED("command.unban.not_banned"),
     COMMAND_UNBAN_SUCCESS("command.unban.success"),

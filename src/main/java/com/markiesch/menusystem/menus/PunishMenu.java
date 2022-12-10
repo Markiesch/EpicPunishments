@@ -67,7 +67,7 @@ public class PunishMenu extends Menu {
                 setMenuItems();
             }
             case CONFIRM_BUTTON_SLOT -> {
-                new PreparedInfraction(type, getOwner(), target, reason, duration).execute();
+                new PreparedInfraction(type, getOwner(), target.getUniqueId(), reason, duration).execute();
                 getOwner().closeInventory();
             }
             case BACK_BUTTON_SLOT -> {

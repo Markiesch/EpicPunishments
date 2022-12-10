@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommandBase extends BukkitCommand implements CommandExecutor {
-    private static final String COMMAND_FALLBACK_PREFIX = "command";
+    private static final String COMMAND_FALLBACK_PREFIX = "epicpunishments";
     private final int minArgs;
     private final int maxArgs;
     private final boolean playerOnly;

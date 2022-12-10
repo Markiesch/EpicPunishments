@@ -1,17 +1,36 @@
 package com.markiesch.listeners;
 
+import com.markiesch.EpicPunishments;
 import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.utils.SkullTexture;
 import com.markiesch.utils.TimeUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoin implements Listener {
+    private final EpicPunishments plugin;
+
+    public PlayerJoin(EpicPunishments plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            String skinTextureURL = Bukkit.getOnlineMode() ? SkullTexture.fromPlayerUUID(event.getPlayer()) : SkullTexture.fromMojangAPI(event.getPlayer().getName());
+
+            ProfileManager.getInstance().updateSkullTexture(event.getPlayer().getUniqueId(), skinTextureURL);
+        });
+    }
+
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         boolean success = ProfileManager.getInstance()

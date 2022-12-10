@@ -1,6 +1,8 @@
 package com.markiesch.modules.infraction;
 
 import com.markiesch.locale.Translation;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,22 +13,30 @@ import java.util.UUID;
 public class PreparedInfraction {
     public final InfractionType type;
     public final CommandSender issuer;
-    public final OfflinePlayer victim;
+    public final UUID victimUUID;
     public final String reason;
     public final long duration;
     public final long date;
 
-    public PreparedInfraction(InfractionType type, CommandSender issuer, OfflinePlayer victim, String reason, long duration) {
+    public PreparedInfraction(InfractionType type, CommandSender issuer, UUID victimUUID, String reason, long duration) {
         this.type = type;
         this.issuer = issuer;
-        this.victim = victim;
+        this.victimUUID = victimUUID;
         this.reason = reason;
         this.duration = duration;
         date = System.currentTimeMillis() / 1000L;
     }
 
     public void execute() {
-        InfractionList victimInfractionList = InfractionManager.getInstance().getPlayer(victim.getUniqueId());
+        ProfileModel victimProfile = ProfileManager.getInstance().getPlayer(victimUUID);
+
+        if (victimProfile == null) {
+            issuer.sendMessage(Translation.COMMAND_PLAYER_NOT_FOUND.addPlaceholder("name", "").toString());
+            return;
+        }
+
+        OfflinePlayer victim = victimProfile.getPlayer();
+        InfractionList victimInfractionList = InfractionManager.getInstance().getPlayer(victimUUID);
 
         switch (type) {
             case KICK -> {
@@ -73,13 +83,13 @@ public class PreparedInfraction {
     }
 
     private @Nullable UUID getIssuerUUID() {
-        return issuer instanceof OfflinePlayer ? ((Player)issuer).getUniqueId() : null;
+        return issuer instanceof OfflinePlayer ? ((Player) issuer).getUniqueId() : null;
     }
 
     public InfractionModel createInfraction(int id) {
         return new InfractionModel(id,
                 type,
-                victim.getUniqueId(),
+                victimUUID,
                 getIssuerUUID(),
                 reason,
                 duration,

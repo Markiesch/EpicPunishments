@@ -52,10 +52,13 @@ public class ProfileController {
             ResultSet result = connection.prepareStatement(ProfileQuery.SELECT_PROFILES).executeQuery();
 
             while (result.next()) {
-                UUID uuid = UUID.fromString(result.getString("UUID"));
-                String name = result.getString("name");
-                String ip = result.getString("ip");
-                models.add(new ProfileModel(uuid, name, ip));
+                ProfileModel profileModel = new ProfileModel(
+                        UUID.fromString(result.getString("UUID")),
+                        result.getString("name"),
+                        result.getString("ip"),
+                        result.getString("textureURL")
+                );
+                models.add(profileModel);
             }
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");
@@ -64,29 +67,20 @@ public class ProfileController {
         return models;
     }
 
-    public ProfileModel getProfile(UUID uuid) {
-        ProfileModel model = null;
-
+    public void updateTextureURL(UUID uuid, String url) {
         try {
             Connection connection = storage.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement(ProfileQuery.SELECT_PROFILE);
-            preparedStatement.setString(1, uuid.toString());
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                model = new ProfileModel(
-                        UUID.fromString(resultSet.getString("UUID")),
-                        resultSet.getString("name"),
-                        resultSet.getString("ip")
-                );
-            }
-            resultSet.close();
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE Profile " +
+                            "SET [textureURL] = ?" +
+                            "WHERE [uuid] = ?"
+            );
+            preparedStatement.setString(1, url);
+            preparedStatement.setString(2, uuid.toString());
+            preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to read from database");
+            Bukkit.getLogger().warning("Failed to write to database");
         }
-
-        return model;
     }
 }

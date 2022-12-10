@@ -1,11 +1,12 @@
 package com.markiesch.commands;
 
+import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.infraction.PreparedInfraction;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.CommandUtils;
 import com.markiesch.utils.TimeUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -14,19 +15,23 @@ import java.util.List;
 public class BanCommand extends CommandBase {
     public BanCommand() {
         super(
-            "ban",
-            "epicpunishments.ban",
-            "§7Usage: §e/ban <target> <duration | permanent> (reason)",
-            2,
-            -1,
-            false
+                "ban",
+                "epicpunishments.ban",
+                "§7Usage: §e/ban <target> <duration | permanent> (reason)",
+                2,
+                -1,
+                false
         );
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        OfflinePlayer victim = Bukkit.getPlayer(args[0]);
-        if (victim == null) victim = Bukkit.getOfflinePlayer(args[0]);
+        final ProfileModel profileModel = ProfileManager.getInstance().getPlayer(args[0]);
+
+        if (profileModel == null) {
+            sender.sendMessage(Translation.COMMAND_PLAYER_NOT_FOUND.addPlaceholder("name", args[0]).toString());
+            return true;
+        }
 
         long duration = TimeUtils.parseTime(args[1]);
         List<String> arguments = Arrays.asList(args);
@@ -35,7 +40,7 @@ public class BanCommand extends CommandBase {
         new PreparedInfraction(
             InfractionType.BAN,
             sender,
-            victim,
+            profileModel.uuid,
             reason,
             duration
         ).execute();

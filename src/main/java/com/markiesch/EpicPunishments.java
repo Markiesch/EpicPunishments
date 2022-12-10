@@ -33,7 +33,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         // Initialize listeners
         getServer().getPluginManager().registerEvents(new CommandSpy(), this);
         getServer().getPluginManager().registerEvents(new SignSpy(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
 

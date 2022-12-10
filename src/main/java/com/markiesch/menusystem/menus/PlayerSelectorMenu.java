@@ -10,12 +10,9 @@ import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 import java.util.UUID;
@@ -59,7 +56,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD,
                 Translation.MENU_PLAYERS_BUTTON_PLAYER_TITLE
-                        .addPlaceholder("player_name", profile.getPlayer().getName())
+                        .addPlaceholder("player_name", profile.name)
                         .toString(),
                 Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE
                         .addPlaceholder("punishments_size", infractionsList.size())
@@ -73,13 +70,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                         .toList()
         );
 
-        SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
-        if (playerMeta != null) {
-            playerMeta.setOwningPlayer(target);
-            playerMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, target.getUniqueId().toString());
-            playerHead.setItemMeta(playerMeta);
-        }
-
+        ItemUtils.setSkullTexture(playerHead, profile.textureURL);
         return playerHead;
     }
 
