@@ -4,9 +4,9 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
-import com.markiesch.modules.infraction.InfractionController;
+import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
-import com.markiesch.modules.profile.ProfileController;
+import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
@@ -22,9 +22,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
-    private final EpicPunishments plugin;
-    private final ProfileController profileController;
-    private final InfractionController infractionController;
     private PlayerSelectorSearchType filter;
 
     private final byte TEMPLATE_BUTTON_SLOT = 52;
@@ -32,18 +29,14 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private final int closeSlot = 49;
     private final int filterSlot = 46;
 
-    public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid, int page) {
+    public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid) {
         super(
                 plugin,
                 uuid,
                 54,
-                new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 }
+                new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34}
         );
-        this.plugin = plugin;
         this.filter = PlayerSelectorSearchType.ALL;
-        this.page = page;
-        profileController = new ProfileController();
-        infractionController = new InfractionController();
 
         open();
     }
@@ -61,12 +54,12 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     @Override
     protected ItemStack modelToItemStack(ProfileModel profile) {
         OfflinePlayer target = profile.getPlayer();
-        List<InfractionModel> infractionsList = infractionController.readAll(target.getUniqueId());
+        List<InfractionModel> infractionsList = InfractionManager.getInstance().getPlayer(profile.uuid);
 
         ItemStack playerHead = ItemUtils.createItem(
                 Material.PLAYER_HEAD,
                 Translation.MENU_PLAYERS_BUTTON_PLAYER_TITLE
-                        .addPlaceholder("player_name",  profile.getPlayer().getName())
+                        .addPlaceholder("player_name", profile.getPlayer().getName())
                         .toString(),
                 Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE
                         .addPlaceholder("punishments_size", infractionsList.size())
@@ -75,8 +68,8 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                                 (infractionsList.size() == 0 ?
                                         Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_EMPTY :
                                         Translation.MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_NOT_EMPTY)
-                                            .addPlaceholder("punishments_size", infractionsList.size())
-                                            .toString())
+                                        .addPlaceholder("punishments_size", infractionsList.size())
+                                        .toString())
                         .toList()
         );
 
@@ -92,10 +85,13 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
     @Override
     protected List<ProfileModel> getModels() {
-        return profileController.getProfiles().stream()
+        return ProfileManager.getInstance()
+                .getPlayers()
+                .stream()
                 .filter(profile -> {
                     if (filter.equals(PlayerSelectorSearchType.ALL)) return true;
-                    else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY) && profile.getPlayer().isOnline()) return true;
+                    else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY) && profile.getPlayer().isOnline())
+                        return true;
                     else return filter.equals(PlayerSelectorSearchType.OFFLINE_ONLY) && !profile.getPlayer().isOnline();
                 }).collect(Collectors.toList());
     }
@@ -122,7 +118,8 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
         String nextFilter = Translation.WORD_ALL.getRawString();
         if (filter.equals(PlayerSelectorSearchType.ALL)) nextFilter = Translation.WORD_ONLINE.getRawString();
-        else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY)) nextFilter = Translation.WORD_OFFLINE.getRawString();
+        else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY))
+            nextFilter = Translation.WORD_OFFLINE.getRawString();
 
         ItemStack filterItem = ItemUtils.createItem(
                 Material.ENDER_EYE,

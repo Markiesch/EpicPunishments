@@ -5,10 +5,7 @@ import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Storage {
     private Connection connection;
@@ -29,6 +26,7 @@ public class Storage {
 
         try {
             connection = getConnection();
+            connection.setAutoCommit(true);
 
             // Create tables
             plugin.getLogger().info("Creating SQLite tables...");
@@ -38,8 +36,6 @@ public class Storage {
             plugin.getLogger().info("Created SQLite tables!");
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to initialize SQL tables" + sqlException.getMessage());
-        } finally {
-            closeConnection();
         }
     }
 
@@ -88,9 +84,15 @@ public class Storage {
     }
 
     public Integer getLastInsertedId() {
-        try (Statement statement = getConnection().createStatement()) {
-            statement.execute("SELECT last_insert_rowid()");
-            return statement.getUpdateCount();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT last_insert_rowid();");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
+                return null;
+            }
+            return resultSet.getInt("last_insert_rowid()");
         } catch (SQLException exception) {
             Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
         }

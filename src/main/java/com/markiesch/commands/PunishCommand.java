@@ -27,7 +27,7 @@ public class PunishCommand extends CommandBase {
     public boolean onCommand(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        new PlayerSelectorMenu(plugin, player.getUniqueId(), 0);
+        new PlayerSelectorMenu(plugin, player.getUniqueId());
 
         return true;
     }

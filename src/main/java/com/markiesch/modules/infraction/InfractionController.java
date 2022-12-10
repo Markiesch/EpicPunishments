@@ -1,5 +1,6 @@
 package com.markiesch.modules.infraction;
 
+import com.markiesch.storage.SqlController;
 import com.markiesch.storage.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,85 +14,58 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class InfractionController {
+public class InfractionController extends SqlController<InfractionModel> {
     private final Storage storage;
 
     public InfractionController() {
         storage = Storage.getInstance();
     }
 
+    @Override
+    protected InfractionModel resultSetToModel(ResultSet resultSet) throws SQLException {
+        return new InfractionModel(
+                resultSet.getInt("id"),
+                InfractionType.valueOf(resultSet.getString("type")),
+                UUID.fromString(resultSet.getString("victim")),
+                resultSet.getString("issuer") == null ? null : UUID.fromString(resultSet.getString("issuer")),
+                resultSet.getString("reason"),
+                resultSet.getInt("duration"),
+                resultSet.getInt("date"),
+                resultSet.getBoolean("revoked")
+        );
+    }
+
     public @Nullable InfractionModel create(PreparedInfraction preparedInfraction) {
-        InfractionModel infractionModel = null;
+        Object[] parameters = {
+                preparedInfraction.victim.getUniqueId().toString(),
+                preparedInfraction.issuer == null ? null : ((Player) preparedInfraction.issuer).getUniqueId().toString(),
+                preparedInfraction.type.name(),
+                preparedInfraction.reason,
+                preparedInfraction.duration,
+                preparedInfraction.date,
+                0
+        };
+        executeUpdate("REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date, revoked) VALUES (?, ?, ?, ?, ?, ?, ?);", parameters);
 
-        try {
-            PreparedStatement preparedStatement = storage.getConnection().prepareStatement(
-                    "REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date, revoked)" +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?);"
-            );
-
-            // Insert model values
-            preparedStatement.setString(1, preparedInfraction.victim.getUniqueId().toString());
-            preparedStatement.setString(2, preparedInfraction.issuer == null ? null : ((Player)preparedInfraction.issuer).getUniqueId().toString());
-            preparedStatement.setString(3, preparedInfraction.type.name());
-            preparedStatement.setString(4, preparedInfraction.reason);
-            preparedStatement.setLong(5, preparedInfraction.duration);
-            preparedStatement.setLong(6, preparedInfraction.date);
-            preparedStatement.setInt(7, 0);
-            preparedStatement.executeUpdate();
-
-            infractionModel = preparedInfraction.createInfraction(storage.getLastInsertedId());
-
-            storage.closeConnection();
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to write to database");
-        }
-
-        return infractionModel;
+        return preparedInfraction.createInfraction(storage.getLastInsertedId());
     }
 
     public InfractionList readAll(UUID uuid) {
-        InfractionList infractions = new InfractionList();
+        Object[] parameters = {uuid};
 
-        try {
-            Connection connection = storage.getConnection();
-
-            PreparedStatement statement = connection.prepareStatement(InfractionQuery.SELECT_INFRACTIONS);
-            statement.setString(1, uuid.toString());
-
-            ResultSet result = statement.executeQuery();
-
-            while (result.next()) {
-                int id = result.getInt("id");
-                UUID victim = UUID.fromString(result.getString("victim"));
-                UUID issuer = result.getString("issuer") == null ? null : UUID.fromString(result.getString("issuer"));
-                InfractionType type = InfractionType.valueOf(result.getString("type"));
-                String reason = result.getString("reason");
-                int duration = result.getInt("duration");
-                int date = result.getInt("date");
-                boolean revoked = result.getBoolean("revoked");
-                infractions.add(new InfractionModel(id, type, victim, issuer, reason, duration, date, revoked));
-            }
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to read from database");
-        } finally {
-            storage.closeConnection();
-        }
-
-        return infractions;
+        return new InfractionList(executeRead("SELECT * FROM Infraction WHERE victim = ?;", parameters));
     }
 
-    public void delete(Integer id) {
-        try {
-            Connection connection = storage.getConnection();
+    public InfractionList readAll() {
+        return new InfractionList(executeRead("SELECT * FROM Infraction;", null));
+    }
 
-            PreparedStatement preparedStatement = connection.prepareStatement(InfractionQuery.DELETE_INFRACTION);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to write to database");
-        } finally {
-            storage.closeConnection();
-        }
+    public boolean delete(Integer id) {
+        Object[] parameters = {id};
+
+        int affectedRows = executeUpdate("DELETE FROM Infraction WHERE [id] = ?; SELECT changes();", parameters);
+
+        return affectedRows == 1;
     }
 
     public void expire(InfractionList infractionList) {
@@ -109,8 +83,6 @@ public class InfractionController {
             connection.commit();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
-        } finally {
-            storage.closeConnection();
         }
     }
 }

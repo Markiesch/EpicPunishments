@@ -3,6 +3,8 @@ package com.markiesch;
 import com.markiesch.commands.*;
 import com.markiesch.listeners.*;
 import com.markiesch.locale.LangConfig;
+import com.markiesch.modules.infraction.InfractionManager;
+import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.storage.Storage;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -25,6 +27,8 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
         // Initialize storage
         Storage.getInstance().setup(this);
+        InfractionManager.getInstance().initialize();
+        ProfileManager.getInstance().initialize();
 
         // Initialize listeners
         getServer().getPluginManager().registerEvents(new CommandSpy(), this);

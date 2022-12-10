@@ -125,7 +125,7 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
                             new TemplateSelectorMenu(plugin, uuid);
                         });
             }
-            case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0);
+            case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid);
         }
     }
 

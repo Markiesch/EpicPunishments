@@ -68,7 +68,8 @@ public class PreparedInfraction {
             }
         }
 
-        InfractionManager.getInstance().createInfraction(this);
+        boolean success = InfractionManager.getInstance().createInfraction(this);
+        // TODO send error message if success is false\
     }
 
     private @Nullable UUID getIssuerUUID() {

@@ -64,8 +64,6 @@ public class TemplateController {
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
-        } finally {
-            storage.closeConnection();
         }
     }
 
@@ -78,8 +76,6 @@ public class TemplateController {
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
-        } finally {
-            storage.closeConnection();
         }
     }
 
@@ -96,8 +92,6 @@ public class TemplateController {
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
-        } finally {
-            storage.closeConnection();
         }
     }
 

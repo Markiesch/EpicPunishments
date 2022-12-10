@@ -32,8 +32,6 @@ public class ProfileController {
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
-        } finally {
-            storage.closeConnection();
         }
     }
 
@@ -73,8 +71,6 @@ public class ProfileController {
             resultSet.close();
         } catch(SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");
-        } finally {
-            storage.closeConnection();
         }
 
         return model;

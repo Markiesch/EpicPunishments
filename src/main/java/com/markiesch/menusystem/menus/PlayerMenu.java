@@ -48,7 +48,7 @@ public class PlayerMenu extends Menu implements Listener {
             case PUNISH_BUTTON_SLOT -> {
                 new PunishMenu(plugin, uuid, target.getUniqueId());
             }
-            case BACK_BUTTON_SLOT -> new PlayerSelectorMenu(plugin, uuid, 0);
+            case BACK_BUTTON_SLOT -> new PlayerSelectorMenu(plugin, uuid);
             case INFRACTIONS_BUTTON_SLOT -> new InfractionsMenu(plugin, uuid, target.getUniqueId());
         }
     }
