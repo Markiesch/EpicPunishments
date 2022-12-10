@@ -1,6 +1,5 @@
 package com.markiesch.listeners;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -9,12 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
 public class SignSpy implements Listener {
-    private final EpicPunishments plugin;
-
-    public SignSpy(EpicPunishments plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public boolean onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();

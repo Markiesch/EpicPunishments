@@ -1,6 +1,5 @@
 package com.markiesch.modules.infraction;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -52,10 +51,6 @@ public class InfractionManager {
         }
 
         return true;
-    }
-
-    public void removePlayer(UUID uuid) {
-        infractionsMap.remove(uuid);
     }
 
     public boolean deletePunishment(InfractionModel infractionModel) {

@@ -1,7 +1,6 @@
 package com.markiesch.commands;
 
 import com.markiesch.locale.Translation;
-import com.markiesch.modules.infraction.InfractionController;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionType;
