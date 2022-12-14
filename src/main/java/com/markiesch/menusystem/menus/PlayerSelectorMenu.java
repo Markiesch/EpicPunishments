@@ -10,7 +10,6 @@ import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -50,7 +49,6 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
 
     @Override
     protected ItemStack modelToItemStack(ProfileModel profile) {
-        OfflinePlayer target = profile.getPlayer();
         List<InfractionModel> infractionsList = InfractionManager.getInstance().getPlayer(profile.uuid);
 
         ItemStack playerHead = ItemUtils.createItem(
