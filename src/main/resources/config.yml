@@ -1,4 +1,28 @@
-# When true the issuer needs the permission "epicpunishments.templates.use.<templateName>" to use the template.
-# When false you only need "epicpunishments.templates.use" + "epicpunishments.<templateType>"
-requireExactTemplatePermission: false
-
+formats:
+    kick:
+        - '&cYou have been kicked!'
+        - ''
+        - '&7Reason: &f[reason]'
+        - '&7Find out more:&f www.example.com'
+    temporarily_muted:
+        - '&c———————————————————————————'
+        - '&c&lHey! &cYou are still muted for [duration]!'
+        - '&7Reason: &c[reason]'
+        - '&7Find out more here:&c www.example.com/faq#muted'
+        - '&c———————————————————————————'
+    permanently_muted:
+        - "&c———————————————————————————"
+        - '&c&lHey! &cYou are currently muted!'
+        - '&7Reason: &c[reason]'
+        - '&7Find out more here:&c www.example.com/faq#muted'
+        - '&c———————————————————————————'
+    temporarily_banned:
+        - "&cYou are temporarily banned for &f[duration]&c from this server!"
+        - ''
+        - '&7Reason: &f[reason]'
+        - '&7Find out more:&e&n www.example.com'
+    permanently_banned:
+        - "&cYou are permanently banned from this server!"
+        - ''
+        - '&7Reason: &f[reason]'
+        - '&7Find out more:&e&n www.example.com'

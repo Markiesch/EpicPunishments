@@ -24,6 +24,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         // Initialize config
         this.saveDefaultConfig();
         langConfig = new LangConfig(this);
+        Format.init(this);
 
         // Initialize storage
         Storage.getInstance().setup(this);

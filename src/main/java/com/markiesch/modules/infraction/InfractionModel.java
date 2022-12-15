@@ -1,5 +1,6 @@
 package com.markiesch.modules.infraction;
 
+import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,5 +45,17 @@ public class InfractionModel {
 
     public void setRevoked(boolean value) {
         revoked = value;
+    }
+
+    public String getFormattedDuration() {
+        return TimeUtils.makeReadable(this.duration);
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public String getReason() {
+        return reason;
     }
 }

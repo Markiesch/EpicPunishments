@@ -30,19 +30,12 @@ public enum Translation {
 
     EVENT_KICK_SUCCESS("event.kick.success"),
     EVENT_KICK_OFFLINE("event.kick.offline"),
-    EVENT_KICK_MESSAGE("event.kick.message"),
 
     EVENT_MUTE_SUCCESS("event.mute.success"),
     EVENT_MUTE_ALREADY("event.mute.already"),
-    EVENT_MUTE_TEMPORARILY_MESSAGE("event.mute.temporarily_message"),
-    EVENT_MUTE_PERMANENTLY_MESSAGE("event.mute.permanently_message"),
 
     EVENT_BAN_SUCCESS("event.ban.success"),
     EVENT_BAN_ALREADY("event.ban.already"),
-
-
-    EVENT_BAN_TEMPORARILY_MESSAGE("event.ban.temporarily_message"),
-    EVENT_BAN_PERMANENTLY_MESSAGE("event.ban.permanently_message"),
 
     PREVIOUS_PAGE("menu.general.previous"),
     NEXT_PAGE("menu.general.next"),

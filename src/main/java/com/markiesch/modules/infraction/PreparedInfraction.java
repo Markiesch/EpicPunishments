@@ -1,5 +1,6 @@
 package com.markiesch.modules.infraction;
 
+import com.markiesch.Format;
 import com.markiesch.locale.Translation;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
@@ -41,36 +42,39 @@ public class PreparedInfraction {
         switch (type) {
             case KICK -> {
                 if (!victim.isOnline()) {
-                    issuer.sendMessage(Translation.EVENT_KICK_OFFLINE.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_KICK_OFFLINE.addPlaceholder("victim_name", victimProfile.getName()).toString());
                     return;
                 }
                 Player onlineTarget = victim.getPlayer();
                 if (onlineTarget != null) {
-                    onlineTarget.kickPlayer(Translation.EVENT_KICK_MESSAGE.addPlaceholder("message", reason).toString());
+                    onlineTarget.kickPlayer(Format.KICK.getString(this));
 
-                    issuer.sendMessage(Translation.EVENT_KICK_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_KICK_SUCCESS.addPlaceholder("victim_name", victimProfile.getName()).toString());
                 }
             }
             case MUTE -> {
                 if (victimInfractionList.isMuted()) {
                     issuer.sendMessage(
                             Translation.EVENT_MUTE_ALREADY
-                                    .addPlaceholder("victim_name", victim.getName())
+                                    .addPlaceholder("victim_name", victimProfile.getName())
                                     .toString());
                     return;
                 }
-                issuer.sendMessage(Translation.EVENT_MUTE_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
+                issuer.sendMessage(Translation.EVENT_MUTE_SUCCESS.addPlaceholder("victim_name", victimProfile.getName()).toString());
             }
             case BAN -> {
                 if (victimInfractionList.isBanned()) {
-                    issuer.sendMessage(Translation.EVENT_BAN_ALREADY.addPlaceholder("victim_name", victim.getName()).toString());
+                    issuer.sendMessage(Translation.EVENT_BAN_ALREADY.addPlaceholder("victim_name", victimProfile.getName()).toString());
                     return;
                 }
 
                 if (victim.isOnline()) {
                     Player onlineVictim = victim.getPlayer();
                     if (onlineVictim != null) {
-                        onlineVictim.kickPlayer("You have been banned: \nReason:" + reason);
+                        String message = this.isPermanent() ?
+                                Format.PERMANENTLY_BANNED.getString(this) :
+                                Format.TEMPORARILY_BANNED.getString(this);
+                        onlineVictim.kickPlayer(message);
                     }
 
                     issuer.sendMessage(Translation.EVENT_BAN_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
@@ -82,10 +86,6 @@ public class PreparedInfraction {
         // TODO send error message if success is false\
     }
 
-    private @Nullable UUID getIssuerUUID() {
-        return issuer instanceof OfflinePlayer ? ((Player) issuer).getUniqueId() : null;
-    }
-
     public InfractionModel createInfraction(int id) {
         return new InfractionModel(id,
                 type,
@@ -95,5 +95,13 @@ public class PreparedInfraction {
                 duration,
                 date,
                 false);
+    }
+
+    private @Nullable UUID getIssuerUUID() {
+        return issuer instanceof OfflinePlayer ? ((Player) issuer).getUniqueId() : null;
+    }
+
+    private boolean isPermanent() {
+        return duration == 0L;
     }
 }

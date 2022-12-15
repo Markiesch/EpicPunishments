@@ -26,17 +26,12 @@ event:
     kick:
         success: '&7Successfully kicked &e[victim_name]'
         offline: '&e[victim_name] &7is not online'
-        message: '&cYou have been kicked!\n\n&7Reason: &f[reason]\n&7Find out more:&f www.example.com'
     mute:
         success: '&7Successfully muted &e[victim_name]'
         already: '&e[victim_name] &7is already&c muted'
-        temporarily_message: "&c———————————————————————————\n&c&lHey! &cYou are still muted for [duration]!\n&7Reason: &c[reason]\n&7Find out more here:&c www.example.com/faq#muted\n&c———————————————————————————"
-        permanently_message: "&c———————————————————————————\n&c&lHey! &cYou are currently muted!\n&7Reason: &c[reason]\n&7Find out more here:&c www.example.com/faq#muted\n&c———————————————————————————"
     ban:
         success: '&7Successfully banned &e[victim_name]'
         already: '&e[victim_name] &7is already&c banned'
-        temporarily_message: "&cYou are temporarily banned for &f[duration]&c from this server!\n\n&7Reason: &f[reason]\n&7Find out more:&e&n www.example.com"
-        permanently_message: "&cYou are permanently banned from this server!\n\n&7Reason: &f[reason]\n&7Find out more:&e&n www.example.com"
 
 menu:
     general:

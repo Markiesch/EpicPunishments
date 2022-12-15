@@ -1,14 +1,13 @@
 package com.markiesch.listeners;
 
 import com.markiesch.EpicPunishments;
-import com.markiesch.locale.Translation;
+import com.markiesch.Format;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.utils.SkullTexture;
-import com.markiesch.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,13 +52,11 @@ public class PlayerJoin implements Listener {
 
         if (activeBan == null) return;
 
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED,
-                (activeBan.isPermanent() ?
-                        Translation.EVENT_BAN_PERMANENTLY_MESSAGE :
-                        Translation.EVENT_BAN_TEMPORARILY_MESSAGE)
-                        .addPlaceholder("reason", activeBan.reason)
-                        .addPlaceholder("duration", TimeUtils.makeReadable(activeBan.duration))
-                        .toString()
+        event.disallow(
+                AsyncPlayerPreLoginEvent.Result.KICK_BANNED,
+                activeBan.isPermanent() ?
+                        Format.PERMANENTLY_BANNED.getString(activeBan) :
+                        Format.TEMPORARILY_BANNED.getString(activeBan)
         );
     }
 }
