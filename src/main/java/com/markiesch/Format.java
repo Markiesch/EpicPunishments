@@ -14,14 +14,9 @@ public enum Format {
     PERMANENTLY_BANNED("formats.permanently_banned");
 
     private final String configPath;
-    private static EpicPunishments plugin;
 
     Format(String configPath) {
         this.configPath = configPath;
-    }
-
-    public static void init(EpicPunishments plugin) {
-        Format.plugin = plugin;
     }
 
     public @NotNull String getString(InfractionModel infractionModel) {
@@ -41,6 +36,8 @@ public enum Format {
     }
 
     private String getString(String reason, String duration, String issuer) {
+        EpicPunishments plugin = EpicPunishments.getInstance();
+
         String configValue = plugin.getConfig().isString(configPath) ?
                 plugin.getConfig().getString(configPath) :
                 String.join("\n", plugin.getConfig().getStringList(configPath));

@@ -6,7 +6,6 @@ import com.markiesch.locale.LangConfig;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.storage.Storage;
-import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,15 +15,16 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         return langConfig;
     }
 
-    public String changeColor(String string) {
-        return ChatColor.translateAlternateColorCodes('&', string);
+    private static EpicPunishments instance;
+    public static EpicPunishments getInstance() {
+        return instance;
     }
 
     public void onEnable() {
         // Initialize config
+        instance = this;
         this.saveDefaultConfig();
         langConfig = new LangConfig(this);
-        Format.init(this);
 
         // Initialize storage
         Storage.getInstance().setup(this);
