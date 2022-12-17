@@ -35,13 +35,14 @@ public abstract class SkullTexture {
 
             String textureURL = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false";
 
-            return JsonUtils.readJsonFromUrl(textureURL)
+            String value = JsonUtils.readJsonFromUrl(textureURL)
                     .get("properties")
                     .getAsJsonArray()
                     .get(0)
                     .getAsJsonObject()
                     .get("value")
                     .getAsString();
+            return textureDataToUrl(value);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
