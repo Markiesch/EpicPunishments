@@ -1,6 +1,7 @@
 package com.markiesch.chat;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.utils.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +36,7 @@ public class PlayerChat implements Listener {
         player.closeInventory();
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             if (player.isOnline() && !player.isDead()) {
-                player.sendTitle(plugin.changeColor(title), plugin.changeColor(subtitle), 0, 51, 0);
+                player.sendTitle(ChatUtils.changeColor(title), ChatUtils.changeColor(subtitle), 0, 51, 0);
             }
         }, 0L, 50L);
     }
