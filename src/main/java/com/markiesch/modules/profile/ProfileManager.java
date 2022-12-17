@@ -60,8 +60,6 @@ public class ProfileManager {
     public void updateSkullTexture(UUID uuid, String url) {
         ProfileModel profileModel = getPlayer(uuid);
 
-        System.out.println(url);
-
         if (profileModel == null || (url != null && url.equals(profileModel.textureURL))) return;
 
         profileController.updateTextureURL(uuid, url);
