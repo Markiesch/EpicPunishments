@@ -38,7 +38,7 @@ public class KickCommand extends CommandBase {
         new PreparedInfraction(
                 InfractionType.KICK,
                 sender,
-                profileModel.uuid,
+                profileModel,
                 reason,
                 0L
         ).execute();

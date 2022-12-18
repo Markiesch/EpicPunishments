@@ -40,7 +40,7 @@ public class MuteCommand extends CommandBase {
         new PreparedInfraction(
                 InfractionType.MUTE,
                 sender,
-                profileModel.uuid,
+                profileModel,
                 reason,
                 duration
         ).execute();

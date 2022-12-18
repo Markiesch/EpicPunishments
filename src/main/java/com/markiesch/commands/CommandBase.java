@@ -2,8 +2,6 @@ package com.markiesch.commands;
 
 import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -15,15 +13,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommandBase extends BukkitCommand implements CommandExecutor {
+public abstract class CommandBase extends BukkitCommand {
     private static final String COMMAND_FALLBACK_PREFIX = "epicpunishments";
     private final int minArgs;
     private final int maxArgs;
     private final boolean playerOnly;
-    private final String permission;
-
-    protected abstract boolean onCommand(CommandSender sender, String[] args);
-    protected abstract List<String> onTabComplete(CommandSender sender, String alias, String[] args);
 
     public CommandBase(
             String command,
@@ -34,7 +28,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
             boolean playerOnly
     ) {
         super(command);
-        this.permission = permission;
+        this.setPermission(permission);
         this.setUsage(usage);
         this.minArgs = minArgs;
         this.maxArgs = maxArgs;
@@ -42,6 +36,9 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
 
         registerCommand();
     }
+
+    protected abstract boolean onCommand(CommandSender sender, String[] args);
+    protected abstract List<String> onTabComplete(CommandSender sender, String alias, String[] args);
 
     private void registerCommand() {
         try {
@@ -63,8 +60,8 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, String[] arguments) {
-        if (permission != null && !sender.hasPermission(permission)) {
-            this.sendPermissionMessage(sender);
+        if (getPermission() != null && !sender.hasPermission(getPermission())) {
+            sender.sendMessage(Translation.COMMAND_NO_PERMISSION.toString());
             return true;
         }
 
@@ -82,18 +79,9 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         return true;
     }
 
-    private void sendPermissionMessage(CommandSender sender) {
-        sender.sendMessage(Translation.COMMAND_NO_PERMISSION.toString());
-    }
-
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        return this.onCommand(sender, args);
-    }
-
-    @Override
-    public @NotNull List<String> tabComplete(CommandSender sender, @NotNull String alias, String[] args) {
-        if (!sender.hasPermission(permission)) return new ArrayList<>();
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, String[] args) {
+        if (getPermission() != null && !sender.hasPermission(getPermission())) return new ArrayList<>();
         return onTabComplete(sender, alias, args);
     }
 }

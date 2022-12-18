@@ -40,7 +40,7 @@ public class BanCommand extends CommandBase {
         new PreparedInfraction(
             InfractionType.BAN,
             sender,
-            profileModel.uuid,
+            profileModel,
             reason,
             duration
         ).execute();

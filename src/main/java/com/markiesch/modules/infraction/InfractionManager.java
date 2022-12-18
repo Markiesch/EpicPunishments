@@ -35,7 +35,7 @@ public class InfractionManager {
 
         if (infractionModel == null) return false;
 
-        this.getPlayer(preparedInfraction.victimUUID).add(infractionModel);
+        this.getPlayer(preparedInfraction.victimProfile.uuid).add(infractionModel);
         return true;
     }
 

@@ -6,11 +6,11 @@ import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.infraction.PreparedInfraction;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,7 +24,7 @@ public class PunishMenu extends Menu {
     private static final byte CONFIRM_BUTTON_SLOT = 25;
     private static final byte BACK_BUTTON_SLOT = 40;
 
-    private final OfflinePlayer target;
+    private final ProfileModel target;
 
     private String reason = "none";
     private long duration = 0L;
@@ -33,7 +33,7 @@ public class PunishMenu extends Menu {
     public PunishMenu(EpicPunishments plugin, UUID uuid, UUID target) {
         super(plugin, uuid, 45);
 
-        this.target = Bukkit.getOfflinePlayer(target);
+        this.target = ProfileManager.getInstance().getPlayer(target);
         open();
     }
 
@@ -67,11 +67,11 @@ public class PunishMenu extends Menu {
                 setMenuItems();
             }
             case CONFIRM_BUTTON_SLOT -> {
-                new PreparedInfraction(type, getOwner(), target.getUniqueId(), reason, duration).execute();
+                new PreparedInfraction(type, getOwner(), target, reason, duration).execute();
                 getOwner().closeInventory();
             }
             case BACK_BUTTON_SLOT -> {
-                new PlayerMenu(plugin, uuid, target.getUniqueId());
+                new PlayerMenu(plugin, uuid, target.uuid);
             }
             case TEMPLATE_BUTTON_SLOT -> {
                 new SelectTemplateMenu(plugin, uuid, (template) -> {

@@ -4,8 +4,8 @@ import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionType;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -24,17 +24,22 @@ public class UnbanCommand extends CommandBase {
 
     @Override
     protected boolean onCommand(CommandSender sender, String[] args) {
-        OfflinePlayer victim = Bukkit.getOfflinePlayer(args[0]);
+        ProfileModel victim = ProfileManager.getInstance().getPlayer(args[0]);
+
+        if (victim == null) {
+            sender.sendMessage(Translation.COMMAND_PLAYER_NOT_FOUND.addPlaceholder("name", args[0]).toString());
+            return true;
+        }
 
         InfractionManager infractionManager = InfractionManager.getInstance();
-        InfractionList infractionList = infractionManager.getPlayer(victim.getUniqueId());
+        InfractionList infractionList = infractionManager.getPlayer(victim.uuid);
 
         if (!infractionList.isBanned()) {
             sender.sendMessage(Translation.COMMAND_UNBAN_NOT_BANNED.addPlaceholder("victim_name", victim.getName()).toString());
             return true;
         }
 
-        infractionManager.expirePunishments(victim.getUniqueId(), InfractionType.BAN);
+        infractionManager.expirePunishments(victim.uuid, InfractionType.BAN);
         sender.sendMessage(Translation.COMMAND_UNBAN_SUCCESS.addPlaceholder("victim_name", victim.getName()).toString());
 
         return true;

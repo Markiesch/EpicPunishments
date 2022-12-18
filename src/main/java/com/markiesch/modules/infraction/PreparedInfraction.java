@@ -2,11 +2,11 @@ package com.markiesch.modules.infraction;
 
 import com.markiesch.Format;
 import com.markiesch.locale.Translation;
-import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -14,30 +14,29 @@ import java.util.UUID;
 public class PreparedInfraction {
     public final InfractionType type;
     public final CommandSender issuer;
-    public final UUID victimUUID;
+    public final @NotNull ProfileModel victimProfile;
     public final String reason;
     public final long duration;
     public final long date;
 
-    public PreparedInfraction(InfractionType type, CommandSender issuer, UUID victimUUID, String reason, long duration) {
-        this.type = type;
-        this.issuer = issuer;
-        this.victimUUID = victimUUID;
-        this.reason = reason;
-        this.duration = duration;
+    public PreparedInfraction(
+            InfractionType paramType,
+            CommandSender paramIssuer,
+            @NotNull ProfileModel paramVictim,
+            String paramReason,
+            long paramDuration
+    ) {
+        type = paramType;
+        issuer = paramIssuer;
+        victimProfile = paramVictim;
+        reason = paramReason;
+        duration = paramDuration;
         date = System.currentTimeMillis() / 1000L;
     }
 
     public void execute() {
-        ProfileModel victimProfile = ProfileManager.getInstance().getPlayer(victimUUID);
-
-        if (victimProfile == null) {
-            issuer.sendMessage(Translation.COMMAND_PLAYER_NOT_FOUND.addPlaceholder("name", "").toString());
-            return;
-        }
-
+        InfractionList victimInfractionList = InfractionManager.getInstance().getPlayer(victimProfile.uuid);
         OfflinePlayer victim = victimProfile.getPlayer();
-        InfractionList victimInfractionList = InfractionManager.getInstance().getPlayer(victimUUID);
 
         switch (type) {
             case KICK -> {
@@ -89,7 +88,7 @@ public class PreparedInfraction {
     public InfractionModel createInfraction(int id) {
         return new InfractionModel(id,
                 type,
-                victimUUID,
+                victimProfile.uuid,
                 getIssuerUUID(),
                 reason,
                 duration,
