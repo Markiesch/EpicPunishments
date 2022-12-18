@@ -14,6 +14,9 @@ public enum Translation {
     WORD_ONLINE("word.online"),
     WORD_OFFLINE("word.offline"),
     WORD_ALL("word.all"),
+    WORD_ACTIVE("word.active"),
+    WORD_EXPIRED("word.expired"),
+    WORD_REVOKED("word.revoked"),
 
     COMMAND_NO_PERMISSION("command.no_permission"),
     COMMAND_PLAYER_ONLY("command.player_only"),

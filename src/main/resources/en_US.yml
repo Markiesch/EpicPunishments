@@ -2,6 +2,9 @@ word:
     online: 'online'
     offline: 'offline'
     all: 'all'
+    active: 'active'
+    expired: 'expired'
+    revoked: 'revoked'
 
 command:
     no_permission: '&7You do not have&c permissions &7to use this command!'
@@ -115,7 +118,7 @@ menu:
     infractions:
         title: 'Infractions > [name]'
         infraction_button:
-            title: '&b&l[type]'
+            title: '&b&l[type] &7- &f&l[state]'
             lore:
                 - '&bPress Q &7to revoke punishment'
                 - ''

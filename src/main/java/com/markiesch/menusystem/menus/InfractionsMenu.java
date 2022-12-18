@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
@@ -49,6 +50,10 @@ public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
                 Material.PAPER,
                 Translation.MENU_INFRACTIONS_BUTTON_TITLE
                         .addPlaceholder("type", model.type)
+                        .addPlaceholder("state",
+                                (model.revoked ? Translation.WORD_REVOKED : model.isActive() ? Translation.WORD_ACTIVE : Translation.WORD_EXPIRED)
+                                        .toString()
+                                        .toUpperCase(Locale.ROOT))
                         .toString(),
                 Translation.MENU_INFRACTIONS_BUTTON_LORE
                         .addPlaceholder("reason", model.reason)
