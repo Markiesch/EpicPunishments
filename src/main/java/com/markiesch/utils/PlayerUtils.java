@@ -3,7 +3,7 @@ package com.markiesch.utils;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.entity.Player;
 
-public abstract class PlayerUtils {
+public class PlayerUtils {
     private static final Class<?> CRAFT_PLAYER = Reflection.getCraftClass("entity.CraftPlayer");
 
     private static Object getCraftPlayer(Player player) {

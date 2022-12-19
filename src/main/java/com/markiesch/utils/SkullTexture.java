@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.NoSuchElementException;
 
-public abstract class SkullTexture {
+public class SkullTexture {
     public static @Nullable String fromPlayerUUID(Player player) {
         GameProfile gameProfile = PlayerUtils.getGameProfile(player);
         if (gameProfile == null) return null;

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CommandUtils {
+public final class CommandUtils {
     public static List<String> getAllOfflinePlayerNames() {
         return ProfileManager.getInstance().getPlayers().stream().map(ProfileModel::getName).collect(Collectors.toList());
     }

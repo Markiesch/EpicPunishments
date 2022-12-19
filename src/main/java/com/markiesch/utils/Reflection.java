@@ -2,7 +2,7 @@ package com.markiesch.utils;
 
 import org.bukkit.Bukkit;
 
-public abstract class Reflection {
+public class Reflection {
     public static Class<?> getCraftClass(String paramString) {
         return getClass("org.bukkit.craftbukkit." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + "." + paramString);
     }
