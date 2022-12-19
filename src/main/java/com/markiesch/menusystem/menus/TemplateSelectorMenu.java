@@ -36,7 +36,6 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
     private static final long DEFAULT_DURATION = 0L;
     private static final InfractionType DEFAULT_TYPE = InfractionType.BAN;
 
-
     private String filter = "";
 
     public TemplateSelectorMenu(EpicPunishments plugin, UUID uuid) {
@@ -98,57 +97,47 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
-        super.handleMenu(event);
-
-        switch (event.getSlot()) {
-            case SEARCH_NAME_SLOT -> {
-                new PlayerChat(plugin, getOwner(), Translation.MENU_TEMPLATES_SEARCH_TITLE.toString(), Translation.MENU_TEMPLATES_SEARCH_SUBTITLE.toString(), (String message) -> {
-                    this.filter = message;
-                    open();
-                });
-            }
-            case NEW_TEMPLATE_SLOT -> {
-                new PlayerChat(
-                        plugin,
-                        getOwner(),
-                        Translation.MENU_TEMPLATES_CREATE_TITLE.toString(),
-                        Translation.MENU_TEMPLATES_CREATE_SUBTITLE.toString(),
-                        (String name) -> {
-                            new TemplateController().create(
-                                    name,
-                                    DEFAULT_REASON,
-                                    DEFAULT_TYPE,
-                                    DEFAULT_DURATION
-                            );
-                            getOwner().sendMessage(Translation.MENU_TEMPLATES_CREATE_SUCCESS.addPlaceholder("name", name).toString());
-                            new TemplateSelectorMenu(plugin, uuid);
-                        });
-            }
-            case BACK_SLOT -> new PlayerSelectorMenu(plugin, uuid);
-        }
-    }
-
-    @Override
     public void setMenuItems() {
         super.setMenuItems();
 
         final String displayFilter = filter.equals("") ? "none" : filter;
 
-        ItemStack filterNameButton = ItemUtils.createItem(Material.COMPASS,
-                Translation.MENU_TEMPLATES_FILTER_TITLE
-                        .addPlaceholder("current_filter", displayFilter)
-                        .toString(),
-                Translation.MENU_TEMPLATES_FILTER_LORE
-                        .addPlaceholder("current_filter", displayFilter)
-                        .toList());
-        getInventory().setItem(SEARCH_NAME_SLOT, filterNameButton);
+        ItemStack filterNameButton = ItemUtils.createItem(
+                Material.COMPASS,
+                Translation.MENU_TEMPLATES_FILTER_TITLE.addPlaceholder("current_filter", displayFilter).toString(),
+                Translation.MENU_TEMPLATES_FILTER_LORE.addPlaceholder("current_filter", displayFilter).toList()
+        );
+        setButton(SEARCH_NAME_SLOT, filterNameButton, (event) -> {
+            new PlayerChat(plugin, getOwner(), Translation.MENU_TEMPLATES_SEARCH_TITLE.toString(), Translation.MENU_TEMPLATES_SEARCH_SUBTITLE.toString(), (String message) -> {
+                this.filter = message;
+                open();
+            });
+        });
 
-        ItemStack back = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
-        getInventory().setItem(BACK_SLOT, back);
+        ItemStack back = ItemUtils.createItem(
+                Material.OAK_SIGN,
+                Translation.MENU_BACK_BUTTON_TITLE.toString(),
+                Translation.MENU_BACK_BUTTON_LORE.toList()
+        );
+        setButton(BACK_SLOT, back, (event) -> new PlayerSelectorMenu(plugin, uuid));
 
-        ItemStack newTemplate = ItemUtils.createItem(Material.ANVIL, Translation.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(), Translation.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList());
-        getInventory().setItem(NEW_TEMPLATE_SLOT, newTemplate);
+        ItemStack newTemplate = ItemUtils.createItem(
+                Material.ANVIL,
+                Translation.MENU_TEMPLATES_CREATE_BUTTON_TITLE.toString(),
+                Translation.MENU_TEMPLATES_CREATE_BUTTON_LORE.toList()
+        );
+        setButton(NEW_TEMPLATE_SLOT, newTemplate, event -> {
+            new PlayerChat(
+                    plugin,
+                    getOwner(),
+                    Translation.MENU_TEMPLATES_CREATE_TITLE.toString(),
+                    Translation.MENU_TEMPLATES_CREATE_SUBTITLE.toString(),
+                    (String name) -> {
+                        new TemplateController().create(name, DEFAULT_REASON, DEFAULT_TYPE, DEFAULT_DURATION);
+                        getOwner().sendMessage(Translation.MENU_TEMPLATES_CREATE_SUCCESS.addPlaceholder("name", name).toString());
+                        new TemplateSelectorMenu(plugin, uuid);
+                    });
+        });
 
         if (isEmpty) {
             ItemStack noTemplates = ItemUtils.createItem(Material.MAP, Translation.MENU_TEMPLATES_EMPTY_TITLE.toString(), Translation.MENU_TEMPLATES_EMPTY_LORE.toList());

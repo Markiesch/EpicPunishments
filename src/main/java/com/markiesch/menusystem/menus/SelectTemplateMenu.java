@@ -50,15 +50,6 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
-        super.handleMenu(event);
-
-        if (event.getSlot() == BACK_SLOT) {
-            callback.accept(null);
-        }
-    }
-
-    @Override
     protected void handleModelClick(InventoryClickEvent event, TemplateModel template) {
         callback.accept(template);
     }
@@ -67,8 +58,13 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     public void setMenuItems() {
         super.setMenuItems();
 
-        ItemStack backButton = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
-        getInventory().setItem(BACK_SLOT, backButton);
+        ItemStack backButton = ItemUtils.createItem(
+                Material.OAK_SIGN,
+                Translation.MENU_BACK_BUTTON_TITLE.toString(),
+                Translation.MENU_BACK_BUTTON_LORE.toList()
+        );
+
+        setButton(BACK_SLOT, backButton, (event) -> callback.accept(null));
     }
 
     @Override

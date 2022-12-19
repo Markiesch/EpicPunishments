@@ -20,10 +20,9 @@ import java.util.stream.Collectors;
 public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private PlayerSelectorSearchType filter;
 
-    private final byte TEMPLATE_BUTTON_SLOT = 52;
-
-    private final int closeSlot = 49;
-    private final int filterSlot = 46;
+    private static final byte TEMPLATE_BUTTON_SLOT = 52;
+    private static final int CLOSE_SLOT = 49;
+    private static final int FILTER_SLOT = 46;
 
     public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid) {
         super(
@@ -91,17 +90,6 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
-        super.handleMenu(event);
-
-        switch (event.getSlot()) {
-            case TEMPLATE_BUTTON_SLOT -> new TemplateSelectorMenu(plugin, uuid);
-            case closeSlot -> getOwner().closeInventory();
-            case filterSlot -> toggleFilter();
-        }
-    }
-
-    @Override
     public void setMenuItems() {
         super.setMenuItems();
 
@@ -110,26 +98,31 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
         else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY))
             nextFilter = Translation.WORD_OFFLINE.getRawString();
 
+
         ItemStack filterItem = ItemUtils.createItem(
                 Material.ENDER_EYE,
                 Translation.MENU_PLAYERS_BUTTON_FILTER_TITLE.toString(),
                 Translation.MENU_PLAYERS_BUTTON_FILTER_LORE.addPlaceholder("next_filter", nextFilter).toList()
         );
-        getInventory().setItem(filterSlot, filterItem);
+        setButton(
+                FILTER_SLOT,
+                filterItem,
+                event -> toggleFilter()
+        );
 
         ItemStack closeButton = ItemUtils.createItem(
                 Material.NETHER_STAR,
                 Translation.MENU_CLOSE_BUTTON_TITLE.toString(),
                 Translation.MENU_CLOSE_BUTTON_LORE.toList()
         );
-        getInventory().setItem(closeSlot, closeButton);
+        setButton(CLOSE_SLOT, closeButton, (event) -> getOwner().closeInventory());
 
-        ItemStack templates = ItemUtils.createItem(
+        ItemStack templatesButton = ItemUtils.createItem(
                 Material.ANVIL,
                 Translation.MENU_PLAYERS_TEMPLATES_BUTTON_TITLE.toString(),
                 Translation.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList()
         );
-        getInventory().setItem(TEMPLATE_BUTTON_SLOT, templates);
+        setButton(TEMPLATE_BUTTON_SLOT, templatesButton, (event) -> new TemplateSelectorMenu(plugin, uuid));
     }
 
     public void toggleFilter() {

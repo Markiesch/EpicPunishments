@@ -16,5 +16,6 @@ public class MenuListener implements Listener {
         event.setCancelled(true);
         Menu menu = (Menu) holder;
         menu.handleMenu(event);
+        menu.handleButtonClick(event);
     }
 }

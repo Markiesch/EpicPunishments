@@ -7,11 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public abstract class Menu implements InventoryHolder {
+    private final HashMap<Integer, Consumer<InventoryClickEvent>> clickMap = new HashMap<>();
     protected final UUID uuid;
     protected final EpicPunishments plugin;
     private final int slots;
@@ -39,6 +43,18 @@ public abstract class Menu implements InventoryHolder {
         inventory = Bukkit.createInventory(this, slots, this.getMenuName());
         this.setMenuItems();
         player.openInventory(inventory);
+    }
+
+
+    protected void setButton(int slot, ItemStack itemStack, Consumer<InventoryClickEvent> callback) {
+        getInventory().setItem(slot, itemStack);
+        clickMap.put(slot, callback);
+    }
+
+    public void handleButtonClick(InventoryClickEvent event) {
+        if (clickMap.containsKey(event.getSlot())) {
+            clickMap.get(event.getSlot()).accept(event);
+        }
     }
 
     public Player getOwner() {
