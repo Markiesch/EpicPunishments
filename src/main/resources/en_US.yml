@@ -118,13 +118,13 @@ menu:
     infractions:
         title: 'Infractions > [name]'
         infraction_button:
-            title: '&b&l[type] &7- &f&l[state]'
+            title: '&c&l[type] &7- &f&l[state]'
             lore:
-                - '&bPress Q &7to revoke punishment'
+                - '&bPress Q &7to &cdelete &7punishment'
                 - ''
-                - '&7reason: &a[reason]'
-                - '&7Duration: &a[duration]'
-                - '&7Issuer: &a[issuer]'
+                - '&7Issuer: &e[issuer]'
+                - '&7Duration: &e[duration]'
+                - '&7Reason: &e[reason]'
     select_template:
         title: 'Select template'
         template_button:
