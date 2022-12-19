@@ -77,19 +77,10 @@ public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
-        super.handleMenu(event);
-
-        if (event.getSlot() == BACK_BUTTON_SLOT) {
-            new PlayerMenu(plugin, uuid, target.getUniqueId());
-        }
-    }
-
-    @Override
     public void setMenuItems() {
         super.setMenuItems();
 
         ItemStack backButton = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
-        getInventory().setItem(BACK_BUTTON_SLOT, backButton);
+        setButton(BACK_BUTTON_SLOT, backButton, event -> new PlayerMenu(plugin, uuid, target.getUniqueId()));
     }
 }

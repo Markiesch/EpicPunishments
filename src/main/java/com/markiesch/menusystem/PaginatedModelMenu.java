@@ -1,21 +1,26 @@
 package com.markiesch.menusystem;
 
 import com.markiesch.EpicPunishments;
-import org.bukkit.NamespacedKey;
+import com.markiesch.locale.Translation;
+import com.markiesch.utils.ItemUtils;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
+public abstract class PaginatedModelMenu<T> extends Menu {
+    private static final byte PREV_PAGE_SLOT = 45;
+    private static final byte NEXT_PAGE_SLOT = 53;
+    private final int[] itemSlots;
+
     protected boolean isEmpty = false;
+    private int page = 0;
 
     public PaginatedModelMenu(EpicPunishments plugin, UUID uuid, int slots, int[] itemSlots) {
-        super(plugin, uuid, slots, itemSlots);
+        super(plugin, uuid, slots);
+        this.itemSlots = itemSlots;
     }
 
     protected abstract ItemStack modelToItemStack(T model);
@@ -23,35 +28,45 @@ public abstract class PaginatedModelMenu<T> extends PaginatedMenu {
     protected abstract void handleModelClick(InventoryClickEvent event, T model);
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
-        super.handleMenu(event);
-
-        ItemStack item = event.getCurrentItem();
-        if (item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-
-        Integer index = meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "index"), PersistentDataType.INTEGER);
-        if (index == null) return;
-
-        handleModelClick(event, this.getModels().get(index));
-    }
-
-    @Override
     public void setMenuItems() {
-        List<ItemStack> items = this.getModels().stream().map(this::modelToItemStack).collect(Collectors.toList());
+        List<T> models = getModels();
+
+        List<T> items = models.subList(itemSlots.length * page, Math.min(itemSlots.length * page + itemSlots.length, models.size()));
+        isEmpty = items.size() == 0;
 
         for (int i = 0; i < items.size(); i++) {
-            ItemStack item = items.get(i);
-            ItemMeta itemMeta = item.getItemMeta();
-            if (itemMeta != null) {
-                itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "index"), PersistentDataType.INTEGER, i);
-                item.setItemMeta(itemMeta);
-            }
+            T item = items.get(i);
+            setButton(itemSlots[i], this.modelToItemStack(item), (event) -> handleModelClick(event, item));
         }
 
-        isEmpty = items.size() == 0;
-        setPaginatedItems(items);
+        setPaginationItems(items);
+    }
+
+    private void setPaginationItems(List<T> items) {
+        int maxPages = items.size() / itemSlots.length;
+
+        if (page >= 1) {
+            ItemStack prevPage = ItemUtils.createItem(
+                    Material.ARROW,
+                    Translation.PREVIOUS_PAGE.toString(),
+                    Translation.VISIT_PAGE.addPlaceholder("page", page).toString()
+            );
+            setButton(PREV_PAGE_SLOT, prevPage, event -> {
+                page--;
+                open();
+            });
+        }
+
+        if (page < maxPages) {
+            ItemStack nextPage = ItemUtils.createItem(
+                    Material.ARROW,
+                    Translation.NEXT_PAGE.toString(),
+                    Translation.VISIT_PAGE.addPlaceholder("page", page + 2).toString()
+            );
+            setButton(NEXT_PAGE_SLOT, nextPage, event -> {
+                page++;
+                open();
+            });
+        }
     }
 }

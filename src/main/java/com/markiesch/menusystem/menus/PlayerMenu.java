@@ -8,16 +8,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
 public class PlayerMenu extends Menu implements Listener {
-    private final byte TELEPORT_BUTTON_SLOT = 20;
-    private final byte PUNISH_BUTTON_SLOT = 22;
-    private final byte INFRACTIONS_BUTTON_SLOT = 24;
-    private final byte BACK_BUTTON_SLOT = 40;
+    private static final byte TELEPORT_BUTTON_SLOT = 20;
+    private static final byte PUNISH_BUTTON_SLOT = 22;
+    private static final byte INFRACTIONS_BUTTON_SLOT = 24;
+    private static final byte BACK_BUTTON_SLOT = 40;
 
     public OfflinePlayer target;
 
@@ -38,21 +37,6 @@ public class PlayerMenu extends Menu implements Listener {
         return "epicpunishments.templates";
     }
 
-    public void handleMenu(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) return;
-
-        switch (event.getSlot()) {
-            case TELEPORT_BUTTON_SLOT -> {
-                // TODO teleport to player
-            }
-            case PUNISH_BUTTON_SLOT -> {
-                new PunishMenu(plugin, uuid, target.getUniqueId());
-            }
-            case BACK_BUTTON_SLOT -> new PlayerSelectorMenu(plugin, uuid);
-            case INFRACTIONS_BUTTON_SLOT -> new InfractionsMenu(plugin, uuid, target.getUniqueId());
-        }
-    }
-
     public void setMenuItems() {
         if (target == null) {
             getOwner().sendMessage(Translation.MENU_PLAYER_NOT_FOUND.toString());
@@ -65,27 +49,29 @@ public class PlayerMenu extends Menu implements Listener {
                 Translation.MENU_PLAYER_TELEPORT_TITLE.toString(),
                 Translation.MENU_PLAYER_TELEPORT_LORE.addPlaceholder("name", target.getName()).toList()
         );
-        getInventory().setItem(TELEPORT_BUTTON_SLOT, teleportButton);
+        setButton(TELEPORT_BUTTON_SLOT, teleportButton, event -> {
+            // TODO teleport to player
+        });
 
         ItemStack punishButton = ItemUtils.createItem(
                 Material.ANVIL,
                 Translation.MENU_PLAYER_PUNISH_TITLE.toString(),
                 Translation.MENU_PLAYER_PUNISH_LORE.addPlaceholder("name", target.getName()).toList()
         );
-        getInventory().setItem(PUNISH_BUTTON_SLOT, punishButton);
+        setButton(PUNISH_BUTTON_SLOT, punishButton, event -> new PunishMenu(plugin, uuid, target.getUniqueId()));
 
         ItemStack infractions = ItemUtils.createItem(
                 Material.FLOWER_BANNER_PATTERN,
                 Translation.MENU_PLAYER_INFRACTIONS_TITLE.toString(),
                 Translation.MENU_PLAYER_INFRACTIONS_LORE.addPlaceholder("name", target.getName()).toList()
         );
-        getInventory().setItem(INFRACTIONS_BUTTON_SLOT, infractions);
+        setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new InfractionsMenu(plugin, uuid, target.getUniqueId()));
 
         ItemStack back = ItemUtils.createItem(
                 Material.OAK_SIGN,
                 Translation.MENU_BACK_BUTTON_TITLE.toString(),
                 Translation.MENU_BACK_BUTTON_LORE.toList()
         );
-        getInventory().setItem(BACK_BUTTON_SLOT, back);
+        setButton(BACK_BUTTON_SLOT, back, event -> new PlayerSelectorMenu(plugin, uuid));
     }
 }

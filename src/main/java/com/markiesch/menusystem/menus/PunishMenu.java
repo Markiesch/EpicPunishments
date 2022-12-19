@@ -11,7 +11,6 @@ import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -48,45 +47,6 @@ public class PunishMenu extends Menu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent event) {
-        switch (event.getSlot()) {
-            case REASON_BUTTON_SLOT -> {
-                new PlayerChat(plugin, getOwner(), "§b§lReason", "§7Insert a new reason", (String message) -> {
-                    reason = message;
-                    open();
-                });
-            }
-            case DURATION_BUTTON_SLOT -> {
-                new PlayerChat(plugin, getOwner(), "§b§lDuration", "§7Insert a new duration", (String message) -> {
-                    duration = TimeUtils.parseTime(message);
-                    open();
-                });
-            }
-            case TYPE_BUTTON_SLOT -> {
-                type = type.getNextType();
-                setMenuItems();
-            }
-            case CONFIRM_BUTTON_SLOT -> {
-                new PreparedInfraction(type, getOwner(), target, reason, duration).execute();
-                getOwner().closeInventory();
-            }
-            case BACK_BUTTON_SLOT -> {
-                new PlayerMenu(plugin, uuid, target.uuid);
-            }
-            case TEMPLATE_BUTTON_SLOT -> {
-                new SelectTemplateMenu(plugin, uuid, (template) -> {
-                    if (template != null) {
-                        this.reason = template.reason;
-                        this.duration = template.duration;
-                        this.type = template.type;
-                    }
-                    open();
-                });
-            }
-        }
-    }
-
-    @Override
     public void setMenuItems() {
         ItemStack reasonButton = ItemUtils.createItem(
                 Material.WRITABLE_BOOK,
@@ -95,14 +55,22 @@ public class PunishMenu extends Menu {
                         .addPlaceholder("reason", reason)
                         .toList()
         );
-        getInventory().setItem(REASON_BUTTON_SLOT, reasonButton);
+        setButton(REASON_BUTTON_SLOT, reasonButton, event -> {
+            new PlayerChat(plugin, getOwner(), "§b§lReason", "§7Insert a new reason", (String message) -> {
+                reason = message;
+                open();
+            });
+        });
 
         ItemStack typeButton = ItemUtils.createItem(
                 type.getMaterial(),
                 Translation.MENU_PUNISH_BUTTON_TYPE_TITLE.toString(),
                 Translation.MENU_PUNISH_BUTTON_TYPE_LORE.addPlaceholder("type", type).toList()
         );
-        getInventory().setItem(TYPE_BUTTON_SLOT, typeButton);
+        setButton(TYPE_BUTTON_SLOT, typeButton, event -> {
+            type = type.getNextType();
+            setMenuItems();
+        });
 
         ItemStack durationButton = ItemUtils.createItem(
                 Material.CLOCK,
@@ -111,14 +79,28 @@ public class PunishMenu extends Menu {
                         .addPlaceholder("duration", TimeUtils.makeReadable(duration))
                         .toList()
         );
-        getInventory().setItem(DURATION_BUTTON_SLOT, durationButton);
+        setButton(DURATION_BUTTON_SLOT, durationButton, event -> {
+            new PlayerChat(plugin, getOwner(), "§b§lDuration", "§7Insert a new duration", (String message) -> {
+                duration = TimeUtils.parseTime(message);
+                open();
+            });
+        });
 
         ItemStack templateButton = ItemUtils.createItem(
                 Material.ANVIL,
                 Translation.MENU_PUNISH_BUTTON_TEMPLATE_TITLE.toString(),
                 Translation.MENU_PUNISH_BUTTON_TEMPLATE_LORE.toList()
         );
-        getInventory().setItem(TEMPLATE_BUTTON_SLOT, templateButton);
+        setButton(TEMPLATE_BUTTON_SLOT, templateButton, event -> {
+            new SelectTemplateMenu(plugin, uuid, (template) -> {
+                if (template != null) {
+                    this.reason = template.reason;
+                    this.duration = template.duration;
+                    this.type = template.type;
+                }
+                open();
+            });
+        });
 
         ItemStack confirmButton = ItemUtils.createItem(
                 Material.EMERALD_BLOCK,
@@ -130,13 +112,16 @@ public class PunishMenu extends Menu {
                         .addPlaceholder("type", type)
                         .toList()
         );
-        getInventory().setItem(CONFIRM_BUTTON_SLOT, confirmButton);
+        setButton(CONFIRM_BUTTON_SLOT, confirmButton, event -> {
+            new PreparedInfraction(type, getOwner(), target, reason, duration).execute();
+            getOwner().closeInventory();
+        });
 
         ItemStack back = ItemUtils.createItem(
                 Material.OAK_SIGN,
                 Translation.MENU_BACK_BUTTON_TITLE.toString(),
                 Translation.MENU_BACK_BUTTON_LORE.toList()
         );
-        getInventory().setItem(BACK_BUTTON_SLOT, back);
+        setButton(BACK_BUTTON_SLOT, back, event -> new PlayerMenu(plugin, uuid, target.uuid));
     }
 }

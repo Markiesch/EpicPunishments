@@ -29,7 +29,6 @@ public abstract class Menu implements InventoryHolder {
 
     public abstract String getMenuName();
     public abstract String getRequiredPermission();
-    public abstract void handleMenu(InventoryClickEvent event);
     public abstract void setMenuItems();
 
     public void open() {
