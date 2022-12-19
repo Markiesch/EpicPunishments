@@ -13,9 +13,10 @@ import java.nio.charset.StandardCharsets;
 
 public class JsonUtils {
     public static JsonObject readJsonFromUrl(String url) throws IOException, JsonSyntaxException {
-        try (InputStream inputStream = new URL(url).openStream()) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
+        try (
+            InputStream inputStream = new URL(url).openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+        ) {
             return new Gson().fromJson(reader, JsonObject.class);
         }
     }
