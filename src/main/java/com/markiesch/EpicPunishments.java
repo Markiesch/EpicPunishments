@@ -6,10 +6,13 @@ import com.markiesch.locale.LangConfig;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.storage.Storage;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
+    private static final int pluginId = 17132;
+
     private static LangConfig langConfig;
     public static LangConfig getLangConfig() {
         return langConfig;
@@ -21,6 +24,8 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     }
 
     public void onEnable() {
+        new Metrics(this, pluginId);
+
         // Initialize config
         instance = this;
         this.saveDefaultConfig();
