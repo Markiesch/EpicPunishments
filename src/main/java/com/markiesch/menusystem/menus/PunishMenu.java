@@ -56,7 +56,7 @@ public class PunishMenu extends Menu {
                         .toList()
         );
         setButton(REASON_BUTTON_SLOT, reasonButton, event -> {
-            new PlayerChat(plugin, getOwner(), "§b§lReason", "§7Insert a new reason", (String message) -> {
+            new PlayerChat(plugin, getOwner(), Translation.MENU_PUNISH_INSERT_REASON_TITLE.toString(), Translation.MENU_PUNISH_INSERT_REASON_SUBTITLE.toString(), (message) -> {
                 reason = message;
                 open();
             });
@@ -80,7 +80,7 @@ public class PunishMenu extends Menu {
                         .toList()
         );
         setButton(DURATION_BUTTON_SLOT, durationButton, event -> {
-            new PlayerChat(plugin, getOwner(), "§b§lDuration", "§7Insert a new duration", (String message) -> {
+            new PlayerChat(plugin, getOwner(), Translation.MENU_PUNISH_INSERT_DURATION_TITLE.toString(), Translation.MENU_PUNISH_INSERT_DURATION_SUBTITLE.toString(), (message) -> {
                 duration = TimeUtils.parseTime(message);
                 open();
             });

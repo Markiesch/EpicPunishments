@@ -91,6 +91,9 @@ menu:
                 - '&7Click to insert reason'
                 - ''
                 - '&7Reason set: &e[reason]'
+        insert_reason:
+            title: '&b&lReason'
+            subtitle: '&7Insert a new reason'
         type_button:
             title: '&b&lType'
             lore:
@@ -103,18 +106,21 @@ menu:
                 - '&7Click to insert duration'
                 - ''
                 - '&7Duration set: &e[duration]'
+        insert_duration:
+            title: '§b§lDuration'
+            subtitle: '§7Insert a new duration'
         template_button:
-            title: '§b§lUse template'
+            title: '&b&lUse template'
             lore:
-                - '§7Click to use a template'
+                - '&7Click to use a template'
         confirm_button:
-            title: '§c§lConfirm'
+            title: '&c&lConfirm'
             lore:
-                - '§7Click to punish [name]'
+                - '&7Click to punish [name]'
                 - ''
-                - '§7Reason: §e[reason]'
-                - '§7Duration: §e[duration]'
-                - '§7Type: §e[type]'
+                - '&7Reason: &e[reason]'
+                - '&7Duration: &e[duration]'
+                - '&7Type: &e[type]'
     infractions:
         title: 'Infractions > [name]'
         infraction_button:
