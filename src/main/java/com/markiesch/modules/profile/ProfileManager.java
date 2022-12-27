@@ -56,13 +56,4 @@ public class ProfileManager {
     public List<ProfileModel> getPlayers() {
         return new ArrayList<>(profileModelMap.values());
     }
-
-    public void updateSkullTexture(UUID uuid, String url) {
-        ProfileModel profileModel = getPlayer(uuid);
-
-        if (profileModel == null || (url != null && url.equals(profileModel.textureURL))) return;
-
-        profileController.updateTextureURL(uuid, url);
-        profileModel.textureURL = url;
-    }
 }
