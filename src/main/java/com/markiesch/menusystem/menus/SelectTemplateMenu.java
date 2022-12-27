@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.modules.template.TemplateController;
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
 
 public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     private final static byte SLOTS = 54;
-    private final static int[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+    private final static byte[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
     private final static byte BACK_SLOT = 49;
 
@@ -40,7 +41,7 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    public String getRequiredPermission() {
+    public Permission getRequiredPermission() {
         return null;
     }
 

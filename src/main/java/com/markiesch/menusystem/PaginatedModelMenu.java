@@ -13,12 +13,12 @@ import java.util.UUID;
 public abstract class PaginatedModelMenu<T> extends Menu {
     private static final byte PREV_PAGE_SLOT = 45;
     private static final byte NEXT_PAGE_SLOT = 53;
-    private final int[] itemSlots;
+    private final byte[] itemSlots;
 
     protected boolean isEmpty = false;
     private int page = 0;
 
-    public PaginatedModelMenu(EpicPunishments plugin, UUID uuid, int slots, int[] itemSlots) {
+    public PaginatedModelMenu(EpicPunishments plugin, UUID uuid, int slots, byte[] itemSlots) {
         super(plugin, uuid, slots);
         this.itemSlots = itemSlots;
     }

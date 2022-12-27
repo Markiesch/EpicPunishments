@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.modules.infraction.InfractionList;
@@ -21,9 +22,9 @@ import java.util.UUID;
 
 public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
     private final OfflinePlayer target;
-    private final static int BACK_BUTTON_SLOT = 49;
+    private final static byte BACK_BUTTON_SLOT = 49;
 
-    private final static int[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+    private final static byte[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
     private final InfractionList models;
 
     public InfractionsMenu(EpicPunishments plugin, UUID uuid, UUID target) {
@@ -40,7 +41,7 @@ public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
     }
 
     @Override
-    public String getRequiredPermission() {
+    public Permission getRequiredPermission() {
         return null;
     }
 

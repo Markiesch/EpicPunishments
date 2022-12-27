@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
@@ -40,7 +41,7 @@ public class EditTemplateMenu extends Menu {
     }
 
     @Override
-    public String getRequiredPermission() {
+    public Permission getRequiredPermission() {
         return null;
     }
 
@@ -117,7 +118,7 @@ public class EditTemplateMenu extends Menu {
                 Translation.MENU_EDIT_TEMPLATE_CONFIRM_LORE.toList()
         );
         setButton(CREATE_SLOT, createItem, event -> {
-            templateController.updateTemplate(template.id, template.name, template.type, template.reason, template.duration);
+            templateController.update(template.id, template.name, template.type, template.reason, template.duration);
             event.getWhoClicked().sendMessage(Translation.MENU_EDIT_TEMPLATE_SUCCESS.addPlaceholder("name", template.name).toString());
             new TemplateSelectorMenu(plugin, uuid);
         });

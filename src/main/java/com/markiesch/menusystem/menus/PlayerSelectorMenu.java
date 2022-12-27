@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
@@ -12,6 +13,7 @@ import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,15 +23,15 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private PlayerSelectorSearchType filter;
 
     private static final byte TEMPLATE_BUTTON_SLOT = 52;
-    private static final int CLOSE_SLOT = 49;
-    private static final int FILTER_SLOT = 46;
+    private static final byte CLOSE_SLOT = 49;
+    private static final byte FILTER_SLOT = 46;
 
     public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid) {
         super(
                 plugin,
                 uuid,
                 54,
-                new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34}
+                new byte[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34}
         );
         this.filter = PlayerSelectorSearchType.ALL;
 
@@ -42,8 +44,8 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     }
 
     @Override
-    public String getRequiredPermission() {
-        return "epicpunishments.selector";
+    public Permission getRequiredPermission() {
+        return Permission.MANAGE_PLAYERS;
     }
 
     @Override
@@ -67,7 +69,12 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                         .toList()
         );
 
-        ItemUtils.setSkullTexture(playerHead, profile.textureURL);
+        SkullMeta playerMeta = (SkullMeta) playerHead.getItemMeta();
+        if (playerMeta != null) {
+            playerMeta.setOwningPlayer(profile.getPlayer());
+            playerHead.setItemMeta(playerMeta);
+        }
+
         return playerHead;
     }
 

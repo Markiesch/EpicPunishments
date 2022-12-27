@@ -1,6 +1,7 @@
 package com.markiesch.menusystem;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ public abstract class Menu implements InventoryHolder {
     protected final UUID uuid;
     protected final EpicPunishments plugin;
     private final int slots;
-    private Inventory inventory;
+    protected Inventory inventory;
 
     public Menu(EpicPunishments plugin, UUID uuid, int slots) {
         this.plugin = plugin;
@@ -28,13 +29,13 @@ public abstract class Menu implements InventoryHolder {
     }
 
     public abstract String getMenuName();
-    public abstract String getRequiredPermission();
+    public abstract Permission getRequiredPermission();
     public abstract void setMenuItems();
 
     public void open() {
         Player player = getOwner();
 
-        if (getRequiredPermission() != null && !player.hasPermission(getRequiredPermission())) {
+        if (getRequiredPermission() != null && !player.hasPermission(getRequiredPermission().getNode())) {
             player.sendMessage(Translation.MENU_NO_PERMISSION.toString());
             player.closeInventory();
             return;
@@ -43,7 +44,6 @@ public abstract class Menu implements InventoryHolder {
         this.setMenuItems();
         player.openInventory(inventory);
     }
-
 
     protected void setButton(int slot, ItemStack itemStack, Consumer<InventoryClickEvent> callback) {
         getInventory().setItem(slot, itemStack);

@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
 import com.markiesch.utils.ItemUtils;
@@ -32,8 +33,8 @@ public class PlayerMenu extends Menu implements Listener {
     }
 
     @Override
-    public String getRequiredPermission() {
-        return "epicpunishments.templates";
+    public Permission getRequiredPermission() {
+        return Permission.MANAGE_PLAYERS;
     }
 
     public void setMenuItems() {

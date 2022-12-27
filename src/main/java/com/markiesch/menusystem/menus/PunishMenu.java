@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
@@ -42,8 +43,8 @@ public class PunishMenu extends Menu {
     }
 
     @Override
-    public String getRequiredPermission() {
-        return "epicpunishments.punish";
+    public Permission getRequiredPermission() {
+        return Permission.MANAGE_PLAYERS;
     }
 
     @Override
