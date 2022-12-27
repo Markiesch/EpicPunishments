@@ -26,7 +26,6 @@ public class Storage {
 
         try {
             connection = getConnection();
-            connection.setAutoCommit(true);
 
             // Create tables
             plugin.getLogger().info("Creating SQLite tables...");

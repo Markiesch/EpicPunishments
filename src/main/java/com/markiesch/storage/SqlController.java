@@ -22,15 +22,13 @@ public abstract class SqlController<T> {
 
         try {
             Connection connection = storage.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             if (parameters != null) {
-                for (int i = 0; i < parameters.length; i++) {
-                    statement.setObject(i + 1, parameters[i]);
-                }
+                addParameters(preparedStatement, parameters);
             }
 
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 T model = resultSetToModel(resultSet);
@@ -50,9 +48,7 @@ public abstract class SqlController<T> {
             Connection connection = storage.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            for (int i = 0; i < parameters.length; i++) {
-                preparedStatement.setObject(i + 1, parameters[i]);
-            }
+            addParameters(preparedStatement, parameters);
 
             return preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -60,5 +56,29 @@ public abstract class SqlController<T> {
         }
 
         return 0;
+    }
+
+    protected void executeUpdateBatch(@Language("SQLite") String query, Object[][] batches) {
+        Storage storage = Storage.getInstance();
+
+        try {
+            Connection connection = storage.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            for (Object[] parameters : batches) {
+                addParameters(preparedStatement, parameters);
+            }
+
+            preparedStatement.executeBatch();
+        } catch (SQLException sqlException) {
+            Bukkit.getLogger().warning("Failed to write to database.\n" + sqlException.getMessage());
+        }
+    }
+
+    private void addParameters(PreparedStatement preparedStatement, Object[] parameters) throws SQLException {
+        for (int i = 0; i < parameters.length; i++) {
+            preparedStatement.setObject(i + 1, parameters[i]);
+        }
+        preparedStatement.addBatch();
     }
 }

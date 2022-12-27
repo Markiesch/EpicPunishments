@@ -2,17 +2,12 @@ package com.markiesch.modules.infraction;
 
 import com.markiesch.storage.SqlController;
 import com.markiesch.storage.Storage;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class InfractionController extends SqlController<InfractionModel> {
     private final Storage storage;
@@ -69,20 +64,11 @@ public class InfractionController extends SqlController<InfractionModel> {
     }
 
     public void expire(InfractionList infractionList) {
-        try {
-            Connection connection = storage.getConnection();
+        Integer[][] ids = infractionList.stream()
+                .map(infractionModel -> infractionModel.id)
+                .map(id -> new Integer[]{id})
+                .toArray(Integer[][]::new);
 
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Infraction SET revoked = 1 WHERE id = ?");
-
-            List<Integer> keys = infractionList.stream().map(infractionModel -> infractionModel.id).collect(Collectors.toList());
-            for (Integer key : keys) {
-                preparedStatement.setInt(1, key);
-                preparedStatement.addBatch();
-            }
-            preparedStatement.executeBatch();
-            connection.commit();
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to write to database");
-        }
+        executeUpdateBatch("UPDATE Infraction SET revoked = 1 WHERE id = ?;", ids);
     }
 }

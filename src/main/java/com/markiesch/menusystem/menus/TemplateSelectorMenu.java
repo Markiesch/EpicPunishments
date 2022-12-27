@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
@@ -25,7 +26,7 @@ import static java.util.Locale.ROOT;
 
 public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
     private static final byte SLOTS = 54;
-    private static final int[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+    private static final byte[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
 
     private static final byte NEW_TEMPLATE_SLOT = 52;
     private static final byte BACK_SLOT = 49;
@@ -49,8 +50,8 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    public String getRequiredPermission() {
-        return "epicpunishments.templates";
+    public Permission getRequiredPermission() {
+        return Permission.MANAGE_TEMPLATES;
     }
 
     @Override

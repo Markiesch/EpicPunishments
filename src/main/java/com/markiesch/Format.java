@@ -35,7 +35,7 @@ public enum Format {
         );
     }
 
-    private String getString(String reason, String duration, String issuer) {
+    private @NotNull String getString(String reason, String duration, String issuer) {
         EpicPunishments plugin = EpicPunishments.getInstance();
 
         String configValue = plugin.getConfig().isString(configPath) ?

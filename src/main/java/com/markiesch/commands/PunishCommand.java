@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.menusystem.menus.PlayerSelectorMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,7 +15,7 @@ public class PunishCommand extends CommandBase {
     public PunishCommand(EpicPunishments plugin) {
         super(
             "punish",
-            "epicpunishments.punish",
+                Permission.MANAGE_PLAYERS,
             "§7Usage: §e/punish (target)",
             0,
             -1,

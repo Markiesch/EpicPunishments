@@ -1,6 +1,7 @@
 package com.markiesch.commands;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.Permission;
 import com.markiesch.menusystem.menus.TemplateSelectorMenu;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,7 +15,7 @@ public class TemplatesCommand extends CommandBase {
     public TemplatesCommand(EpicPunishments plugin) {
         super(
                 "templates",
-                "epicpunishments.templates",
+                Permission.MANAGE_TEMPLATES,
                 "§7Usage: §e/templates",
                 0,
                 -1,
@@ -25,7 +26,7 @@ public class TemplatesCommand extends CommandBase {
 
     @Override
     protected boolean onCommand(CommandSender sender, String[] args) {
-        Player player = (Player)sender;
+        Player player = (Player) sender;
 
         new TemplateSelectorMenu(plugin, player.getUniqueId());
         return true;
