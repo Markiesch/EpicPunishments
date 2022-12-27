@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,19 +19,16 @@ public abstract class SqlController<T> {
 
         Storage storage = Storage.getInstance();
 
-        try {
-            Connection connection = storage.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
+        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
             if (parameters != null) {
                 addParameters(preparedStatement, parameters);
             }
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                T model = resultSetToModel(resultSet);
-                result.add(model);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    T model = resultSetToModel(resultSet);
+                    result.add(model);
+                }
             }
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to read from database");
@@ -44,10 +40,7 @@ public abstract class SqlController<T> {
     protected int executeUpdate(@Language("SQLite") String query, Object[] parameters) {
         Storage storage = Storage.getInstance();
 
-        try {
-            Connection connection = storage.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
+        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
             addParameters(preparedStatement, parameters);
 
             return preparedStatement.executeUpdate();
@@ -61,10 +54,7 @@ public abstract class SqlController<T> {
     protected void executeUpdateBatch(@Language("SQLite") String query, Object[][] batches) {
         Storage storage = Storage.getInstance();
 
-        try {
-            Connection connection = storage.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-
+        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
             for (Object[] parameters : batches) {
                 addParameters(preparedStatement, parameters);
             }

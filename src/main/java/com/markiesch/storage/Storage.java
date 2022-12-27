@@ -11,7 +11,8 @@ public class Storage {
     private Connection connection;
     private File file;
 
-    private Storage() {}
+    private Storage() {
+    }
 
     private static class StorageHolder {
         static final Storage INSTANCE = new Storage();
@@ -40,6 +41,7 @@ public class Storage {
 
     /**
      * Executes an update query to the (local) database
+     *
      * @param query The query that needs to be executed
      */
     private void executeUpdate(Query query) {
@@ -83,10 +85,9 @@ public class Storage {
     }
 
     public Integer getLastInsertedId() {
-        try {
-            PreparedStatement preparedStatement = getConnection().prepareStatement("SELECT last_insert_rowid();");
-            ResultSet resultSet = preparedStatement.executeQuery();
-
+        try (PreparedStatement preparedStatement = getConnection().prepareStatement("SELECT last_insert_rowid();");
+             ResultSet resultSet = preparedStatement.executeQuery()
+        ) {
             if (!resultSet.next()) {
                 Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
                 return null;
