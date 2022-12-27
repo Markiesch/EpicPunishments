@@ -10,6 +10,6 @@ public class LangConfig extends Config {
 
     @Override
     protected String getResource() {
-        return "en_US.yml";
+        return "locale/en_US.yml";
     }
 }
