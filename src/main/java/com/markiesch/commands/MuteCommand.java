@@ -1,22 +1,18 @@
 package com.markiesch.commands;
 
-import com.markiesch.locale.Translation;
+import com.markiesch.Permission;
 import com.markiesch.modules.infraction.InfractionType;
-import com.markiesch.modules.infraction.PreparedInfraction;
-import com.markiesch.modules.profile.ProfileManager;
-import com.markiesch.modules.profile.ProfileModel;
+import com.markiesch.modules.infraction.InfractionUtils;
 import com.markiesch.utils.CommandUtils;
-import com.markiesch.utils.TimeUtils;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MuteCommand extends CommandBase {
     public MuteCommand() {
         super(
                 "mute",
-                "epicpunishments.mute",
+                Permission.EXECUTE_MUTE,
                 "§7Usage: §e/mute <target> <duration | permanent> (reason)",
                 2,
                 -1,
@@ -26,25 +22,7 @@ public class MuteCommand extends CommandBase {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        final ProfileModel profileModel = ProfileManager.getInstance().getPlayer(args[0]);
-
-        if (profileModel == null) {
-            sender.sendMessage(Translation.COMMAND_PLAYER_NOT_FOUND.addPlaceholder("name", args[0]).toString());
-            return true;
-        }
-
-        long duration = TimeUtils.parseTime(args[1]);
-        List<String> arguments = Arrays.asList(args);
-        String reason = String.join(" ", arguments.subList(2, arguments.size()));
-
-        new PreparedInfraction(
-                InfractionType.MUTE,
-                sender,
-                profileModel,
-                reason,
-                duration
-        ).execute();
-
+        InfractionUtils.commandToInfraction(sender, args, InfractionType.MUTE);
         return true;
     }
 

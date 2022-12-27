@@ -1,5 +1,6 @@
 package com.markiesch.commands;
 
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
@@ -15,11 +16,12 @@ public class UnbanCommand extends CommandBase {
 
     public UnbanCommand() {
         super("unban",
-                "epicpunishments.unban",
+                Permission.REVOKE_BAN,
                 "§7Usage: §e/unban <target>",
                 1,
                 -1,
-                false);
+                false
+        );
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.markiesch.commands;
 
+import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -21,14 +22,14 @@ public abstract class CommandBase extends BukkitCommand {
 
     public CommandBase(
             String command,
-            String permission,
+            Permission permission,
             String usage,
             int minArgs,
             int maxArgs,
             boolean playerOnly
     ) {
         super(command);
-        this.setPermission(permission);
+        this.setPermission(permission.getNode());
         this.setUsage(usage);
         this.minArgs = minArgs;
         this.maxArgs = maxArgs;
