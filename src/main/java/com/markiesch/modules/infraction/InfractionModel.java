@@ -55,6 +55,13 @@ public class InfractionModel {
         return duration;
     }
 
+    public long getTimeLeft() {
+        if (duration == 0L) return 0L;
+
+        long currentUnixTime = System.currentTimeMillis() / 1000L;
+        return date + duration - currentUnixTime;
+    }
+
     public String getReason() {
         return reason;
     }
