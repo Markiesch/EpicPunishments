@@ -21,10 +21,10 @@ command:
 event:
     # [target] shows the username of the command issuer
     # [command] shows the command input
-    command_spy: '&cCSpy &7[target]: [command]'
+    command_spy: '&c&lCmdSpy &e[target]&7: [command]'
     # [target] shows the username of the user that placed down the sign
     # [content] shows the sign content
-    sign_spy: '&cSignSpy &7[target]: [content]'
+    sign_spy: '&c&lSignSpy &e[target]&7: [content]'
 
     kick:
         success: '&7Successfully kicked &e[victim_name]'
