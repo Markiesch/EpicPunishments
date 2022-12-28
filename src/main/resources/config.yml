@@ -6,7 +6,7 @@ formats:
         - '&7Find out more:&f www.example.com'
     temporarily_muted:
         - '&c———————————————————————————'
-        - '&c&lHey! &cYou are still muted for [duration]!'
+        - '&c&lHey! &cYou are still muted for [time_left]!'
         - '&7Reason: &c[reason]'
         - '&7Find out more here:&c www.example.com/faq#muted'
         - '&c———————————————————————————'
@@ -17,7 +17,7 @@ formats:
         - '&7Find out more here:&c www.example.com/faq#muted'
         - '&c———————————————————————————'
     temporarily_banned:
-        - "&cYou are temporarily banned for &f[duration]&c from this server!"
+        - "&cYou are temporarily banned for &f[time_left]&c from this server!"
         - ''
         - '&7Reason: &f[reason]'
         - '&7Find out more:&e&n www.example.com'
