@@ -4,10 +4,10 @@ import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,12 +18,12 @@ public class PlayerMenu extends Menu implements Listener {
     private static final byte INFRACTIONS_BUTTON_SLOT = 23;
     private static final byte BACK_BUTTON_SLOT = 40;
 
-    public OfflinePlayer target;
+    public ProfileModel target;
 
     public PlayerMenu(EpicPunishments plugin, UUID uuid, UUID player) {
         super(plugin, uuid, 45);
 
-        target = Bukkit.getOfflinePlayer(player);
+        target = ProfileManager.getInstance().getPlayer(player);
         open();
     }
 
@@ -49,14 +49,14 @@ public class PlayerMenu extends Menu implements Listener {
                 Translation.MENU_PLAYER_PUNISH_TITLE.toString(),
                 Translation.MENU_PLAYER_PUNISH_LORE.addPlaceholder("name", target.getName()).toList()
         );
-        setButton(PUNISH_BUTTON_SLOT, punishButton, event -> new PunishMenu(plugin, uuid, target.getUniqueId()));
+        setButton(PUNISH_BUTTON_SLOT, punishButton, event -> new PunishMenu(plugin, uuid, target.uuid));
 
         ItemStack infractions = ItemUtils.createItem(
                 Material.FLOWER_BANNER_PATTERN,
                 Translation.MENU_PLAYER_INFRACTIONS_TITLE.toString(),
                 Translation.MENU_PLAYER_INFRACTIONS_LORE.addPlaceholder("name", target.getName()).toList()
         );
-        setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new InfractionsMenu(plugin, uuid, target.getUniqueId()));
+        setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new InfractionsMenu(plugin, uuid, target.uuid));
 
         ItemStack back = ItemUtils.createItem(
                 Material.OAK_SIGN,

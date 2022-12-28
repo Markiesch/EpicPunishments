@@ -7,11 +7,11 @@ import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.modules.infraction.InfractionList;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionModel;
+import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.profile.ProfileModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,17 +21,19 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
-    private final OfflinePlayer target;
+    private final static byte[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
     private final static byte BACK_BUTTON_SLOT = 49;
 
-    private final static byte[] SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-    private final InfractionList models;
+    private final ProfileModel target;
+    private InfractionList models;
 
-    public InfractionsMenu(EpicPunishments plugin, UUID uuid, UUID target) {
+    public InfractionsMenu(EpicPunishments plugin, UUID uuid, UUID targetUUID) {
         super(plugin, uuid, 54, SLOTS);
 
-        this.target = Bukkit.getOfflinePlayer(target);
-        models = InfractionManager.getInstance().getPlayer(this.target.getUniqueId());
+        target = ProfileManager.getInstance().getPlayer(targetUUID);
+        if (target == null) return;
+
+        models = InfractionManager.getInstance().getPlayer(target.uuid);
         open();
     }
 
@@ -82,6 +84,6 @@ public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
         super.setMenuItems();
 
         ItemStack backButton = ItemUtils.createItem(Material.OAK_SIGN, Translation.MENU_BACK_BUTTON_TITLE.toString(), Translation.MENU_BACK_BUTTON_LORE.toList());
-        setButton(BACK_BUTTON_SLOT, backButton, event -> new PlayerMenu(plugin, uuid, target.getUniqueId()));
+        setButton(BACK_BUTTON_SLOT, backButton, event -> new PlayerMenu(plugin, uuid, target.uuid));
     }
 }
