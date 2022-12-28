@@ -23,7 +23,8 @@ public enum Format {
         return getString(
                 infractionModel.getReason(),
                 infractionModel.getFormattedDuration(),
-                infractionModel.getIssuer()
+                infractionModel.getIssuer(),
+                TimeUtils.makeReadable(infractionModel.getTimeLeft())
         );
     }
 
@@ -31,11 +32,12 @@ public enum Format {
         return getString(
                 infractionModel.reason,
                 TimeUtils.makeReadable(infractionModel.duration),
-                infractionModel.issuer.getName()
+                infractionModel.issuer.getName(),
+                TimeUtils.makeReadable(infractionModel.duration)
         );
     }
 
-    private @NotNull String getString(String reason, String duration, String issuer) {
+    private @NotNull String getString(String reason, String duration, String issuer, String timeLeft) {
         EpicPunishments plugin = EpicPunishments.getInstance();
 
         String configValue = plugin.getConfig().isString(configPath) ?
@@ -47,6 +49,7 @@ public enum Format {
         return ChatColor.translateAlternateColorCodes('&', configValue
                 .replace("[reason]", reason)
                 .replace("[duration]", duration)
+                .replace("[time_left]", timeLeft)
                 .replace("[issuer]", issuer));
     }
 }
