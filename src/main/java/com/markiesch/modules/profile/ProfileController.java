@@ -13,8 +13,7 @@ public class ProfileController extends SqlController<ProfileModel> {
         return new ProfileModel(
                 UUID.fromString(resultSet.getString("uuid")),
                 resultSet.getString("name"),
-                resultSet.getString("ip"),
-                resultSet.getString("textureURL")
+                resultSet.getString("ip")
         );
     }
 

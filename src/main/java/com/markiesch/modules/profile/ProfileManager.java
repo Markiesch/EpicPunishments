@@ -25,7 +25,7 @@ public class ProfileManager {
         boolean success = profileController.createProfile(uuid, name, hostAddress);
         if (!success) return false;
 
-        profileModelMap.put(uuid, new ProfileModel(uuid, name, hostAddress, null));
+        profileModelMap.put(uuid, new ProfileModel(uuid, name, hostAddress));
         return true;
     }
 
