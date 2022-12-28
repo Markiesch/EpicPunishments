@@ -1,23 +1,29 @@
 package com.markiesch.listeners;
 
+import com.markiesch.Permission;
+import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CommandSpy implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public boolean onPreCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (player.hasPermission("epicpunishments.spy.command.bypass")) return true;
+        if (player.hasPermission(Permission.SPY_COMMAND_BYPASS.getNode())) return true;
 
-        String message = event.getMessage();
-
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (onlinePlayer.equals(player) || !onlinePlayer.hasPermission("epicpunishments.spy.command")) continue;
-            onlinePlayer.sendMessage("§cCSpy §7" + player.getDisplayName() + ": " + message);
-        }
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(onlinePlayer -> onlinePlayer.hasPermission(Permission.SPY_COMMAND_NOTIFY.getNode()))
+                .forEach(onlineStaff -> {
+                    onlineStaff.sendMessage(Translation.EVENT_COMMAND_SPY
+                            .addPlaceholder("target", player.getName())
+                            .addPlaceholder("command", event.getMessage())
+                            .toString());
+                });
         return true;
     }
 }

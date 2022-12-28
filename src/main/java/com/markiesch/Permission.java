@@ -16,6 +16,12 @@ public enum Permission {
 
     MANAGE_PLAYERS("manage.players"),
     MANAGE_TEMPLATES("manage.templates"),
+
+    SPY_COMMAND_BYPASS("spy.command.bypass"),
+    SPY_COMMAND_NOTIFY("spy.command.notify"),
+
+    SPY_SIGN_BYPASS("spy.sign.bypass"),
+    SPY_SIGN_NOTIFY("spy.sign.notify")
     ;
 
     private static final String prefix = "epicpunishments.";
