@@ -6,11 +6,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public final class CommandUtils {
-    public static List<String> getAllOfflinePlayerNames() {
-        return ProfileManager.getInstance().getPlayers().stream().map(ProfileModel::getName).collect(Collectors.toList());
+    public static List<String> getAllOfflinePlayerNames(String filter) {
+        return ProfileManager.getInstance()
+                .getPlayers()
+                .stream()
+                .map(ProfileModel::getName)
+                .filter(name -> name.toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
     }
 
     public static List<String> getAllOnlinePlayerNames() {

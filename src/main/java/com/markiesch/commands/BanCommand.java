@@ -28,7 +28,7 @@ public class BanCommand extends CommandBase {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String alias, String[] args) {
-        if (args.length == 1) return CommandUtils.getAllOfflinePlayerNames();
+        if (args.length == 1) return CommandUtils.getAllOfflinePlayerNames(args[0]);
         if (args.length == 2) return CommandUtils.getTimeOptions(args[1]);
         else return List.of("reason");
     }

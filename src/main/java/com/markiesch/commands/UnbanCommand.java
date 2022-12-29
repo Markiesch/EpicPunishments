@@ -7,6 +7,7 @@ import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.infraction.InfractionType;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
+import com.markiesch.utils.CommandUtils;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class UnbanCommand extends CommandBase {
 
     @Override
     protected List<String> onTabComplete(CommandSender sender, String alias, String[] args) {
+        if (args.length == 1) return CommandUtils.getAllOfflinePlayerNames(args[0]);
         return new ArrayList<>();
     }
 }
