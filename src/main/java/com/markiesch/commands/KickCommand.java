@@ -28,7 +28,7 @@ public class KickCommand extends CommandBase {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String alias, String[] args) {
-        if (args.length == 1) return CommandUtils.getAllOnlinePlayerNames();
+        if (args.length == 1) return CommandUtils.getAllOnlinePlayerNames(args[0]);
         else return List.of("reason");
     }
 }

@@ -19,8 +19,12 @@ public final class CommandUtils {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> getAllOnlinePlayerNames() {
-        return Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+    public static List<String> getAllOnlinePlayerNames(String filter) {
+        return Bukkit.getOnlinePlayers()
+                .stream()
+                .map(Player::getName)
+                .filter(name -> name.toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
     }
 
     public static List<String> getTimeOptions(String input) {
