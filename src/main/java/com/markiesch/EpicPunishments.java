@@ -14,11 +14,13 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     private static final int pluginId = 17132;
 
     private static LangConfig langConfig;
+
     public static LangConfig getLangConfig() {
         return langConfig;
     }
 
     private static EpicPunishments instance;
+
     public static EpicPunishments getInstance() {
         return instance;
     }
@@ -36,14 +38,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         InfractionManager.getInstance().initialize();
         ProfileManager.getInstance().initialize();
 
-        // Initialize listeners
-        getServer().getPluginManager().registerEvents(new CommandSpy(), this);
-        getServer().getPluginManager().registerEvents(new SignSpy(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
-
-        // Initialize commands
+        registerListeners();
         registerCommands();
 
         getServer().getConsoleSender().sendMessage("§aEpicPunishments is now enabled");
@@ -65,5 +60,17 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
         new PunishCommand(this);
         new TemplatesCommand(this);
+    }
+
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        getServer().getPluginManager().registerEvents(new MenuListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+
+        final boolean commandSpyIsEnabled = getConfig().getBoolean("modules.command_spy");
+        final boolean signSpyIsEnabled = getConfig().getBoolean("modules.sign_spy");
+
+        if (commandSpyIsEnabled) getServer().getPluginManager().registerEvents(new CommandSpy(), this);
+        if (signSpyIsEnabled) getServer().getPluginManager().registerEvents(new SignSpy(), this);
     }
 }

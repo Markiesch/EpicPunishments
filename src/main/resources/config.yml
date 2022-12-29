@@ -1,28 +1,35 @@
+# Disabling/enabling modules requires you to restart your whole server, this makes sure all events are (un)registered correctly
+modules:
+    sign_spy: true
+    command_spy: true
+
 formats:
     kick:
-        - '&cYou have been kicked!'
-        - ''
-        - '&7Reason: &f[reason]'
-        - '&7Find out more:&f www.example.com'
+        - "&cYou have been kicked!"
+        - ""
+        - "&7Reason: &f[reason]"
+        - "&7Find out more:&f www.example.com"
     temporarily_muted:
-        - '&c———————————————————————————'
-        - '&c&lHey! &cYou are still muted for [time_left]!'
-        - '&7Reason: &c[reason]'
-        - '&7Find out more here:&c www.example.com/faq#muted'
-        - '&c———————————————————————————'
+        - "&c———————————————————————————"
+        - "&c&lHey! &cYou are still muted for [time_left]!"
+        - "&7Reason: &c[reason]"
+        - "&7Find out more here:&c www.example.com/faq#muted"
+        - "&c———————————————————————————"
     permanently_muted:
         - "&c———————————————————————————"
-        - '&c&lHey! &cYou are currently muted!'
-        - '&7Reason: &c[reason]'
-        - '&7Find out more here:&c www.example.com/faq#muted'
-        - '&c———————————————————————————'
+        - "&c&lHey! &cYou are currently muted!"
+        - "&7Reason: &c[reason]"
+        - "&7Find out more here:&c www.example.com/faq#muted"
+        - "&c———————————————————————————"
     temporarily_banned:
         - "&cYou are temporarily banned for &f[time_left]&c from this server!"
-        - ''
-        - '&7Reason: &f[reason]'
-        - '&7Find out more:&e&n www.example.com'
+        - ""
+        - "&7Reason: &f[reason]"
+        - "&7Find out more:&e&n www.example.com"
     permanently_banned:
         - "&cYou are permanently banned from this server!"
-        - ''
-        - '&7Reason: &f[reason]'
-        - '&7Find out more:&e&n www.example.com'
+        - ""
+        - "&7Reason: &f[reason]"
+        - "&7Find out more:&e&n www.example.com"
+
+# | config generated at version ${project.version}
