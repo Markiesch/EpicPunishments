@@ -2,13 +2,16 @@ package com.markiesch.storage;
 
 import org.bukkit.Bukkit;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class SqlController<T> {
 
@@ -70,5 +73,15 @@ public abstract class SqlController<T> {
             preparedStatement.setObject(i + 1, parameters[i]);
         }
         preparedStatement.addBatch();
+    }
+
+    protected static byte[] uuidToBytes(final @NotNull UUID uuid) {
+        return ByteBuffer.allocate(16).putLong(uuid.getMostSignificantBits()).putLong(uuid.getLeastSignificantBits()).array();
+    }
+
+    protected static UUID uuidFromBytes(final byte[] bytes) {
+        if (bytes.length < 2) { throw new IllegalArgumentException("Byte array too small."); }
+        final ByteBuffer bb = ByteBuffer.wrap(bytes);
+        return new UUID(bb.getLong(), bb.getLong());
     }
 }

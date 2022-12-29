@@ -2,7 +2,6 @@ package com.markiesch.modules.infraction;
 
 import com.markiesch.storage.SqlController;
 import com.markiesch.storage.Storage;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
@@ -21,8 +20,8 @@ public class InfractionController extends SqlController<InfractionModel> {
         return new InfractionModel(
                 resultSet.getInt("id"),
                 InfractionType.valueOf(resultSet.getString("type")),
-                UUID.fromString(resultSet.getString("victim")),
-                resultSet.getString("issuer") == null ? null : UUID.fromString(resultSet.getString("issuer")),
+                uuidFromBytes(resultSet.getBytes("victim")),
+                resultSet.getBytes("issuer") == null ? null : uuidFromBytes(resultSet.getBytes("issuer")),
                 resultSet.getString("reason"),
                 resultSet.getInt("duration"),
                 resultSet.getInt("date"),
@@ -32,8 +31,8 @@ public class InfractionController extends SqlController<InfractionModel> {
 
     public @Nullable InfractionModel create(PreparedInfraction preparedInfraction) {
         Object[] parameters = {
-                preparedInfraction.victimProfile.uuid.toString(),
-                preparedInfraction.issuer == null ? null : ((Player) preparedInfraction.issuer).getUniqueId().toString(),
+                uuidToBytes(preparedInfraction.victimProfile.uuid),
+                preparedInfraction.getIssuerUUID() == null ? null : uuidToBytes(preparedInfraction.getIssuerUUID()),
                 preparedInfraction.type.name(),
                 preparedInfraction.reason,
                 preparedInfraction.duration,

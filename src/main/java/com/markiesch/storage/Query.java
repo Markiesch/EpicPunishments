@@ -6,8 +6,8 @@ public enum Query {
     CREATE_INFRACTION_TABLE(
             "CREATE TABLE IF NOT EXISTS Infraction (" +
                 "[id]           INTEGER                 PRIMARY KEY        AUTOINCREMENT," +
-                "[victim]       VARCHAR(36)             NOT NULL," +
-                "[issuer]       VARCHAR(36)," +
+                "[victim]       BINARY(16)             NOT NULL," +
+                "[issuer]       BINARY(16)," +
                 "[type]         VARCHAR(10)," +
                 "[reason]       VARCHAR(100)," +
                 "[duration]     INTEGER," +
@@ -17,7 +17,7 @@ public enum Query {
     ),
     CREATE_PLAYER_TABLE(
             "CREATE TABLE IF NOT EXISTS Profile (" +
-                "[UUID]         VARCHAR(36)     NOT NULL    PRIMARY KEY," +
+                "[UUID]         BINARY(16)     NOT NULL    PRIMARY KEY," +
                 "[ip]           VARCHAR(39)     NOT NULL," +
                 "[name]         VARCHAR(16)     NOT NULL" +
             ");"

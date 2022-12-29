@@ -11,7 +11,7 @@ public class ProfileController extends SqlController<ProfileModel> {
     @Override
     protected ProfileModel resultSetToModel(ResultSet resultSet) throws SQLException {
         return new ProfileModel(
-                UUID.fromString(resultSet.getString("uuid")),
+                uuidFromBytes(resultSet.getBytes("uuid")),
                 resultSet.getString("name"),
                 resultSet.getString("ip")
         );
@@ -26,7 +26,7 @@ public class ProfileController extends SqlController<ProfileModel> {
                         "ON CONFLICT(UUID) " +
                         "DO UPDATE SET ip = ?; " +
                         "SELECT changes();",
-                new Object[]{uuid.toString(), ip, name, ip}) == 1;
+                new Object[]{uuidToBytes(uuid), ip, name, ip}) == 1;
     }
 
     public List<ProfileModel> getProfiles() {

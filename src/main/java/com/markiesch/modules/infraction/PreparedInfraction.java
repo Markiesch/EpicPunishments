@@ -96,7 +96,7 @@ public class PreparedInfraction {
                 false);
     }
 
-    private @Nullable UUID getIssuerUUID() {
+    public @Nullable UUID getIssuerUUID() {
         return issuer instanceof OfflinePlayer ? ((Player) issuer).getUniqueId() : null;
     }
 

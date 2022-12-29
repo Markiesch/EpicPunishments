@@ -11,22 +11,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
-    private static final int pluginId = 17132;
+    private static final int BSTATS_PLUGIN_ID = 17132;
 
     private static LangConfig langConfig;
+    private static EpicPunishments instance;
 
     public static LangConfig getLangConfig() {
         return langConfig;
     }
-
-    private static EpicPunishments instance;
 
     public static EpicPunishments getInstance() {
         return instance;
     }
 
     public void onEnable() {
-        new Metrics(this, pluginId);
+        new Metrics(this, BSTATS_PLUGIN_ID);
 
         // Initialize config
         instance = this;
