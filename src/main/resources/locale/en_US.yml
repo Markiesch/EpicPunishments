@@ -51,7 +51,7 @@ menu:
             lore:
                 - '&7Click to close menu'
     players:
-        title: 'Overview > Punish'
+        title: 'Players'
         filter_button:
             title: '&b&lVisibility'
             lore:

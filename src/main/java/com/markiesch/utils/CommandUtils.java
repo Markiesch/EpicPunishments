@@ -40,6 +40,7 @@ public final class CommandUtils {
                 input.contains("s") ? input : input + "30s",
                 input.contains("m") ? input : input + "15m",
                 input.contains("d") ? input : input + "5d",
-                input.contains("y") ? input : input + "1y");
+                input.contains("y") ? input : input + "1y",
+                "Permanent");
     }
 }
