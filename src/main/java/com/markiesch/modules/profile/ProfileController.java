@@ -24,9 +24,9 @@ public class ProfileController extends SqlController<ProfileModel> {
         return executeUpdate("INSERT OR REPLACE INTO Profile (UUID, ip, name) " +
                         "VALUES(?, ?, ?) " +
                         "ON CONFLICT(UUID) " +
-                        "DO UPDATE SET ip = ?; " +
+                        "DO UPDATE SET ip = ?, name = ?; " +
                         "SELECT changes();",
-                new Object[]{uuidToBytes(uuid), ip, name, ip}) == 1;
+                new Object[]{uuidToBytes(uuid), ip, name, ip, name}) == 1;
     }
 
     public List<ProfileModel> getProfiles() {
