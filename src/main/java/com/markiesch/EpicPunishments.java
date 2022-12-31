@@ -59,6 +59,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
         new PunishCommand(this);
         new TemplatesCommand(this);
+        new RandomPlayerCommand();
     }
 
     private void registerListeners() {

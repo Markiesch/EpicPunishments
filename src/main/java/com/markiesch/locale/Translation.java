@@ -28,6 +28,9 @@ public enum Translation {
     COMMAND_UNMUTE_NOT_MUTED("command.unmute.not_muted"),
     COMMAND_UNMUTE_SUCCESS("command.unmute.success"),
 
+    COMMAND_RANDOM_PLAYER_NO_PLAYERS("command.random_player.no_players"),
+    COMMAND_RANDOM_PLAYER_SUCCESS("command.random_player.success"),
+
     EVENT_COMMAND_SPY("event.command_spy"),
     EVENT_SIGN_SPY("event.sign_spy"),
 

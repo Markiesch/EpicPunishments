@@ -17,6 +17,9 @@ command:
     unmute:
         not_muted: '&e[victim_name] &7is not muted'
         success: '&7Successfully unmuted &e[victim_name]'
+    random_player:
+        no_players: '&cThere are no players online you can teleport to'
+        success: '&7Teleported to &e[target]'
 
 event:
     # [target] shows the username of the command issuer
