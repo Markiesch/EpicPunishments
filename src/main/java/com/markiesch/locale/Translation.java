@@ -33,6 +33,7 @@ public enum Translation {
 
     EVENT_COMMAND_SPY("event.command_spy"),
     EVENT_SIGN_SPY("event.sign_spy"),
+    EVENT_NEW_NAME_SPY("event.new_name_spy"),
 
     EVENT_KICK_SUCCESS("event.kick.success"),
     EVENT_KICK_OFFLINE("event.kick.offline"),

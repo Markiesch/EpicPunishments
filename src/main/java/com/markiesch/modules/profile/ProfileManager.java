@@ -29,7 +29,6 @@ public class ProfileManager {
         return true;
     }
 
-
     private static class ProfileManagerHolder {
         public static final ProfileManager INSTANCE = new ProfileManager();
     }
@@ -51,7 +50,6 @@ public class ProfileManager {
                 .map(Map.Entry::getValue)
                 .orElse(null);
     }
-
 
     public List<ProfileModel> getPlayers() {
         return new ArrayList<>(profileModelMap.values());
