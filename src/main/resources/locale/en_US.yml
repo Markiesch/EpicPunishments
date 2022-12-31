@@ -28,7 +28,7 @@ event:
     # [target] shows the username of the user that placed down the sign
     # [content] shows the sign content
     sign_spy: '&c&lSignSpy &e[target]&7: [content]'
-    new_name_spy: '&7Player with the name &c[old_name] &7joined under a new name: &e[new_name]'
+    new_name_spy: '&7A player previously joined under the name &c[old_name] &7joined under a new name: &e[new_name]'
 
     kick:
         success: '&7Successfully kicked &e[victim_name]'
