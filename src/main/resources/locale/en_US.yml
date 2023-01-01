@@ -20,6 +20,9 @@ command:
     random_player:
         no_players: '&cThere are no players online you can teleport to'
         success: '&7Teleported to &e[target]'
+    clear_chat:
+        success: '&7The chat has been&a successfully &7cleared'
+        broadcast: '&7The chat was cleared by &e[issuer]'
 
 event:
     # [target] shows the username of the command issuer

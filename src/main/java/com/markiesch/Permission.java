@@ -26,7 +26,11 @@ public enum Permission {
     SPY_NEW_NAME_NOTIFY("spy.new_name.notify"),
 
     RANDOM_PLAYER("randomplayer"),
-    RANDOM_PLAYER_EXEMPT("randomplayer.exempt");
+    RANDOM_PLAYER_EXEMPT("randomplayer.exempt"),
+
+    CLEAR_CHAT_EXECUTE("clear_chat.execute"),
+    CLEAR_CHAT_BYPASS("clear_chat.bypass"),
+    ;
 
     private static final String prefix = "epicpunishments.";
     private final String node;
