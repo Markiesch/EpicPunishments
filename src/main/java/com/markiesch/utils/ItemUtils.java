@@ -1,9 +1,11 @@
 package com.markiesch.utils;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,5 +39,15 @@ public class ItemUtils {
         }
 
         return item;
+    }
+
+    public static void setSkullOwner(ItemStack item, OfflinePlayer owner) {
+        if (item.getType() != Material.PLAYER_HEAD) return;
+
+        SkullMeta playerMeta = (SkullMeta) item.getItemMeta();
+        if (playerMeta != null) {
+            playerMeta.setOwningPlayer(owner);
+            item.setItemMeta(playerMeta);
+        }
     }
 }
