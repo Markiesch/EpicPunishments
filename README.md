@@ -1,6 +1,6 @@
-<div align="center">
+<div style="text-align: center">
     <a>
-        <img src="assets/logo.png" alt="Logo" width="80" height="80" />
+        <img src="assets/logo-100.png" alt="Logo" width="100" height="100" />
     </a>
     <h1>Epic Punishments</h1>
     <p>Punish evil players through an easy to use GUI</p>
