@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum Translation {
+    // Words
     WORD_ONLINE("word.online"),
     WORD_OFFLINE("word.offline"),
     WORD_ALL("word.all"),
@@ -18,43 +19,37 @@ public enum Translation {
     WORD_EXPIRED("word.expired"),
     WORD_REVOKED("word.revoked"),
 
+    // Commands
     COMMAND_NO_PERMISSION("command.no_permission"),
     COMMAND_PLAYER_ONLY("command.player_only"),
     COMMAND_PLAYER_NOT_FOUND("command.player_not_found"),
-
     COMMAND_UNBAN_NOT_BANNED("command.unban.not_banned"),
     COMMAND_UNBAN_SUCCESS("command.unban.success"),
-
     COMMAND_UNMUTE_NOT_MUTED("command.unmute.not_muted"),
     COMMAND_UNMUTE_SUCCESS("command.unmute.success"),
-
     COMMAND_RANDOM_PLAYER_NO_PLAYERS("command.random_player.no_players"),
     COMMAND_RANDOM_PLAYER_SUCCESS("command.random_player.success"),
-
     COMMAND_CLEAR_CHAT_SUCCESS("command.clear_chat.success"),
     COMMAND_CLEAR_CHAT_BROADCAST("command.clear_chat.broadcast"),
 
+    // Events
     EVENT_COMMAND_SPY("event.command_spy"),
     EVENT_SIGN_SPY("event.sign_spy"),
     EVENT_NEW_NAME_SPY("event.new_name_spy"),
-
     EVENT_KICK_SUCCESS("event.kick.success"),
     EVENT_KICK_OFFLINE("event.kick.offline"),
-
     EVENT_MUTE_SUCCESS("event.mute.success"),
     EVENT_MUTE_ALREADY("event.mute.already"),
-
     EVENT_BAN_SUCCESS("event.ban.success"),
     EVENT_BAN_ALREADY("event.ban.already"),
 
+    // General menu
     PREVIOUS_PAGE("menu.general.previous"),
     NEXT_PAGE("menu.general.next"),
     VISIT_PAGE("menu.general.visit"),
     MENU_NO_PERMISSION("menu.general.no_permission"),
-
     MENU_BACK_BUTTON_TITLE("menu.general.back_button.title"),
     MENU_BACK_BUTTON_LORE("menu.general.back_button.lore"),
-
     MENU_CLOSE_BUTTON_TITLE("menu.general.close_button.title"),
     MENU_CLOSE_BUTTON_LORE("menu.general.close_button.lore"),
 
@@ -76,13 +71,10 @@ public enum Translation {
     // Player menu
     MENU_PLAYER_TITLE("menu.player.title"),
     MENU_PLAYER_NOT_FOUND("menu.player.not_found"),
-
     MENU_PLAYER_TELEPORT_TITLE("menu.player.teleport_button.title"),
     MENU_PLAYER_TELEPORT_LORE("menu.player.teleport_button.lore"),
-
     MENU_PLAYER_PUNISH_TITLE("menu.player.punish_button.title"),
     MENU_PLAYER_PUNISH_LORE("menu.player.punish_button.lore"),
-
     MENU_PLAYER_INFRACTIONS_TITLE("menu.player.infractions_button.title"),
     MENU_PLAYER_INFRACTIONS_LORE("menu.player.infractions_button.lore"),
 
@@ -98,7 +90,6 @@ public enum Translation {
     MENU_PUNISH_BUTTON_DURATION_LORE("menu.punish.duration_button.lore"),
     MENU_PUNISH_INSERT_DURATION_TITLE("menu.punish.insert_duration.title"),
     MENU_PUNISH_INSERT_DURATION_SUBTITLE("menu.punish.insert_duration.subtitle"),
-
     MENU_PUNISH_BUTTON_TEMPLATE_TITLE("menu.punish.template_button.title"),
     MENU_PUNISH_BUTTON_TEMPLATE_LORE("menu.punish.template_button.lore"),
     MENU_PUNISH_BUTTON_CONFIRM_TITLE("menu.punish.confirm_button.title"),
@@ -114,57 +105,42 @@ public enum Translation {
     MENU_SELECT_TEMPLATE_BUTTON_TITLE("menu.select_template.template_button.title"),
     MENU_SELECT_TEMPLATE_BUTTON_LORE("menu.select_template.template_button.lore"),
 
-    // Template menu
+    // Templates menu
     MENU_TEMPLATES_TITLE("menu.templates.title"),
-
     MENU_TEMPLATES_FILTER_TITLE("menu.templates.filter_button.title"),
     MENU_TEMPLATES_FILTER_LORE("menu.templates.filter_button.lore"),
-
     MENU_TEMPLATES_SEARCH_TITLE("menu.templates.search_by_name.title"),
     MENU_TEMPLATES_SEARCH_SUBTITLE("menu.templates.search_by_name.subtitle"),
-
     MENU_TEMPLATES_CREATE_BUTTON_TITLE("menu.templates.create_button.title"),
     MENU_TEMPLATES_CREATE_BUTTON_LORE("menu.templates.create_button.lore"),
-
     MENU_TEMPLATES_TEMPLATE_BUTTON_TITLE("menu.templates.template_button.title"),
     MENU_TEMPLATES_TEMPLATE_BUTTON_LORE("menu.templates.template_button.lore"),
-
     MENU_TEMPLATES_EMPTY_TITLE("menu.templates.no_templates_item.title"),
     MENU_TEMPLATES_EMPTY_LORE("menu.templates.no_templates_item.lore"),
-
     MENU_TEMPLATES_CREATE_SUCCESS("menu.create_template.success"),
     MENU_TEMPLATES_CREATE_TITLE("menu.create_template.title"),
     MENU_TEMPLATES_CREATE_SUBTITLE("menu.create_template.subtitle"),
 
+    // Edit template menu
     MENU_EDIT_TEMPLATE_TITLE("menu.edit_template.title"),
-
     MENU_EDIT_TEMPLATE_CONFIRM_TITLE("menu.edit_template.confirm_button.title"),
     MENU_EDIT_TEMPLATE_CONFIRM_LORE("menu.edit_template.confirm_button.lore"),
-
     MENU_EDIT_TEMPLATE_NAME_BUTTON_TITLE("menu.edit_template.name_button.title"),
     MENU_EDIT_TEMPLATE_NAME_BUTTON_LORE("menu.edit_template.name_button.lore"),
-
     MENU_EDIT_TEMPLATE_TYPE_BUTTON_TITLE("menu.edit_template.type_button.title"),
     MENU_EDIT_TEMPLATE_TYPE_BUTTON_LORE("menu.edit_template.type_button.lore"),
-
     MENU_EDIT_TEMPLATE_TIME_BUTTON_TITLE("menu.edit_template.time_button.title"),
     MENU_EDIT_TEMPLATE_TIME_BUTTON_LORE("menu.edit_template.time_button.lore"),
-
     MENU_EDIT_TEMPLATE_REASON_BUTTON_TITLE("menu.edit_template.reason_button.title"),
     MENU_EDIT_TEMPLATE_REASON_BUTTON_LORE("menu.edit_template.reason_button.lore"),
-
     MENU_EDIT_TEMPLATE_INSERT_NAME_TITLE("menu.edit_template.insert_name.title"),
     MENU_EDIT_TEMPLATE_INSERT_NAME_SUBTITLE("menu.edit_template.insert_name.subtitle"),
-
     MENU_EDIT_TEMPLATE_INSERT_REASON_TITLE("menu.edit_template.insert_reason.title"),
     MENU_EDIT_TEMPLATE_INSERT_REASON_SUBTITLE("menu.edit_template.insert_reason.subtitle"),
-
     MENU_EDIT_TEMPLATE_INSERT_DURATION_TITLE("menu.edit_template.insert_duration.title"),
     MENU_EDIT_TEMPLATE_INSERT_DURATION_SUBTITLE("menu.edit_template.insert_duration.subtitle"),
     MENU_EDIT_TEMPLATE_INSERT_DURATION_INFO("menu.edit_template.insert_duration.info"),
-
     MENU_EDIT_TEMPLATE_SUCCESS("menu.edit_template.success");
-
 
     private final String path;
     private final Map<String, @Nullable Object> placeholders;
