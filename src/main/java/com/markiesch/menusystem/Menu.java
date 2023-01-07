@@ -1,6 +1,5 @@
 package com.markiesch.menusystem;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import org.bukkit.Bukkit;
@@ -9,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -18,11 +18,11 @@ import java.util.function.Consumer;
 public abstract class Menu implements InventoryHolder {
     private final HashMap<Integer, Consumer<InventoryClickEvent>> clickMap = new HashMap<>();
     protected final UUID uuid;
-    protected final EpicPunishments plugin;
+    protected final Plugin plugin;
     private final int slots;
     protected Inventory inventory;
 
-    public Menu(EpicPunishments plugin, UUID uuid, int slots) {
+    public Menu(Plugin plugin, UUID uuid, int slots) {
         this.plugin = plugin;
         this.uuid = uuid;
         this.slots = slots;

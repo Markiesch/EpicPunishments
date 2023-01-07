@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
@@ -13,6 +12,7 @@ import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
@@ -30,7 +30,7 @@ public class PunishMenu extends Menu {
     private long duration = 0L;
     private InfractionType type = InfractionType.KICK;
 
-    public PunishMenu(EpicPunishments plugin, UUID uuid, UUID target) {
+    public PunishMenu(Plugin plugin, UUID uuid, UUID target) {
         super(plugin, uuid, 45);
 
         this.target = ProfileManager.getInstance().getPlayer(target);

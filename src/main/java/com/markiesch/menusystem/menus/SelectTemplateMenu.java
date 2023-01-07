@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
@@ -11,6 +10,7 @@ import com.markiesch.utils.TimeUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     private final Consumer<TemplateModel> callback;
     private final List<TemplateModel> models;
 
-    public SelectTemplateMenu(EpicPunishments plugin, UUID uuid, Consumer<@Nullable TemplateModel> callback) {
+    public SelectTemplateMenu(Plugin plugin, UUID uuid, Consumer<@Nullable TemplateModel> callback) {
         super(plugin, uuid, SLOTS, ITEM_SLOTS);
 
         models = new TemplateController().readAll();

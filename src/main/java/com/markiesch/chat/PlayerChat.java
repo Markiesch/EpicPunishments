@@ -1,6 +1,5 @@
 package com.markiesch.chat;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.utils.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,11 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.Plugin;
 
 import java.util.function.Consumer;
 
 public class PlayerChat implements Listener {
-    private final EpicPunishments plugin;
+    private final Plugin plugin;
 
     private int taskId;
     private final String title;
@@ -20,7 +20,7 @@ public class PlayerChat implements Listener {
     private final Player player;
     private final Consumer<String> finishCallback;
 
-    public PlayerChat(EpicPunishments plugin, Player player, String title, String subtitle, Consumer<String> finishCallback) {
+    public PlayerChat(Plugin plugin, Player player, String title, String subtitle, Consumer<String> finishCallback) {
         this.plugin = plugin;
         this.title = title;
         this.subtitle = subtitle;

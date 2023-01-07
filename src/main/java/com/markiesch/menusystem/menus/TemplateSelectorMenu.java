@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
@@ -17,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +39,7 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
 
     private String filter = "";
 
-    public TemplateSelectorMenu(EpicPunishments plugin, UUID uuid) {
+    public TemplateSelectorMenu(Plugin plugin, UUID uuid) {
         super(plugin, uuid, SLOTS, ITEM_SLOTS);
         open();
     }

@@ -1,11 +1,11 @@
 package com.markiesch.menusystem;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.locale.Translation;
 import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +18,7 @@ public abstract class PaginatedModelMenu<T> extends Menu {
     protected boolean isEmpty = false;
     private int page = 0;
 
-    public PaginatedModelMenu(EpicPunishments plugin, UUID uuid, int slots, byte[] itemSlots) {
+    public PaginatedModelMenu(Plugin plugin, UUID uuid, int slots, byte[] itemSlots) {
         super(plugin, uuid, slots);
         this.itemSlots = itemSlots;
     }

@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
@@ -15,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +27,7 @@ public class InfractionsMenu extends PaginatedModelMenu<InfractionModel> {
     private final ProfileModel target;
     private InfractionList models;
 
-    public InfractionsMenu(EpicPunishments plugin, UUID uuid, UUID targetUUID) {
+    public InfractionsMenu(Plugin plugin, UUID uuid, UUID targetUUID) {
         super(plugin, uuid, 54, SLOTS);
 
         target = ProfileManager.getInstance().getPlayer(targetUUID);

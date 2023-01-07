@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
@@ -10,6 +9,7 @@ import com.markiesch.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ public class PlayerMenu extends Menu implements Listener {
 
     public ProfileModel target;
 
-    public PlayerMenu(EpicPunishments plugin, UUID uuid, UUID player) {
+    public PlayerMenu(Plugin plugin, UUID uuid, UUID player) {
         super(plugin, uuid, 45);
 
         target = ProfileManager.getInstance().getPlayer(player);

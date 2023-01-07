@@ -3,6 +3,9 @@ package com.markiesch;
 import org.jetbrains.annotations.NotNull;
 
 public enum Permission {
+    ADMIN_RELOAD("admin.reload"),
+    ADMIN_HELP("admin.help"),
+
     EXECUTE_BAN("ban.execute"),
     REVOKE_BAN("ban.revoke"),
     DELETE_BAN("ban.delete"),

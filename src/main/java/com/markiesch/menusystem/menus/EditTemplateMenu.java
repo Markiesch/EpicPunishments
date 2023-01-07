@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
@@ -11,6 +10,7 @@ import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ public class EditTemplateMenu extends Menu {
     private final TemplateController templateController;
     private final TemplateModel template;
 
-    public EditTemplateMenu(EpicPunishments plugin, UUID uuid, int id) {
+    public EditTemplateMenu(Plugin plugin, UUID uuid, int id) {
         super(plugin, uuid, SLOTS);
 
         templateController = new TemplateController();

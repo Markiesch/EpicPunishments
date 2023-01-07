@@ -1,6 +1,5 @@
 package com.markiesch.menusystem.menus;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
@@ -14,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private static final byte CLOSE_SLOT = 49;
     private static final byte FILTER_SLOT = 46;
 
-    public PlayerSelectorMenu(EpicPunishments plugin, UUID uuid) {
+    public PlayerSelectorMenu(Plugin plugin, UUID uuid) {
         super(
                 plugin,
                 uuid,
