@@ -63,6 +63,15 @@ menu:
             title: '&b&lVisibility'
             lore:
                 - '&7Click to show &e[next_filter] &7users'
+        name_filter_button:
+            title: '&b&lSearch players'
+            lore:
+                - '&7Click to search by name'
+                - ''
+                - '&7Current filter: &e[current_filter]'
+        search_players:
+            title: '&bFilter by name'
+            subtitle: '&7Type in a filter'
         templates_button:
             title: '&b&lTemplates'
             lore:

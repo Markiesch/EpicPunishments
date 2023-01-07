@@ -60,16 +60,16 @@ public enum Translation {
 
     // Players menu
     MENU_PLAYERS_TITLE("menu.players.title"),
-
     MENU_PLAYERS_TEMPLATES_BUTTON_TITLE("menu.players.templates_button.title"),
     MENU_PLAYERS_TEMPLATES_BUTTON_LORE("menu.players.templates_button.lore"),
-
     MENU_PLAYERS_BUTTON_FILTER_TITLE("menu.players.filter_button.title"),
     MENU_PLAYERS_BUTTON_FILTER_LORE("menu.players.filter_button.lore"),
-
+    MENU_PLAYERS_BUTTON_NAME_FILTER_TITLE("menu.players.name_filter_button.title"),
+    MENU_PLAYERS_BUTTON_NAME_FILTER_LORE("menu.players.name_filter_button.lore"),
+    MENU_PLAYERS_INSERT_NAME_FILTER_TITLE("menu.players.search_players.title"),
+    MENU_PLAYERS_INSERT_NAME_FILTER_SUBTITLE("menu.players.search_players.subtitle"),
     MENU_PLAYERS_BUTTON_PLAYER_TITLE("menu.players.player_button.title"),
     MENU_PLAYERS_BUTTON_PLAYER_LORE("menu.players.player_button.lore"),
-
     MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_EMPTY("menu.players.player_button.punishments_empty"),
     MENU_PLAYERS_BUTTON_PLAYER_LORE_PUNISHMENTS_NOT_EMPTY("menu.players.player_button.punishments_not_empty"),
 

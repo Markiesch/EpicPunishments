@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.Permission;
+import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.menusystem.PlayerSelectorSearchType;
@@ -16,15 +17,18 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private PlayerSelectorSearchType filter;
+    private String nameFilter = "";
 
-    private static final byte TEMPLATE_BUTTON_SLOT = 52;
-    private static final byte CLOSE_SLOT = 49;
     private static final byte FILTER_SLOT = 46;
+    private static final byte SEARCH_SLOT = 47;
+    private static final byte CLOSE_SLOT = 49;
+    private static final byte TEMPLATE_BUTTON_SLOT = 52;
 
     public PlayerSelectorMenu(Plugin plugin, UUID uuid) {
         super(
@@ -84,11 +88,15 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                 .getPlayers()
                 .stream()
                 .filter(profile -> {
+                    if (!profile.getName().toLowerCase(Locale.ROOT).contains(nameFilter.toLowerCase(Locale.ROOT)))
+                        return false;
+
                     if (filter.equals(PlayerSelectorSearchType.ALL)) return true;
                     else if (filter.equals(PlayerSelectorSearchType.ONLINE_ONLY) && profile.getPlayer().isOnline())
                         return true;
                     else return filter.equals(PlayerSelectorSearchType.OFFLINE_ONLY) && !profile.getPlayer().isOnline();
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -116,6 +124,19 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                 filterItem,
                 event -> toggleFilter()
         );
+
+        ItemStack searchItem = ItemUtils.createItem(
+                Material.COMPASS,
+                Translation.MENU_PLAYERS_BUTTON_NAME_FILTER_TITLE.toString(),
+                Translation.MENU_PLAYERS_BUTTON_NAME_FILTER_LORE.addPlaceholder("current_filter", nameFilter.equals("") ? "none" : nameFilter).toList()
+        );
+
+        setButton(SEARCH_SLOT, searchItem, (event) -> {
+            new PlayerChat(plugin, getOwner(), Translation.MENU_PLAYERS_INSERT_NAME_FILTER_TITLE.toString(), Translation.MENU_PLAYERS_INSERT_NAME_FILTER_SUBTITLE.toString(), message -> {
+                nameFilter = message;
+                open();
+            });
+        });
 
         ItemStack closeButton = ItemUtils.createItem(
                 Material.NETHER_STAR,
