@@ -57,6 +57,7 @@ public class PunishCommand extends CommandBase {
                 "&c&lEpicPunishments &7v" + plugin.getDescription().getVersion(),
                 " ",
                 "&9/punish (help | reload) &7opens the main menu",
+                "&9/clearchat &7clears the chat for all online players",
                 "&9/ban &e<player> <duration> (reason) &7bans the mentioned player",
                 "&9/unban &e<player> &7will unban the mentioned player",
                 "&9/mute &e<player> <duration> (reason) &7mutes the mentioned player",
