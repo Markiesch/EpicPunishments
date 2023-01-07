@@ -71,8 +71,8 @@ public enum Translation {
     // Player menu
     MENU_PLAYER_TITLE("menu.player.title"),
     MENU_PLAYER_NOT_FOUND("menu.player.not_found"),
-    MENU_PLAYER_TELEPORT_TITLE("menu.player.teleport_button.title"),
-    MENU_PLAYER_TELEPORT_LORE("menu.player.teleport_button.lore"),
+    MENU_PLAYER_DETAILS_TITLE("menu.player.player_info.title"),
+    MENU_PLAYER_DETAILS_LORE("menu.player.player_info.lore"),
     MENU_PLAYER_PUNISH_TITLE("menu.player.punish_button.title"),
     MENU_PLAYER_PUNISH_LORE("menu.player.punish_button.lore"),
     MENU_PLAYER_INFRACTIONS_TITLE("menu.player.infractions_button.title"),

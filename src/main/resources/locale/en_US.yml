@@ -87,10 +87,6 @@ menu:
     player:
         title: 'Player > [name]'
         not_found: '&cCould not find player. Closing menu...'
-        teleport_button:
-            title: '&b&lTeleport'
-            lore:
-                - '&7Click to teleport to &e[name]'
         punish_button:
             title: '&c&lPunish'
             lore:
@@ -99,6 +95,12 @@ menu:
             title: '&c&lInfractions'
             lore:
                 - '&7Click to view infractions'
+        player_info:
+            title: '&b&lPlayer details'
+            lore:
+                - '&7Name: &e[name]'
+                - '&7IP: &e[ip]'
+                - '&7Status: &e[status]'
     punish:
         title: 'Punish > [name]'
         reason_button:

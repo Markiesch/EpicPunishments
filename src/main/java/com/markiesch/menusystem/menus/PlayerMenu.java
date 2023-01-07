@@ -14,14 +14,15 @@ import org.bukkit.plugin.Plugin;
 import java.util.UUID;
 
 public class PlayerMenu extends Menu implements Listener {
-    private static final byte PUNISH_BUTTON_SLOT = 21;
-    private static final byte INFRACTIONS_BUTTON_SLOT = 23;
-    private static final byte BACK_BUTTON_SLOT = 40;
+    private static final byte DETAILS_SLOT = 13;
+    private static final byte PUNISH_BUTTON_SLOT = 30;
+    private static final byte INFRACTIONS_BUTTON_SLOT = 32;
+    private static final byte BACK_BUTTON_SLOT = 49;
 
     public ProfileModel target;
 
     public PlayerMenu(Plugin plugin, UUID uuid, UUID player) {
-        super(plugin, uuid, 45);
+        super(plugin, uuid, 54);
 
         target = ProfileManager.getInstance().getPlayer(player);
         open();
@@ -43,6 +44,18 @@ public class PlayerMenu extends Menu implements Listener {
             getOwner().closeInventory();
             return;
         }
+
+        ItemStack playerDetails = ItemUtils.createItem(
+                Material.PLAYER_HEAD,
+                Translation.MENU_PLAYER_DETAILS_TITLE.toString(),
+                Translation.MENU_PLAYER_DETAILS_LORE
+                        .addPlaceholder("name", target.getName())
+                        .addPlaceholder("ip", target.ip)
+                        .addPlaceholder("status", (target.getPlayer().isOnline() ? Translation.WORD_ONLINE : Translation.WORD_OFFLINE).toString())
+                        .toList()
+        );
+        ItemUtils.setSkullOwner(playerDetails, target.getPlayer());
+        setButton(DETAILS_SLOT, playerDetails, event -> new PunishMenu(plugin, uuid, target.uuid));
 
         ItemStack punishButton = ItemUtils.createItem(
                 Material.ANVIL,
