@@ -2,10 +2,9 @@ my_sql:
     enabled: false
     hostname: 'localhost'
     port: 3306
-    database: 'your_database'
-    username: 'username'
-    password: 'P@ssword'
-
+    database: 'database'
+    username: 'root'
+    password: 'password'
 
 # Disabling/enabling modules requires you to restart your whole server, this makes sure all events are (un)registered correctly
 modules:
