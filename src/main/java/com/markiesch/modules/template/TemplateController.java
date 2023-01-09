@@ -25,7 +25,7 @@ public class TemplateController extends SqlController<TemplateModel> {
     }
 
     public @Nullable TemplateModel readSingle(int id) {
-        return executeRead("SELECT * FROM Template WHERE Template.id = ?", new Object[]{id})
+        return executeRead("SELECT * FROM Template WHERE id = ?", new Object[]{id})
                 .stream()
                 .findFirst()
                 .orElse(null);
@@ -33,19 +33,19 @@ public class TemplateController extends SqlController<TemplateModel> {
 
     public void create(String name, String reason, InfractionType type, Long duration) {
         Object[] parameters = {name, type.name(), reason, duration};
-        executeUpdate("INSERT INTO Template (Template.name, Template.type, Template.reason, Template.duration) VALUES(?, ?, ?, ?)", parameters);
+        executeUpdate("INSERT INTO Template (name, type, reason, duration) VALUES(?, ?, ?, ?)", parameters);
     }
 
     public void delete(Integer id) {
         Object[] parameters = {id};
-        executeUpdate("DELETE FROM Template WHERE Template.id = ?;", parameters);
+        executeUpdate("DELETE FROM Template WHERE id = ?;", parameters);
     }
 
     public void update(int id, String name, InfractionType type, String reason, long duration) {
         Object[] parameters = {name, type.name(), reason, duration, id};
         executeUpdate("UPDATE Template " +
-                "SET Template.name = ?, Template.type = ?, Template.reason = ?, Template.duration = ? " +
-                "WHERE Template.id = ?;",
+                "SET name = ?, type = ?, reason = ?, duration = ? " +
+                "WHERE id = ?;",
                 parameters
         );
     }

@@ -35,7 +35,7 @@ public class InfractionController extends SqlController<InfractionModel> {
                 preparedInfraction.date,
                 0
         };
-        executeUpdate("INSERT INTO Infraction (Infraction.Victim, Infraction.Issuer, Infraction.Type, Infraction.Reason, Infraction.Duration, Infraction.Date, Infraction.revoked)" +
+        executeUpdate("INSERT INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date, revoked)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)", parameters);
 
         return preparedInfraction.createInfraction(getLastInsertedId());
@@ -43,7 +43,7 @@ public class InfractionController extends SqlController<InfractionModel> {
 
     public InfractionList readAll(UUID uuid) {
         Object[] parameters = {uuid};
-        return new InfractionList(executeRead("SELECT * FROM Infraction WHERE Infraction.victim = ?;", parameters));
+        return new InfractionList(executeRead("SELECT * FROM Infraction WHERE victim = ?;", parameters));
     }
 
     public InfractionList readAll() {
@@ -52,7 +52,7 @@ public class InfractionController extends SqlController<InfractionModel> {
 
     public boolean delete(Integer id) {
         Object[] parameters = {id};
-        int affectedRows = executeUpdate("DELETE FROM Infraction WHERE Infraction.id = ?;", parameters);
+        int affectedRows = executeUpdate("DELETE FROM Infraction WHERE id = ?;", parameters);
         return affectedRows == 1;
     }
 
@@ -61,7 +61,7 @@ public class InfractionController extends SqlController<InfractionModel> {
                 .map(infractionModel -> infractionModel.id)
                 .toArray(Integer[]::new);
 
-        @Language("MariaDB") String query = String.format("UPDATE Infraction SET Infraction.revoked = 1 WHERE Infraction.id in (%s);",
+        @Language("SQL") String query = String.format("UPDATE Infraction SET revoked = 1 WHERE id in (%s);",
                 Arrays.stream(ids)
                         .map(id -> "?")
                         .collect(Collectors.joining(", "))

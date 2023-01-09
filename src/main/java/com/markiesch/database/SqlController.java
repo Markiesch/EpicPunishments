@@ -42,7 +42,7 @@ public abstract class SqlController<T> {
         return result;
     }
 
-    protected int executeUpdate(@Language("MariaDB") String query, Object[] parameters) {
+    protected int executeUpdate(@Language("SQL") String query, Object[] parameters) {
         Storage storage = Storage.getInstance();
 
         try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
