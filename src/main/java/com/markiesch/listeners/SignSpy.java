@@ -10,9 +10,9 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class SignSpy implements Listener {
     @EventHandler
-    public boolean onSignChange(SignChangeEvent event) {
+    public void onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
-        if (player.hasPermission(Permission.SPY_SIGN_BYPASS.getNode())) return true;
+        if (player.hasPermission(Permission.SPY_SIGN_BYPASS.getNode())) return;
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -23,7 +23,5 @@ public class SignSpy implements Listener {
                             .addPlaceholder("content", String.join(", ", event.getLines()))
                             .toString());
                 });
-
-        return true;
     }
 }

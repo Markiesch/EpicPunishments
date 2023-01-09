@@ -11,9 +11,9 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CommandSpy implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
-    public boolean onPreCommand(PlayerCommandPreprocessEvent event) {
+    public void onPreCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        if (player.hasPermission(Permission.SPY_COMMAND_BYPASS.getNode())) return true;
+        if (player.hasPermission(Permission.SPY_COMMAND_BYPASS.getNode())) return;
 
         Bukkit.getOnlinePlayers()
                 .stream()
@@ -24,6 +24,5 @@ public class CommandSpy implements Listener {
                             .addPlaceholder("command", event.getMessage())
                             .toString());
                 });
-        return true;
     }
 }
