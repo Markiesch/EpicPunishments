@@ -58,20 +58,6 @@ public abstract class SqlController<T> {
         return 0;
     }
 
-    protected void executeUpdateBatch(@Language("SQLite") String query, Object[][] batches) {
-        Storage storage = Storage.getInstance();
-
-        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
-            for (Object[] parameters : batches) {
-                addParameters(preparedStatement, parameters);
-            }
-
-            preparedStatement.executeBatch();
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to write to database.\n" + sqlException.getMessage());
-        }
-    }
-
     private void addParameters(PreparedStatement preparedStatement, Object[] parameters) throws SQLException {
         for (int i = 0; i < parameters.length; i++) {
             preparedStatement.setObject(i + 1, parameters[i]);

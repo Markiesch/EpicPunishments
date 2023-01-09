@@ -1,11 +1,14 @@
 package com.markiesch.modules.infraction;
 
 import com.markiesch.database.SqlController;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class InfractionController extends SqlController<InfractionModel> {
     @Override
@@ -54,11 +57,16 @@ public class InfractionController extends SqlController<InfractionModel> {
     }
 
     public void expire(InfractionList infractionList) {
-        Integer[][] ids = infractionList.stream()
+        Integer[] ids = infractionList.stream()
                 .map(infractionModel -> infractionModel.id)
-                .map(id -> new Integer[]{id})
-                .toArray(Integer[][]::new);
+                .toArray(Integer[]::new);
 
-        executeUpdateBatch("UPDATE Infraction SET Infraction.revoked = 1 WHERE Infraction.id = ?;", ids);
+        @Language("MariaDB") String query = String.format("UPDATE Infraction SET Infraction.revoked = 1 WHERE Infraction.id in (%s);",
+                Arrays.stream(ids)
+                        .map(id -> "?")
+                        .collect(Collectors.joining(", "))
+        );
+
+        executeUpdate(query, ids);
     }
 }
