@@ -1,3 +1,12 @@
+my_sql:
+    enabled: false
+    hostname: 'localhost'
+    port: 3306
+    database: 'your_database'
+    username: 'username'
+    password: 'P@ssword'
+
+
 # Disabling/enabling modules requires you to restart your whole server, this makes sure all events are (un)registered correctly
 modules:
     sign_spy: true

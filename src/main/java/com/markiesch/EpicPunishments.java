@@ -25,21 +25,21 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     }
 
     public void onEnable() {
-        new Metrics(this, BSTATS_PLUGIN_ID);
+        instance = this;
 
         // Initialize config
-        instance = this;
         this.saveDefaultConfig();
         langConfig = new LangConfig(this);
 
         // Initialize storage
-        Storage.getInstance().setup(this);
+        Storage.getInstance().init(this);
         InfractionManager.getInstance().initialize();
         ProfileManager.getInstance().initialize();
 
         registerListeners();
         registerCommands();
 
+        new Metrics(this, BSTATS_PLUGIN_ID);
         getServer().getConsoleSender().sendMessage("§aEpicPunishments is now enabled");
     }
 

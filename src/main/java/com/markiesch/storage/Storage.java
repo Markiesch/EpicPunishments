@@ -1,15 +1,17 @@
 package com.markiesch.storage;
 
 import com.markiesch.EpicPunishments;
+import com.markiesch.database.DatabaseConnector;
+import com.markiesch.database.MySqlConnector;
+import com.markiesch.database.SQLiteConnector;
 import org.bukkit.Bukkit;
+import org.intellij.lang.annotations.Language;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Storage {
-    private Connection connection;
-    private File file;
+    private DatabaseConnector databaseConnector;
 
     private Storage() {
     }
@@ -22,21 +24,40 @@ public class Storage {
         return StorageHolder.INSTANCE;
     }
 
-    public void setup(EpicPunishments plugin) {
-        this.file = new File(plugin.getDataFolder(), "data.db");
+    public void init(EpicPunishments plugin) {
+        boolean mySqlEnabled = plugin.getConfig().getBoolean("my_sql.enabled");
+        databaseConnector = mySqlEnabled ? new MySqlConnector(plugin) : new SQLiteConnector(plugin);
 
-        try {
-            connection = getConnection();
+        // Create tables
+        String autoIncrement = mySqlEnabled ? "AUTO_INCREMENT" : "AUTOINCREMENT";
 
-            // Create tables
-            plugin.getLogger().info("Creating SQLite tables...");
-            executeUpdate(Query.CREATE_INFRACTION_TABLE);
-            executeUpdate(Query.CREATE_PLAYER_TABLE);
-            executeUpdate(Query.CREATE_TEMPLATE_TABLE);
-            plugin.getLogger().info("Created SQLite tables!");
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to initialize SQL tables" + sqlException.getMessage());
-        }
+        plugin.getLogger().info("Creating SQLite tables...");
+        executeUpdate("CREATE TABLE IF NOT EXISTS Infraction (" +
+                "id           INTEGER                 PRIMARY KEY " + autoIncrement + "," +
+                "victim       BINARY(16)              NOT NULL," +
+                "issuer       BINARY(16)," +
+                "type         VARCHAR(10)," +
+                "reason       VARCHAR(100)," +
+                "duration     INTEGER," +
+                "date         INTEGER                 NOT NULL," +
+                "revoked      BIT(1)                  NOT NULL" +
+                ");"
+        );
+        executeUpdate("CREATE TABLE IF NOT EXISTS Profile (" +
+                "UUID         BINARY(16)     NOT NULL    PRIMARY KEY," +
+                "ip           VARCHAR(39)     NOT NULL," +
+                "name         VARCHAR(16)     NOT NULL" +
+                ");"
+        );
+        executeUpdate("CREATE TABLE IF NOT EXISTS Template (" +
+                "id           INTEGER             PRIMARY KEY " + autoIncrement + "," +
+                "name         VARCHAR(50)         NOT NULL," +
+                "type         VARCHAR(10)         NOT NULL," +
+                "reason       VARCHAR(100)," +
+                "duration     INTEGER" +
+                ");"
+        );
+        plugin.getLogger().info("Created SQLite tables!");
     }
 
     /**
@@ -44,59 +65,24 @@ public class Storage {
      *
      * @param query The query that needs to be executed
      */
-    private void executeUpdate(Query query) {
+    private void executeUpdate(@Language("MariaDB") String query) {
         try {
             Connection connection = getConnection();
-            connection.prepareStatement(query.getQuery()).executeUpdate();
+            connection.prepareStatement(query).executeUpdate();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to execute database query!");
+            Bukkit.getLogger().warning(sqlException.getMessage());
         }
     }
 
-    public Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) openConnection();
-        return connection;
-    }
-
-    /**
-     * Creates a new connection to the local SQLite database
-     */
-    private void openConnection() {
-        try {
-            // Create file if it does not exist
-            if (!file.exists()) file.createNewFile();
-
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
-        } catch (SQLException | IOException | ClassNotFoundException exception) {
-            exception.printStackTrace();
-        }
+    public Connection getConnection() {
+        return databaseConnector.getConnection();
     }
 
     /**
      * Closes the connection
      */
     public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) connection.close();
-        } catch (SQLException sqlException) {
-            Bukkit.getLogger().warning("Failed to close SQL connection");
-        }
-    }
-
-    public Integer getLastInsertedId() {
-        try (PreparedStatement preparedStatement = getConnection().prepareStatement("SELECT last_insert_rowid();");
-             ResultSet resultSet = preparedStatement.executeQuery()
-        ) {
-            if (!resultSet.next()) {
-                Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
-                return null;
-            }
-            return resultSet.getInt("last_insert_rowid()");
-        } catch (SQLException exception) {
-            Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
-        }
-
-        return null;
+        databaseConnector.closeConnection();
     }
 }
