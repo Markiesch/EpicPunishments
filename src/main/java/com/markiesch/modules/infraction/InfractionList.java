@@ -9,7 +9,8 @@ public class InfractionList extends ArrayList<InfractionModel> {
         this.addAll(arrayList);
     }
 
-    public InfractionList() {}
+    public InfractionList() {
+    }
 
     public InfractionList getActiveByType(InfractionType infractionType) {
         return stream()
@@ -19,10 +20,10 @@ public class InfractionList extends ArrayList<InfractionModel> {
     }
 
     public boolean isMuted() {
-        return (getActiveByType(InfractionType.MUTE).size() > 0);
+        return !getActiveByType(InfractionType.MUTE).isEmpty();
     }
 
     public boolean isBanned() {
-        return (getActiveByType(InfractionType.BAN).size() > 0);
+        return !getActiveByType(InfractionType.BAN).isEmpty();
     }
 }
