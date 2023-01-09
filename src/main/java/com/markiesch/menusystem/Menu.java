@@ -50,6 +50,10 @@ public abstract class Menu implements InventoryHolder {
         clickMap.put(slot, callback);
     }
 
+    protected void setButton(int slot, ItemStack itemStack) {
+        getInventory().setItem(slot, itemStack);
+    }
+
     public void handleButtonClick(InventoryClickEvent event) {
         if (clickMap.containsKey(event.getSlot())) {
             clickMap.get(event.getSlot()).accept(event);

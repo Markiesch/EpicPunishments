@@ -101,6 +101,14 @@ menu:
                 - '&7Name: &e[name]'
                 - '&7IP: &e[ip]'
                 - '&7Status: &e[status]'
+        ip_matches_button:
+            title: '&b&lIP-matches'
+            lore:
+                - '&7Other accounts with the same IP:'
+                - ' '
+                - '[player_format]'
+            format: '&7- &e[player_name]'
+            empty: '&aNo IP-matches found'
     punish:
         title: 'Punish > [name]'
         reason_button:

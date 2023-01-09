@@ -77,6 +77,10 @@ public enum Translation {
     MENU_PLAYER_PUNISH_LORE("menu.player.punish_button.lore"),
     MENU_PLAYER_INFRACTIONS_TITLE("menu.player.infractions_button.title"),
     MENU_PLAYER_INFRACTIONS_LORE("menu.player.infractions_button.lore"),
+    MENU_PLAYER_IP_MATCHES_TITLE("menu.player.ip_matches_button.title"),
+    MENU_PLAYER_IP_MATCHES_LORE("menu.player.ip_matches_button.lore"),
+    MENU_PLAYER_IP_MATCHES_FORMAT("menu.player.ip_matches_button.format"),
+    MENU_PLAYER_IP_MATCHES_EMPTY("menu.player.ip_matches_button.empty"),
 
     // Punish menu
     MENU_PUNISH_TITLE("menu.punish.title"),

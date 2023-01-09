@@ -3,6 +3,7 @@ package com.markiesch.modules.profile;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProfileManager {
     private final Map<UUID, ProfileModel> profileModelMap;
@@ -53,5 +54,13 @@ public class ProfileManager {
 
     public List<ProfileModel> getPlayers() {
         return new ArrayList<>(profileModelMap.values());
+    }
+
+    public List<ProfileModel> getPlayersUnderIp(@Nullable String ip) {
+        if (ip == null) return new ArrayList<>();
+        return profileModelMap.values()
+                .stream()
+                .filter(profile -> ip.equals(profile.ip))
+                .collect(Collectors.toList());
     }
 }

@@ -11,15 +11,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerMenu extends Menu implements Listener {
     private static final byte DETAILS_SLOT = 13;
-    private static final byte PUNISH_BUTTON_SLOT = 30;
-    private static final byte INFRACTIONS_BUTTON_SLOT = 32;
+    private static final byte PUNISH_BUTTON_SLOT = 29;
+    private static final byte INFRACTIONS_BUTTON_SLOT = 31;
+    private static final byte IP_MATCHES_BUTTON_SLOT = 33;
     private static final byte BACK_BUTTON_SLOT = 49;
 
-    public ProfileModel target;
+    public final ProfileModel target;
 
     public PlayerMenu(Plugin plugin, UUID uuid, UUID player) {
         super(plugin, uuid, 54);
@@ -70,6 +73,30 @@ public class PlayerMenu extends Menu implements Listener {
                 Translation.MENU_PLAYER_INFRACTIONS_LORE.addPlaceholder("name", target.getName()).toList()
         );
         setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new InfractionsMenu(plugin, uuid, target.uuid));
+
+        List<ProfileModel> playersWithSameIp = ProfileManager.getInstance()
+                .getPlayersUnderIp(target.ip)
+                .stream()
+                .filter(profile -> profile.uuid != target.uuid)
+                .collect(Collectors.toList());
+
+        String playerFormat =
+                playersWithSameIp.isEmpty() ?
+                        Translation.MENU_PLAYER_IP_MATCHES_EMPTY.toString() :
+                        playersWithSameIp
+                                .stream()
+                                .map(profile -> Translation.MENU_PLAYER_IP_MATCHES_FORMAT
+                                        .addPlaceholder("player_name", profile.getName())
+                                        .toString()
+                                )
+                                .collect(Collectors.joining("\n"));
+
+        ItemStack ipMatches = ItemUtils.createItem(
+                Material.BOOKSHELF,
+                Translation.MENU_PLAYER_IP_MATCHES_TITLE.toString(),
+                Translation.MENU_PLAYER_IP_MATCHES_LORE.addPlaceholder("player_format", playerFormat).toList()
+        );
+        setButton(IP_MATCHES_BUTTON_SLOT, ipMatches);
 
         ItemStack back = ItemUtils.createItem(
                 Material.OAK_SIGN,
