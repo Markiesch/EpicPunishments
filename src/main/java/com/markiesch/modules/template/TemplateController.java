@@ -1,7 +1,7 @@
 package com.markiesch.modules.template;
 
+import com.markiesch.database.SqlController;
 import com.markiesch.modules.infraction.InfractionType;
-import com.markiesch.storage.SqlController;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
@@ -25,21 +25,28 @@ public class TemplateController extends SqlController<TemplateModel> {
     }
 
     public @Nullable TemplateModel readSingle(int id) {
-        return executeRead(TemplateQuery.SELECT_SINGLE_TEMPLATE, new Object[]{id})
+        return executeRead("SELECT * FROM Template WHERE Template.id = ?", new Object[]{id})
                 .stream()
                 .findFirst()
                 .orElse(null);
     }
 
     public void create(String name, String reason, InfractionType type, Long duration) {
-        executeUpdate(TemplateQuery.CREATE_TEMPLATE, new Object[]{name, type.name(), reason, duration});
+        Object[] parameters = {name, type.name(), reason, duration};
+        executeUpdate("INSERT INTO Template (Template.name, Template.type, Template.reason, Template.duration) VALUES(?, ?, ?, ?)", parameters);
     }
 
     public void delete(Integer id) {
-        executeUpdate(TemplateQuery.DELETE_TEMPLATE, new Object[]{id});
+        Object[] parameters = {id};
+        executeUpdate("DELETE FROM Template WHERE Template.id = ?;", parameters);
     }
 
     public void update(int id, String name, InfractionType type, String reason, long duration) {
-        executeUpdate(TemplateQuery.UPDATE_TEMPLATE, new Object[]{name, type.name(), reason, duration, id});
+        Object[] parameters = {name, type.name(), reason, duration, id};
+        executeUpdate("UPDATE Template " +
+                "SET Template.name = ?, Template.type = ?, Template.reason = ?, Template.duration = ? " +
+                "WHERE Template.id = ?;",
+                parameters
+        );
     }
 }

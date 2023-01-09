@@ -7,13 +7,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class InfractionModel {
-    public int id;
-    public InfractionType type;
-    public UUID victim;
-    @Nullable public UUID issuer;
-    public String reason;
-    public long duration;
-    public long date;
+    public final int id;
+    public final InfractionType type;
+    public final UUID victim;
+    public final @Nullable UUID issuer;
+    public final String reason;
+    public final long duration;
+    public final long date;
     public boolean revoked;
 
     public InfractionModel(int id, InfractionType type, UUID victim, @Nullable UUID issuer, String reason, long duration, long date, boolean revoked) {

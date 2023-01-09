@@ -1,7 +1,6 @@
 package com.markiesch.modules.infraction;
 
-import com.markiesch.storage.SqlController;
-import com.markiesch.storage.Storage;
+import com.markiesch.database.SqlController;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.ResultSet;
@@ -9,12 +8,6 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class InfractionController extends SqlController<InfractionModel> {
-    private final Storage storage;
-
-    public InfractionController() {
-        storage = Storage.getInstance();
-    }
-
     @Override
     protected InfractionModel resultSetToModel(ResultSet resultSet) throws SQLException {
         return new InfractionModel(
@@ -39,15 +32,15 @@ public class InfractionController extends SqlController<InfractionModel> {
                 preparedInfraction.date,
                 0
         };
-        executeUpdate("REPLACE INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date, revoked) VALUES (?, ?, ?, ?, ?, ?, ?);", parameters);
+        executeUpdate("INSERT INTO Infraction (Infraction.Victim, Infraction.Issuer, Infraction.Type, Infraction.Reason, Infraction.Duration, Infraction.Date, Infraction.revoked)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)", parameters);
 
-        return preparedInfraction.createInfraction(storage.getLastInsertedId());
+        return preparedInfraction.createInfraction(getLastInsertedId());
     }
 
     public InfractionList readAll(UUID uuid) {
         Object[] parameters = {uuid};
-
-        return new InfractionList(executeRead("SELECT * FROM Infraction WHERE victim = ?;", parameters));
+        return new InfractionList(executeRead("SELECT * FROM Infraction WHERE Infraction.victim = ?;", parameters));
     }
 
     public InfractionList readAll() {
@@ -56,9 +49,7 @@ public class InfractionController extends SqlController<InfractionModel> {
 
     public boolean delete(Integer id) {
         Object[] parameters = {id};
-
-        int affectedRows = executeUpdate("DELETE FROM Infraction WHERE [id] = ?; SELECT changes();", parameters);
-
+        int affectedRows = executeUpdate("DELETE FROM Infraction WHERE Infraction.id = ?;", parameters);
         return affectedRows == 1;
     }
 
@@ -68,6 +59,6 @@ public class InfractionController extends SqlController<InfractionModel> {
                 .map(id -> new Integer[]{id})
                 .toArray(Integer[][]::new);
 
-        executeUpdateBatch("UPDATE Infraction SET revoked = 1 WHERE id = ?;", ids);
+        executeUpdateBatch("UPDATE Infraction SET Infraction.revoked = 1 WHERE Infraction.id = ?;", ids);
     }
 }
