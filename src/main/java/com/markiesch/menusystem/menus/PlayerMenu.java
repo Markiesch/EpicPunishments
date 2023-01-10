@@ -72,7 +72,7 @@ public class PlayerMenu extends Menu implements Listener {
                 Translation.MENU_PLAYER_INFRACTIONS_TITLE.toString(),
                 Translation.MENU_PLAYER_INFRACTIONS_LORE.addPlaceholder("name", target.getName()).toList()
         );
-        setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new InfractionsMenu(plugin, uuid, target.uuid));
+        setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new HistoryMenu(plugin, uuid, target.uuid));
 
         List<ProfileModel> playersWithSameIp = ProfileManager.getInstance()
                 .getPlayersUnderIp(target.ip)

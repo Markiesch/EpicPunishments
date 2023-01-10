@@ -18,6 +18,9 @@ public enum Translation {
     WORD_ACTIVE("word.active"),
     WORD_EXPIRED("word.expired"),
     WORD_REVOKED("word.revoked"),
+    WORD_BANNED("word.banned"),
+    WORD_MUTED("word.muted"),
+    WORD_KICKED("word.kicked"),
 
     // Commands
     COMMAND_NO_PERMISSION("command.no_permission"),
@@ -101,6 +104,10 @@ public enum Translation {
 
     // Infractions menu
     MENU_INFRACTIONS_TITLE("menu.infractions.title"),
+    MENU_INFRACTION_PLAYER_TITLE("menu.infractions.player_info.title"),
+    MENU_INFRACTION_PLAYER_LORE("menu.infractions.player_info.lore"),
+    MENU_INFRACTION_PLAYER_EMPTY("menu.infractions.player_info.empty"),
+    MENU_INFRACTION_PLAYER_FILLED("menu.infractions.player_info.filled"),
     MENU_INFRACTIONS_BUTTON_TITLE("menu.infractions.infraction_button.title"),
     MENU_INFRACTIONS_BUTTON_LORE("menu.infractions.infraction_button.lore"),
 

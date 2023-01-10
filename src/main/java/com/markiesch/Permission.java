@@ -33,6 +33,9 @@ public enum Permission {
 
     CLEAR_CHAT_EXECUTE("clear_chat.execute"),
     CLEAR_CHAT_BYPASS("clear_chat.bypass"),
+
+    HISTORY_COMMAND("history.command"),
+    HISTORY_MENU("history.menu"),
     ;
 
     private static final String prefix = "epicpunishments.";
