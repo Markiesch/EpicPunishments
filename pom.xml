@@ -6,7 +6,7 @@
 
     <groupId>com.markiesch</groupId>
     <artifactId>EpicPunishments</artifactId>
-    <version>1.0.0-rc.4</version>
+    <version>1.0.0-rc.5</version>
     <packaging>jar</packaging>
 
     <name>EpicPunishments</name>
