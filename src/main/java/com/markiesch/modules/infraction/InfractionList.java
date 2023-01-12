@@ -19,6 +19,12 @@ public class InfractionList extends ArrayList<InfractionModel> {
                 .collect(Collectors.toCollection(InfractionList::new));
     }
 
+    public InfractionList getByType(InfractionType infractionType) {
+        return stream()
+                .filter(infractionModel -> infractionModel.type == infractionType)
+                .collect(Collectors.toCollection(InfractionList::new));
+    }
+
     public boolean isMuted() {
         return !getActiveByType(InfractionType.MUTE).isEmpty();
     }

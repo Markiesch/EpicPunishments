@@ -5,6 +5,9 @@ word:
     active: 'active'
     expired: 'expired'
     revoked: 'revoked'
+    banned: 'banned'
+    muted: 'muted'
+    kicked: 'kicked'
 
 command:
     no_permission: '&7You do not have&c permissions &7to use this command!'
@@ -23,6 +26,19 @@ command:
     clear_chat:
         success: '&7The chat has been&a successfully &7cleared'
         broadcast: '&7The chat was cleared by &e[issuer]'
+    info:
+        content:
+            - ' '
+            - '&9&lPunishment info for [name]'
+            - ' '
+            - '&8| &7Banned: &e[is_banned]'
+            - '&8| &7Muted: &e[is_muted]'
+            - ' '
+            - '&8| [ban_format]'
+            - '&8| [mute_format]'
+            - ' '
+        empty: '&a✔ &7has never been [punish_type]'
+        filled: '&6✔ &7has been [punish_type] [size] time(s)'
 
 event:
     # [target] shows the username of the command issuer
@@ -148,7 +164,15 @@ menu:
                 - '&7Duration: &e[duration]'
                 - '&7Type: &e[type]'
     infractions:
-        title: 'Infractions > [name]'
+        title: 'History > [name]'
+        player_info:
+            title: '&b&l[name]''s history'
+            lore:
+                - ' '
+                - '[ban_format]'
+                - '[mute_format]'
+            empty: '&a✔ &7has never been [punish_type]'
+            filled: '&6✔ &7has been [punish_type] [size] time(s)'
         infraction_button:
             title: '&c&l[type] &7- &f&l[state]'
             lore:
