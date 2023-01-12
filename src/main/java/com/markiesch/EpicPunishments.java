@@ -61,6 +61,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         new UnmuteCommand();
         new KickCommand();
         new HistoryCommand(this);
+        new InfoCommand();
     }
 
     private void registerListeners() {

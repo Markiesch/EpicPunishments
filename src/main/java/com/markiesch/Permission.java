@@ -6,6 +6,8 @@ public enum Permission {
     ADMIN_RELOAD("admin.reload"),
     ADMIN_HELP("admin.help"),
 
+    EXECUTE_INFO("info.execute"),
+
     EXECUTE_BAN("ban.execute"),
     REVOKE_BAN("ban.revoke"),
     DELETE_BAN("ban.delete"),

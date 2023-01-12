@@ -34,6 +34,9 @@ public enum Translation {
     COMMAND_RANDOM_PLAYER_SUCCESS("command.random_player.success"),
     COMMAND_CLEAR_CHAT_SUCCESS("command.clear_chat.success"),
     COMMAND_CLEAR_CHAT_BROADCAST("command.clear_chat.broadcast"),
+    COMMAND_INFO_CONTENT("command.info.content"),
+    COMMAND_INFO_CONTENT_EMPTY("command.info.empty"),
+    COMMAND_INFO_CONTENT_FILLED("command.info.filled"),
 
     // Events
     EVENT_COMMAND_SPY("event.command_spy"),
