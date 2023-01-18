@@ -4,7 +4,9 @@ my_sql:
     port: 3306
     database: 'database'
     username: 'root'
-    password: 'password'
+    password: ''
+    useSSL: false
+    pool_size: 3
 
 # Disabling/enabling modules requires you to restart your whole server, this makes sure all events are (un)registered correctly
 modules:

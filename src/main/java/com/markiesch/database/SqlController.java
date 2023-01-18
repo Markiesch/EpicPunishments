@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public abstract class SqlController<T> {
 
         Storage storage = Storage.getInstance();
 
-        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
+        try (Connection connection = storage.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (parameters != null) {
                 addParameters(preparedStatement, parameters);
             }
@@ -45,11 +46,13 @@ public abstract class SqlController<T> {
     protected int executeUpdate(@Language("SQL") String query, Object[] parameters) {
         Storage storage = Storage.getInstance();
 
-        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement(query)) {
+        try (Connection connection = storage.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             addParameters(preparedStatement, parameters);
 
             preparedStatement.executeUpdate();
-            return preparedStatement.getUpdateCount();
+            int updateCount = preparedStatement.getUpdateCount();
+            connection.close();
+            return updateCount;
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
             Bukkit.getLogger().warning(sqlException.getMessage());

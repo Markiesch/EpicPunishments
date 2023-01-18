@@ -6,9 +6,13 @@ import com.markiesch.locale.LangConfig;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.storage.Storage;
+import com.zaxxer.hikari.pool.HikariPool;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
     private static final int BSTATS_PLUGIN_ID = 17132;
@@ -32,7 +36,14 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         langConfig = new LangConfig(this);
 
         // Initialize storage
-        Storage.getInstance().init(this);
+        try {
+            Storage.getInstance().init(this);
+            Storage.getInstance().createDatabaseTables(this);
+        } catch (SQLException | HikariPool.PoolInitializationException e) {
+            Bukkit.getPluginManager().disablePlugin(this);
+            getLogger().warning("Failed to connect with database, please check your credentials!");
+            return;
+        }
         InfractionManager.getInstance().initialize();
         ProfileManager.getInstance().initialize();
 
