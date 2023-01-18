@@ -80,21 +80,21 @@ public class PlayerMenu extends Menu implements Listener {
                 .filter(profile -> profile.uuid != target.uuid)
                 .collect(Collectors.toList());
 
-        String playerFormat =
+        List<String> playerFormat =
                 playersWithSameIp.isEmpty() ?
-                        Translation.MENU_PLAYER_IP_MATCHES_EMPTY.toString() :
+                        List.of(Translation.MENU_PLAYER_IP_MATCHES_EMPTY.toString()) :
                         playersWithSameIp
                                 .stream()
                                 .map(profile -> Translation.MENU_PLAYER_IP_MATCHES_FORMAT
                                         .addPlaceholder("player_name", profile.getName())
                                         .toString()
                                 )
-                                .collect(Collectors.joining("\n"));
+                                .collect(Collectors.toList());
 
         ItemStack ipMatches = ItemUtils.createItem(
                 Material.BOOKSHELF,
                 Translation.MENU_PLAYER_IP_MATCHES_TITLE.toString(),
-                Translation.MENU_PLAYER_IP_MATCHES_LORE.addPlaceholder("player_format", playerFormat).toList()
+                Translation.MENU_PLAYER_IP_MATCHES_LORE.addListPlaceholder("player_format", playerFormat).toList()
         );
         setButton(IP_MATCHES_BUTTON_SLOT, ipMatches);
 

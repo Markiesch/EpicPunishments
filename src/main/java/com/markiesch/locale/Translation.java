@@ -158,10 +158,12 @@ public enum Translation {
 
     private final String path;
     private final Map<String, @Nullable Object> placeholders;
+    private final Map<String, List<String>> listPlaceholders;
 
     Translation(String configPath) {
         path = configPath;
         placeholders = new HashMap<>();
+        listPlaceholders = new HashMap<>();
     }
 
     @Override
@@ -181,10 +183,12 @@ public enum Translation {
 
         if (messages == null) return new ArrayList<>();
 
-        return messages
-                .stream()
-                .map(message -> applyPlaceholders(ChatColor.translateAlternateColorCodes('&', message)))
-                .collect(Collectors.toList());
+        return applyPlaceholders(messages);
+    }
+
+    public Translation addListPlaceholder(String placeholder, List<String> value) {
+        listPlaceholders.put("[" + placeholder + "]", value);
+        return this;
     }
 
     public Translation addPlaceholder(String placeholder, @Nullable Object value) {
@@ -196,6 +200,23 @@ public enum Translation {
         for (Map.Entry<String, @Nullable Object> entry : placeholders.entrySet()) {
             string = string.replace(entry.getKey(), entry.getValue() == null ? "" : entry.getValue().toString());
         }
+
         return string;
+    }
+
+    private List<String> applyPlaceholders(List<String> content) {
+        for (Map.Entry<String, List<String>> entry : listPlaceholders.entrySet()) {
+            final String placeholder = entry.getKey();
+
+            if (content.contains(placeholder)) {
+                int index = content.indexOf(placeholder);
+                content.remove(placeholder);
+                content.addAll(index, entry.getValue());
+            }
+        }
+
+        return content.stream()
+                .map(message -> applyPlaceholders(ChatColor.translateAlternateColorCodes('&', message)))
+                .collect(Collectors.toList());
     }
 }
