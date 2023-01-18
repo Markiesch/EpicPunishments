@@ -60,6 +60,10 @@ public abstract class Menu implements InventoryHolder {
         }
     }
 
+    public void close() {
+        if (getOwner() != null) getOwner().closeInventory();
+    }
+
     public Player getOwner() {
         return Bukkit.getPlayer(uuid);
     }

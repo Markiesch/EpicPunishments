@@ -115,7 +115,7 @@ public class PunishMenu extends Menu {
         );
         setButton(CONFIRM_BUTTON_SLOT, confirmButton, event -> {
             new PreparedInfraction(type, getOwner(), target, reason, duration).execute();
-            getOwner().closeInventory();
+            close();
         });
 
         ItemStack back = ItemUtils.createItem(
