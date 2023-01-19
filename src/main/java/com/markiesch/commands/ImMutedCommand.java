@@ -37,6 +37,11 @@ public class ImMutedCommand extends CommandBase {
             return true;
         }
 
+        if (target.getUniqueId() == player.getUniqueId()) {
+            player.sendMessage(Translation.COMMAND_IM_MUTED_SELF.toString());
+            return true;
+        }
+
         boolean executeCommand = plugin.getConfig().getBoolean("im_muted.execute_command");
 
         if (executeCommand) {
@@ -62,7 +67,13 @@ public class ImMutedCommand extends CommandBase {
             }
         }
 
-        player.sendMessage(Translation.COMMAND_IM_MUTED_SUCCESS.toString());
+        if (plugin.getConfig().getBoolean("im_muted.success_message")) {
+            player.sendMessage(
+                    Translation.COMMAND_IM_MUTED_SUCCESS
+                            .addPlaceholder("target", target.getName())
+                            .toString()
+            );
+        }
 
         return true;
     }
