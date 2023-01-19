@@ -20,6 +20,9 @@ command:
     unmute:
         not_muted: '&e[victim_name] &7is not muted'
         success: '&7Successfully unmuted &e[victim_name]'
+    im_muted:
+        not_muted: '&cYou are not muted! &7You can use this command to notify players that you have been muted.'
+        message: '&fHey! I''m currently muted and I am unable to send messages right now.'
     random_player:
         no_players: '&cThere are no players online you can teleport to'
         success: '&7Teleported to &e[target]'

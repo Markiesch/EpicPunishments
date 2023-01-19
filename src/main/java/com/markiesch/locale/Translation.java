@@ -37,6 +37,9 @@ public enum Translation {
     COMMAND_INFO_CONTENT("command.info.content"),
     COMMAND_INFO_CONTENT_EMPTY("command.info.empty"),
     COMMAND_INFO_CONTENT_FILLED("command.info.filled"),
+    COMMAND_IM_MUTED_NOT_MUTED("command.im_muted.not_muted"),
+    COMMAND_IM_MUTED_MESSAGE("command.im_muted.message"),
+    COMMAND_IM_MUTED_SUCCESS("command.im_muted.success"),
 
     // Events
     EVENT_COMMAND_SPY("event.command_spy"),

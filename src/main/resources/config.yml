@@ -13,6 +13,16 @@ modules:
     sign_spy: true
     command_spy: true
 
+im_muted:
+    # When true, a command will be executed, when false a message wil be sent to the mentioned player
+    execute_command: false
+    # use [target] to get the name of the target, use [issuer] to get the name of the player who is executing
+    # the command [message] will be replaced with the message (editable in lang config)
+    # The message format when the above setting is set to false
+    message: '&bFrom [issuer]: [message]'
+    # The command that the issuer will perform if the above setting is set to true
+    command: "msg [target] [message]"
+
 formats:
     kick:
         - "&cYou have been kicked!"

@@ -8,6 +8,8 @@ public enum Permission {
 
     EXECUTE_INFO("info.execute"),
 
+    IM_MUTED_EXECUTE("im_muted.execute"),
+
     EXECUTE_BAN("ban.execute"),
     REVOKE_BAN("ban.revoke"),
     DELETE_BAN("ban.delete"),
