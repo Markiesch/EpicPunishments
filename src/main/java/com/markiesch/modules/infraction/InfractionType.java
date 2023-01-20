@@ -1,20 +1,27 @@
 package com.markiesch.modules.infraction;
 
+import com.markiesch.locale.Translation;
 import org.bukkit.Material;
 
 public enum InfractionType {
-    BAN(Material.OAK_DOOR),
-    KICK(Material.ENDER_EYE),
-    MUTE(Material.STRING);
+    BAN(Material.OAK_DOOR, Translation.WORD_BANNED),
+    KICK(Material.ENDER_EYE, Translation.WORD_KICKED),
+    MUTE(Material.STRING, Translation.WORD_MUTED);
 
     private final Material material;
+    private final Translation translation;
 
-    InfractionType(Material material) {
+    InfractionType(Material material, Translation translation) {
         this.material = material;
+        this.translation = translation;
     }
 
     public Material getMaterial() {
         return material;
+    }
+
+    public Translation getTranslation() {
+        return translation;
     }
 
     public InfractionType getNextType() {
