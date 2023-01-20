@@ -52,6 +52,8 @@ public enum Translation {
     EVENT_MUTE_ALREADY("event.mute.already"),
     EVENT_BAN_SUCCESS("event.ban.success"),
     EVENT_BAN_ALREADY("event.ban.already"),
+    BROADCAST_PERMANENTLY("event.broadcast.permanently"),
+    BROADCAST_TEMPORARILY("event.broadcast.temporarily"),
 
     // General menu
     PREVIOUS_PAGE("menu.general.previous"),

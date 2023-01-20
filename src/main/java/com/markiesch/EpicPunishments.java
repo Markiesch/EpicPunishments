@@ -3,6 +3,7 @@ package com.markiesch;
 import com.markiesch.commands.*;
 import com.markiesch.listeners.*;
 import com.markiesch.locale.LangConfig;
+import com.markiesch.modules.infraction.InfractionBroadcaster;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.storage.Storage;
@@ -77,14 +78,20 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        registerEvent(new PlayerJoin());
+        registerEvent(new MenuListener());
+        registerEvent(new ChatListener());
 
         final boolean commandSpyIsEnabled = getConfig().getBoolean("modules.command_spy");
         final boolean signSpyIsEnabled = getConfig().getBoolean("modules.sign_spy");
+        final boolean broadcastIsEnabled = getConfig().getBoolean("modules.broadcast");
 
-        if (commandSpyIsEnabled) getServer().getPluginManager().registerEvents(new CommandSpy(), this);
-        if (signSpyIsEnabled) getServer().getPluginManager().registerEvents(new SignSpy(), this);
+        if (commandSpyIsEnabled) registerEvent(new CommandSpy());
+        if (signSpyIsEnabled) registerEvent(new SignSpy());
+        if (broadcastIsEnabled) registerEvent(new InfractionBroadcaster());
+    }
+
+    private void registerEvent(Listener listener) {
+        getServer().getPluginManager().registerEvents(listener, this);
     }
 }

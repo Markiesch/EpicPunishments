@@ -10,6 +10,8 @@ public enum Permission {
 
     IM_MUTED_EXECUTE("im_muted.execute"),
 
+    BROADCAST_RECEIVE("broadcast.receive"),
+
     EXECUTE_BAN("ban.execute"),
     REVOKE_BAN("ban.revoke"),
     DELETE_BAN("ban.delete"),

@@ -12,6 +12,7 @@ my_sql:
 modules:
     sign_spy: true
     command_spy: true
+    broadcast: true
 
 im_muted:
     # When true, a command will be executed, when false a message wil be sent to the mentioned player

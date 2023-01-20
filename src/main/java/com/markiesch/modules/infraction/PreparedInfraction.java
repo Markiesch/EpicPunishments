@@ -1,8 +1,10 @@
 package com.markiesch.modules.infraction;
 
 import com.markiesch.Format;
+import com.markiesch.event.PunishEvent;
 import com.markiesch.locale.Translation;
 import com.markiesch.modules.profile.ProfileModel;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -86,7 +88,7 @@ public class PreparedInfraction {
     }
 
     public InfractionModel createInfraction(int id) {
-        return new InfractionModel(id,
+        InfractionModel infractionModel = new InfractionModel(id,
                 type,
                 victimProfile.uuid,
                 getIssuerUUID(),
@@ -94,6 +96,11 @@ public class PreparedInfraction {
                 duration,
                 date,
                 false);
+
+        PunishEvent punishEvent = new PunishEvent(infractionModel);
+        Bukkit.getServer().getPluginManager().callEvent(punishEvent);
+
+        return infractionModel;
     }
 
     public @Nullable UUID getIssuerUUID() {
