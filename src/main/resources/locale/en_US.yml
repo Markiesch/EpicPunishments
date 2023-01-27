@@ -8,6 +8,7 @@ word:
     banned: 'banned'
     muted: 'muted'
     kicked: 'kicked'
+    warned: 'warned'
 
 command:
     no_permission: '&7You do not have&c permissions &7to use this command!'
@@ -120,6 +121,10 @@ menu:
             title: '&c&lInfractions'
             lore:
                 - '&7Click to view infractions'
+        warnings_button:
+            title: '&c&lWarnings'
+            lore:
+                - '&7Click to view warnings'
         player_info:
             title: '&b&lPlayer details'
             lore:
@@ -172,6 +177,14 @@ menu:
                 - '&7Reason: &e[reason]'
                 - '&7Duration: &e[duration]'
                 - '&7Type: &e[type]'
+    warnings:
+        title: 'Warnings > [name]'
+        warning_button:
+            title: '&e&l[category]'
+            lore:
+                - '&bPress Q &7to &cdelete &7warning'
+                - ''
+                - '&7Issuer: &e[issuer]'
     infractions:
         title: 'History > [name]'
         player_info:
@@ -278,3 +291,37 @@ menu:
                 - '&as &7- &eSecond'
             title: '&bTemplate Duration'
             subtitle: '&7Type in a template duration'
+    categories:
+        title: 'Categories'
+        category_button:
+            title: '&b&l[name]'
+            lore:
+                - '&bLeft click &7to manage category'
+                - '&bPress Q &7to delete category'
+        create:
+            title: '&b&lAdd new category'
+            lore:
+                - '&7Click to add a new category'
+    category:
+        title: 'Categories > [name]'
+        info_button:
+            title: '&b&l[name]'
+            lore:
+                - '&7Click to change the category name'
+        rules_empty:
+            title: '&b&lWelcome to category rules'
+            lore:
+                - '&7Category rules are used to punish players'
+                - '&7when they reach an x amount of warnings'
+        rule_button:
+            title: '&b&lCategory rule'
+            lore:
+                - '&bLeft click &7to select a template'
+                - '&bPress Q &7to delete'
+                - ' '
+                - '&7Template: &e[template]'
+                - '&7Activate after: &e[count]'
+        create_rule:
+            title: '&b&lAdd new rule'
+            lore:
+                - '&7Click to add a new rule'

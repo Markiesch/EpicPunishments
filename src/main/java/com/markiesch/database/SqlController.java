@@ -1,6 +1,5 @@
 package com.markiesch.database;
 
-import com.markiesch.EpicPunishments;
 import com.markiesch.storage.Storage;
 import org.bukkit.Bukkit;
 import org.intellij.lang.annotations.Language;
@@ -25,7 +24,8 @@ public abstract class SqlController<T> {
 
         Storage storage = Storage.getInstance();
 
-        try (Connection connection = storage.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = storage.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (parameters != null) {
                 addParameters(preparedStatement, parameters);
             }
@@ -46,13 +46,13 @@ public abstract class SqlController<T> {
     protected int executeUpdate(@Language("SQL") String query, Object[] parameters) {
         Storage storage = Storage.getInstance();
 
-        try (Connection connection = storage.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = storage.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             addParameters(preparedStatement, parameters);
 
             preparedStatement.executeUpdate();
-            int updateCount = preparedStatement.getUpdateCount();
-            connection.close();
-            return updateCount;
+            return preparedStatement.getUpdateCount();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to write to database");
             Bukkit.getLogger().warning(sqlException.getMessage());
@@ -68,18 +68,16 @@ public abstract class SqlController<T> {
         preparedStatement.addBatch();
     }
 
-    protected Integer getLastInsertedId() {
+    protected Integer getLastInsertedId(String tableName) {
         Storage storage = Storage.getInstance();
 
-        String query = EpicPunishments.getInstance().getConfig().getBoolean("my_sql.enabled") ? "LAST_INSERT_ID()" : "last_insert_rowid()";
-        try (PreparedStatement preparedStatement = storage.getConnection().prepareStatement("SELECT " + query + ";");
-             ResultSet resultSet = preparedStatement.executeQuery()
+        try (
+                Connection connection = storage.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT MAX(id) as max_id FROM " + tableName + ";");
+                ResultSet resultSet = preparedStatement.executeQuery()
         ) {
-            if (!resultSet.next()) {
-                Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
-                return null;
-            }
-            return resultSet.getInt(query);
+            resultSet.next();
+            return resultSet.getInt("max_id");
         } catch (SQLException exception) {
             Bukkit.getLogger().warning("Failed to retrieve last inserted SQL ID");
         }

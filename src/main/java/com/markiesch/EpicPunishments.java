@@ -3,9 +3,12 @@ package com.markiesch;
 import com.markiesch.commands.*;
 import com.markiesch.listeners.*;
 import com.markiesch.locale.LangConfig;
+import com.markiesch.modules.categoryRule.CategoryRuleManager;
 import com.markiesch.modules.infraction.InfractionBroadcaster;
 import com.markiesch.modules.infraction.InfractionManager;
 import com.markiesch.modules.profile.ProfileManager;
+import com.markiesch.modules.template.TemplateManager;
+import com.markiesch.modules.warning.WarningManager;
 import com.markiesch.storage.Storage;
 import com.zaxxer.hikari.pool.HikariPool;
 import org.bstats.bukkit.Metrics;
@@ -45,8 +48,12 @@ public class EpicPunishments extends JavaPlugin implements Listener {
             getLogger().warning("Failed to connect with database, please check your credentials!");
             return;
         }
+
         InfractionManager.getInstance().initialize();
         ProfileManager.getInstance().initialize();
+        TemplateManager.getInstance().initialize();
+        WarningManager.getInstance().initialize();
+        CategoryRuleManager.getInstance().initialize();
 
         registerListeners();
         registerCommands();
@@ -66,12 +73,14 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         new TemplatesCommand(this);
         new RandomPlayerCommand();
         new ClearChatCommand();
+        new CategoriesCommand(this);
 
         new BanCommand();
         new UnbanCommand();
         new MuteCommand();
         new UnmuteCommand();
         new KickCommand();
+        new WarnCommand();
         new ImMutedCommand(this);
         new HistoryCommand(this);
         new InfoCommand();

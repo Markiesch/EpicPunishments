@@ -38,7 +38,7 @@ public class InfractionController extends SqlController<InfractionModel> {
         executeUpdate("INSERT INTO Infraction (Victim, Issuer, Type, Reason, Duration, Date, revoked)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)", parameters);
 
-        return preparedInfraction.createInfraction(getLastInsertedId());
+        return preparedInfraction.createInfraction(getLastInsertedId("Infraction"));
     }
 
     public InfractionList readAll(UUID uuid) {

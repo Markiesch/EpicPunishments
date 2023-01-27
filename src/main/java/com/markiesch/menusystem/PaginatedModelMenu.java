@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public abstract class PaginatedModelMenu<T> extends Menu {
     }
 
     protected abstract ItemStack modelToItemStack(T model);
-    protected abstract List<T> getModels();
+    protected abstract @NotNull List<T> getModels();
     protected abstract void handleModelClick(InventoryClickEvent event, T model);
 
     @Override

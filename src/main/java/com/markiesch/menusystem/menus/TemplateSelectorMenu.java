@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    protected List<TemplateModel> getModels() {
+    protected @NotNull List<TemplateModel> getModels() {
         return new TemplateController()
                 .readAll()
                 .stream()

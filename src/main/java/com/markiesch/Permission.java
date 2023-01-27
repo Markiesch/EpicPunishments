@@ -10,6 +10,8 @@ public enum Permission {
 
     IM_MUTED_EXECUTE("im_muted.execute"),
 
+    CATEGORIES_EXECUTE("categories.execute"),
+
     BROADCAST_RECEIVE("broadcast.receive"),
 
     EXECUTE_BAN("ban.execute"),
@@ -22,6 +24,8 @@ public enum Permission {
 
     EXECUTE_KICK("kick.execute"),
     DELETE_KICK("kick.delete"),
+
+    EXECUTE_WARN("warn.execute"),
 
     MANAGE_PLAYERS("manage.players"),
     MANAGE_TEMPLATES("manage.templates"),

@@ -17,9 +17,10 @@ import java.util.stream.Collectors;
 
 public class PlayerMenu extends Menu implements Listener {
     private static final byte DETAILS_SLOT = 13;
-    private static final byte PUNISH_BUTTON_SLOT = 29;
-    private static final byte INFRACTIONS_BUTTON_SLOT = 31;
-    private static final byte IP_MATCHES_BUTTON_SLOT = 33;
+    private static final byte PUNISH_BUTTON_SLOT = 28;
+    private static final byte INFRACTIONS_BUTTON_SLOT = 30;
+    private static final byte WARNINGS_BUTTON_SLOT = 32;
+    private static final byte IP_MATCHES_BUTTON_SLOT = 34;
     private static final byte BACK_BUTTON_SLOT = 49;
 
     public final ProfileModel target;
@@ -73,6 +74,14 @@ public class PlayerMenu extends Menu implements Listener {
                 Translation.MENU_PLAYER_INFRACTIONS_LORE.addPlaceholder("name", target.getName()).toList()
         );
         setButton(INFRACTIONS_BUTTON_SLOT, infractions, event -> new HistoryMenu(plugin, uuid, target.uuid));
+
+        ItemStack warnings = ItemUtils.createItem(
+                Material.BOOK,
+                Translation.MENU_PLAYER_WARNINGS_TITLE.toString(),
+                Translation.MENU_PLAYER_WARNINGS_LORE.toList()
+        );
+        setButton(WARNINGS_BUTTON_SLOT, warnings, event -> new WarningsMenu(plugin, uuid, target.uuid));
+
 
         List<ProfileModel> playersWithSameIp = ProfileManager.getInstance()
                 .getPlayersUnderIp(target.ip)

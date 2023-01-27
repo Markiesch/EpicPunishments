@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +84,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     }
 
     @Override
-    protected List<ProfileModel> getModels() {
+    protected @NotNull List<ProfileModel> getModels() {
         return ProfileManager.getInstance()
                 .getPlayers()
                 .stream()

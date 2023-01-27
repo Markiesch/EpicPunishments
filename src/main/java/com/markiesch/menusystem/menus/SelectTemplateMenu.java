@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     }
 
     @Override
-    protected List<TemplateModel> getModels() {
+    protected @NotNull List<TemplateModel> getModels() {
         return models;
     }
 

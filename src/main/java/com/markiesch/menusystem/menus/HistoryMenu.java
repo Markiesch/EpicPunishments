@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +70,7 @@ public class HistoryMenu extends PaginatedModelMenu<InfractionModel> {
     }
 
     @Override
-    protected List<InfractionModel> getModels() {
+    protected @NotNull List<InfractionModel> getModels() {
         return models;
     }
 

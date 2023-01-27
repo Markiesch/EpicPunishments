@@ -21,6 +21,7 @@ public enum Translation {
     WORD_BANNED("word.banned"),
     WORD_MUTED("word.muted"),
     WORD_KICKED("word.kicked"),
+    WORD_WARNED("word.warned"),
 
     // Commands
     COMMAND_NO_PERMISSION("command.no_permission"),
@@ -89,6 +90,8 @@ public enum Translation {
     MENU_PLAYER_PUNISH_LORE("menu.player.punish_button.lore"),
     MENU_PLAYER_INFRACTIONS_TITLE("menu.player.infractions_button.title"),
     MENU_PLAYER_INFRACTIONS_LORE("menu.player.infractions_button.lore"),
+    MENU_PLAYER_WARNINGS_TITLE("menu.player.warnings_button.title"),
+    MENU_PLAYER_WARNINGS_LORE("menu.player.warnings_button.lore"),
     MENU_PLAYER_IP_MATCHES_TITLE("menu.player.ip_matches_button.title"),
     MENU_PLAYER_IP_MATCHES_LORE("menu.player.ip_matches_button.lore"),
     MENU_PLAYER_IP_MATCHES_FORMAT("menu.player.ip_matches_button.format"),
@@ -110,6 +113,11 @@ public enum Translation {
     MENU_PUNISH_BUTTON_TEMPLATE_LORE("menu.punish.template_button.lore"),
     MENU_PUNISH_BUTTON_CONFIRM_TITLE("menu.punish.confirm_button.title"),
     MENU_PUNISH_BUTTON_CONFIRM_LORE("menu.punish.confirm_button.lore"),
+
+    // Warnings menu
+    MENU_WARNINGS_TITLE("menu.warnings.title"),
+    MENU_WARNINGS_WARNING_TITLE("menu.warnings.warning_button.title"),
+    MENU_WARNINGS_WARNING_LORE("menu.warnings.warning_button.lore"),
 
     // Infractions menu
     MENU_INFRACTIONS_TITLE("menu.infractions.title"),
@@ -160,7 +168,26 @@ public enum Translation {
     MENU_EDIT_TEMPLATE_INSERT_DURATION_TITLE("menu.edit_template.insert_duration.title"),
     MENU_EDIT_TEMPLATE_INSERT_DURATION_SUBTITLE("menu.edit_template.insert_duration.subtitle"),
     MENU_EDIT_TEMPLATE_INSERT_DURATION_INFO("menu.edit_template.insert_duration.info"),
-    MENU_EDIT_TEMPLATE_SUCCESS("menu.edit_template.success");
+    MENU_EDIT_TEMPLATE_SUCCESS("menu.edit_template.success"),
+
+    // Categories menu
+    MENU_CATEGORIES_TITLE("menu.categories.title"),
+    MENU_CATEGORIES_MODEL_TITLE("menu.categories.category_button.title"),
+    MENU_CATEGORIES_MODEL_LORE("menu.categories.category_button.lore"),
+    MENU_CATEGORIES_CREATE_TITLE("menu.categories.create.title"),
+    MENU_CATEGORIES_CREATE_LORE("menu.categories.create.lore"),
+
+    // Category menu
+    MENU_CATEGORY_TITLE("menu.category.title"),
+    MENU_CATEGORY_INFO_TITLE("menu.category.info_button.title"),
+    MENU_CATEGORY_INFO_LORE("menu.category.info_button.lore"),
+    MENU_CATEGORY_RULE_TITLE("menu.category.rule_button.title"),
+    MENU_CATEGORY_RULE_LORE("menu.category.rule_button.lore"),
+    MENU_CATEGORY_EMPTY_TITLE("menu.category.rules_empty.title"),
+    MENU_CATEGORY_EMPTY_LORE("menu.category.rules_empty.lore"),
+    MENU_CATEGORY_CREATE_RULE_TITLE("menu.category.create_rule.title"),
+    MENU_CATEGORY_CREATE_RULE_LORE("menu.category.create_rule.lore"),
+    ;
 
     private final String path;
     private final Map<String, @Nullable Object> placeholders;

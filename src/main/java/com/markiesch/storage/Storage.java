@@ -64,10 +64,37 @@ public class Storage {
                         "revoked      BIT(1)            NOT NULL" +
                         ");";
 
+        String warnTableQuery =
+                "CREATE TABLE IF NOT EXISTS Warning (" +
+                        "id                 INTEGER             PRIMARY KEY " + autoIncrement + "," +
+                        "category_id        INTEGER," +
+                        "victim             BINARY(16)          NOT NULL," +
+                        "issuer             BINARY(16)," +
+                        "message            VARCHAR(255)" +
+                        ");";
+
+        String categoryTableQuery =
+                "CREATE TABLE IF NOT EXISTS Category (" +
+                        "id                 INTEGER           PRIMARY KEY " + autoIncrement + "," +
+                        "category_name      VARCHAR(40)     NOT NULL" +
+                        ");";
+
+        String categoryPunishmentTableQuery =
+                "CREATE TABLE IF NOT EXISTS CategoryRule (" +
+                        "id                     INTEGER          PRIMARY KEY " + autoIncrement + "," +
+                        "category_id            INTEGER          NOT NULL," +
+                        "template_id            INTEGER          NOT NULL," +
+                        "count                  INTEGER          NOT NULL" +
+                        ");";
+
+
         try (Connection connection = getConnection()) {
             connection.prepareStatement(profileTableQuery).executeUpdate();
             connection.prepareStatement(templateTableQuery).executeUpdate();
             connection.prepareStatement(infractionTableQuery).executeUpdate();
+            connection.prepareStatement(warnTableQuery).executeUpdate();
+            connection.prepareStatement(categoryTableQuery).executeUpdate();
+            connection.prepareStatement(categoryPunishmentTableQuery).executeUpdate();
         } catch (SQLException sqlException) {
             Bukkit.getLogger().warning("Failed to execute database query!");
             Bukkit.getLogger().warning(sqlException.getMessage());
