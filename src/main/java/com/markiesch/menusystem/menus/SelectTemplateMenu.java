@@ -3,7 +3,7 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
-import com.markiesch.modules.template.TemplateController;
+import com.markiesch.modules.template.TemplateManager;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
@@ -21,16 +21,13 @@ import java.util.function.Consumer;
 public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     private final static byte SLOTS = 54;
     private final static byte[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-
     private final static byte BACK_SLOT = 49;
 
     private final Consumer<TemplateModel> callback;
-    private final List<TemplateModel> models;
 
     public SelectTemplateMenu(Plugin plugin, UUID uuid, Consumer<@Nullable TemplateModel> callback) {
         super(plugin, uuid, SLOTS, ITEM_SLOTS);
 
-        models = new TemplateController().readAll();
         this.callback = callback;
 
         open();
@@ -48,7 +45,7 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
 
     @Override
     protected @NotNull List<TemplateModel> getModels() {
-        return models;
+        return TemplateManager.getInstance().getTemplates();
     }
 
     @Override
@@ -73,12 +70,12 @@ public class SelectTemplateMenu extends PaginatedModelMenu<TemplateModel> {
     protected ItemStack modelToItemStack(TemplateModel template) {
         return ItemUtils.createItem(Material.PAPER,
                 Translation.MENU_SELECT_TEMPLATE_BUTTON_TITLE
-                        .addPlaceholder("name", template.name)
+                        .addPlaceholder("name", template.getName())
                         .toString(),
                 Translation.MENU_SELECT_TEMPLATE_BUTTON_LORE
-                        .addPlaceholder("reason", template.reason)
-                        .addPlaceholder("duration", TimeUtils.makeReadable(template.duration))
-                        .addPlaceholder("type", template.type)
+                        .addPlaceholder("reason", template.getReason())
+                        .addPlaceholder("duration", TimeUtils.makeReadable(template.getDuration()))
+                        .addPlaceholder("type", template.getType())
                         .toList()
         );
     }

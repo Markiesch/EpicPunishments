@@ -95,9 +95,9 @@ public class PunishMenu extends Menu {
         setButton(TEMPLATE_BUTTON_SLOT, templateButton, event -> {
             new SelectTemplateMenu(plugin, uuid, (template) -> {
                 if (template != null) {
-                    this.reason = template.reason;
-                    this.duration = template.duration;
-                    this.type = template.type;
+                    this.reason = template.getReason();
+                    this.duration = template.getDuration();
+                    this.type = template.getType();
                 }
                 open();
             });

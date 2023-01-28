@@ -74,7 +74,7 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
             new SelectTemplateMenu(plugin, uuid, (template) -> {
                 if (template == null) return;
 
-                CategoryRuleManager.getInstance().update(model.getCategoryId(), model.getId(), template.id, model.getCount());
+                CategoryRuleManager.getInstance().update(model.getCategoryId(), model.getId(), template.getId(), model.getCount());
                 open();
             });
             return;
@@ -144,7 +144,7 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
                     Translation.MENU_CATEGORY_INSERT_RULE_COUNT_TITLE.toString(),
                     Translation.MENU_CATEGORY_INSERT_RULE_COUNT_SUBTITLE.toString(),
                     (count) -> {
-                        CategoryRuleManager.getInstance().create(categoryModel.getId(), template.id, count);
+                        CategoryRuleManager.getInstance().create(categoryModel.getId(), template.getId(), count);
                         open();
                     });
         });

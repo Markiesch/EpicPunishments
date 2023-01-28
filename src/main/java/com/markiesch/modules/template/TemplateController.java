@@ -24,26 +24,23 @@ public class TemplateController extends SqlController<TemplateModel> {
         return executeRead("SELECT * FROM Template", null);
     }
 
-    public @Nullable TemplateModel readSingle(int id) {
-        return executeRead("SELECT * FROM Template WHERE id = ?", new Object[]{id})
-                .stream()
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void create(String name, String reason, InfractionType type, Long duration) {
+    public @Nullable TemplateModel create(String name, String reason, InfractionType type, Long duration) {
         Object[] parameters = {name, type.name(), reason, duration};
-        executeUpdate("INSERT INTO Template (name, type, reason, duration) VALUES(?, ?, ?, ?)", parameters);
+        int affectedRows = executeUpdate("INSERT INTO Template (name, type, reason, duration) VALUES(?, ?, ?, ?)", parameters);
+
+        if (affectedRows == 0) return null;
+
+        return new TemplateModel(getLastInsertedId("Template"), name, reason, type, duration);
     }
 
-    public void delete(Integer id) {
+    public int delete(Integer id) {
         Object[] parameters = {id};
-        executeUpdate("DELETE FROM Template WHERE id = ?;", parameters);
+        return executeUpdate("DELETE FROM Template WHERE id = ?;", parameters);
     }
 
-    public void update(int id, String name, InfractionType type, String reason, long duration) {
+    public int update(int id, String name, InfractionType type, String reason, long duration) {
         Object[] parameters = {name, type.name(), reason, duration, id};
-        executeUpdate("UPDATE Template " +
+        return executeUpdate("UPDATE Template " +
                 "SET name = ?, type = ?, reason = ?, duration = ? " +
                 "WHERE id = ?;",
                 parameters

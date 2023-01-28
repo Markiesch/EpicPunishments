@@ -30,7 +30,7 @@ public class CategoryRuleModel {
 
     public String getTemplateName() {
         TemplateModel template = TemplateManager.getInstance().getTemplate(templateId);
-        return template == null ? "-" : template.name;
+        return template == null ? "-" : template.getName();
     }
 
     public void setTemplateId(int id) {

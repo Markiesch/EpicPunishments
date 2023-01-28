@@ -31,11 +31,11 @@ public class WarningUtils {
                 .forEach(templateModel -> {
                     if (templateModel == null) return;
                     new PreparedInfraction(
-                            templateModel.type,
+                            templateModel.getType(),
                             commandSender,
                             victim,
-                            templateModel.reason,
-                            templateModel.duration
+                            templateModel.getReason(),
+                            templateModel.getDuration()
                     ).execute();
                 });
 

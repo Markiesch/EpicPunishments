@@ -5,7 +5,7 @@ import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
 import com.markiesch.modules.infraction.InfractionType;
-import com.markiesch.modules.template.TemplateController;
+import com.markiesch.modules.template.TemplateManager;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
@@ -60,18 +60,18 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
         ItemStack item = ItemUtils.createItem(
                 TEMPLATE_MATERIAL,
                 Translation.MENU_TEMPLATES_TEMPLATE_BUTTON_TITLE
-                        .addPlaceholder("template_name", template.name)
+                        .addPlaceholder("template_name", template.getName())
                         .toString(),
                 Translation.MENU_TEMPLATES_TEMPLATE_BUTTON_LORE
-                        .addPlaceholder("template_type", template.type)
-                        .addPlaceholder("template_reason", template.reason)
-                        .addPlaceholder("template_duration", TimeUtils.makeReadable(template.duration))
+                        .addPlaceholder("template_type", template.getType())
+                        .addPlaceholder("template_reason", template.getReason())
+                        .addPlaceholder("template_duration", TimeUtils.makeReadable(template.getDuration()))
                         .toList()
         );
 
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "id"), PersistentDataType.INTEGER, template.id);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "id"), PersistentDataType.INTEGER, template.getId());
             item.setItemMeta(meta);
         }
 
@@ -80,22 +80,22 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
 
     @Override
     protected @NotNull List<TemplateModel> getModels() {
-        return new TemplateController()
-                .readAll()
+        return TemplateManager.getInstance()
+                .getTemplates()
                 .stream()
-                .filter(template -> template.name.toLowerCase(ROOT).contains(filter.toLowerCase(ROOT)))
+                .filter(template -> template.getName().toLowerCase(ROOT).contains(filter.toLowerCase(ROOT)))
                 .collect(Collectors.toList());
     }
 
     @Override
     protected void handleModelClick(InventoryClickEvent event, TemplateModel template) {
         if (event.getAction().equals(InventoryAction.DROP_ONE_SLOT)) {
-            new TemplateController().delete(template.id);
+            TemplateManager.getInstance().delete(template.getId());
             open();
             return;
         }
 
-        new EditTemplateMenu(plugin, uuid, template.id);
+        new EditTemplateMenu(plugin, uuid, template.getId());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class TemplateSelectorMenu extends PaginatedModelMenu<TemplateModel> {
                     Translation.MENU_TEMPLATES_CREATE_TITLE.toString(),
                     Translation.MENU_TEMPLATES_CREATE_SUBTITLE.toString(),
                     (String name) -> {
-                        new TemplateController().create(name, DEFAULT_REASON, DEFAULT_TYPE, DEFAULT_DURATION);
+                        TemplateManager.getInstance().create(name, DEFAULT_REASON, DEFAULT_TYPE, DEFAULT_DURATION);
                         getOwner().sendMessage(Translation.MENU_TEMPLATES_CREATE_SUCCESS.addPlaceholder("name", name).toString());
                         new TemplateSelectorMenu(plugin, uuid);
                     });

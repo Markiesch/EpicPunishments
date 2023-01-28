@@ -4,7 +4,7 @@ import com.markiesch.Permission;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.Menu;
-import com.markiesch.modules.template.TemplateController;
+import com.markiesch.modules.template.TemplateManager;
 import com.markiesch.modules.template.TemplateModel;
 import com.markiesch.utils.ItemUtils;
 import com.markiesch.utils.TimeUtils;
@@ -21,16 +21,14 @@ public class EditTemplateMenu extends Menu {
     private static final byte REASON_SLOT = 21;
     private static final byte TYPE_SLOT = 23;
     private static final byte DURATION_SLOT = 24;
-    private static final byte CREATE_SLOT = 40;
+    private static final byte UPDATE_SLOT = 40;
 
-    private final TemplateController templateController;
     private final TemplateModel template;
 
-    public EditTemplateMenu(Plugin plugin, UUID uuid, int id) {
+    public EditTemplateMenu(Plugin plugin, UUID uuid, int templateId) {
         super(plugin, uuid, SLOTS);
 
-        templateController = new TemplateController();
-        template = templateController.readSingle(id);
+        template = TemplateManager.getInstance().getTemplate(templateId);
 
         open();
     }
@@ -50,7 +48,7 @@ public class EditTemplateMenu extends Menu {
         ItemStack nameItem = ItemUtils.createItem(
                 Material.PAPER,
                 Translation.MENU_EDIT_TEMPLATE_NAME_BUTTON_TITLE.toString(),
-                Translation.MENU_EDIT_TEMPLATE_NAME_BUTTON_LORE.addPlaceholder("name", template.name).toList()
+                Translation.MENU_EDIT_TEMPLATE_NAME_BUTTON_LORE.addPlaceholder("name", template.getName()).toList()
         );
         setButton(NAME_SLOT, nameItem, (event) -> {
             new PlayerChat(
@@ -59,25 +57,25 @@ public class EditTemplateMenu extends Menu {
                     Translation.MENU_EDIT_TEMPLATE_INSERT_NAME_TITLE.toString(),
                     Translation.MENU_EDIT_TEMPLATE_INSERT_NAME_SUBTITLE.toString(),
                     (String message) -> {
-                        template.name = message;
+                        template.setName(message);
                         open();
                     });
         });
 
         ItemStack typeItem = ItemUtils.createItem(
-                template.type.getMaterial(),
+                template.getType().getMaterial(),
                 Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_TITLE.toString(),
-                Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_LORE.addPlaceholder("type", template.type).toList()
+                Translation.MENU_EDIT_TEMPLATE_TYPE_BUTTON_LORE.addPlaceholder("type", template.getType()).toList()
         );
         setButton(TYPE_SLOT, typeItem, event -> {
-            template.type = template.type.getNextType();
+            template.setType(template.getType().getNextType());
             setMenuItems();
         });
 
         ItemStack timeItem = ItemUtils.createItem(
                 Material.CLOCK,
                 Translation.MENU_EDIT_TEMPLATE_TIME_BUTTON_TITLE.toString(),
-                Translation.MENU_EDIT_TEMPLATE_TIME_BUTTON_LORE.addPlaceholder("duration", TimeUtils.makeReadable(template.duration)).toList()
+                Translation.MENU_EDIT_TEMPLATE_TIME_BUTTON_LORE.addPlaceholder("duration", TimeUtils.makeReadable(template.getDuration())).toList()
         );
         setButton(DURATION_SLOT, timeItem, event -> {
             for (String line : Translation.MENU_EDIT_TEMPLATE_INSERT_DURATION_INFO.toList()) {
@@ -90,7 +88,7 @@ public class EditTemplateMenu extends Menu {
                     Translation.MENU_EDIT_TEMPLATE_INSERT_DURATION_TITLE.toString(),
                     Translation.MENU_EDIT_TEMPLATE_INSERT_DURATION_SUBTITLE.toString(),
                     (String message) -> {
-                        template.duration = TimeUtils.parseTime(message);
+                        template.setDuration(TimeUtils.parseTime(message));
                         open();
                     });
         });
@@ -98,7 +96,7 @@ public class EditTemplateMenu extends Menu {
         ItemStack reasonItem = ItemUtils.createItem(
                 Material.WRITABLE_BOOK,
                 Translation.MENU_EDIT_TEMPLATE_REASON_BUTTON_TITLE.toString(),
-                Translation.MENU_EDIT_TEMPLATE_REASON_BUTTON_LORE.addPlaceholder("reason", template.reason).toList()
+                Translation.MENU_EDIT_TEMPLATE_REASON_BUTTON_LORE.addPlaceholder("reason", template.getReason()).toList()
         );
         setButton(REASON_SLOT, reasonItem, event -> {
             new PlayerChat(
@@ -107,19 +105,19 @@ public class EditTemplateMenu extends Menu {
                     Translation.MENU_EDIT_TEMPLATE_INSERT_REASON_TITLE.toString(),
                     Translation.MENU_EDIT_TEMPLATE_INSERT_REASON_SUBTITLE.toString(),
                     (String message) -> {
-                        template.reason = message;
+                        template.setReason(message);
                         open();
                     });
         });
 
-        ItemStack createItem = ItemUtils.createItem(
+        ItemStack updateItem = ItemUtils.createItem(
                 Material.EMERALD_BLOCK,
                 Translation.MENU_EDIT_TEMPLATE_CONFIRM_TITLE.toString(),
                 Translation.MENU_EDIT_TEMPLATE_CONFIRM_LORE.toList()
         );
-        setButton(CREATE_SLOT, createItem, event -> {
-            templateController.update(template.id, template.name, template.type, template.reason, template.duration);
-            event.getWhoClicked().sendMessage(Translation.MENU_EDIT_TEMPLATE_SUCCESS.addPlaceholder("name", template.name).toString());
+        setButton(UPDATE_SLOT, updateItem, event -> {
+            TemplateManager.getInstance().update(template.getId(), template.getName(), template.getType(), template.getReason(), template.getDuration());
+            event.getWhoClicked().sendMessage(Translation.MENU_EDIT_TEMPLATE_SUCCESS.addPlaceholder("name", template.getName()).toString());
             new TemplateSelectorMenu(plugin, uuid);
         });
     }
