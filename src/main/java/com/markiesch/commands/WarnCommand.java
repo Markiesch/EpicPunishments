@@ -38,6 +38,14 @@ public class WarnCommand extends CommandBase {
 
         boolean success = WarningUtils.createWarning(sender, category.getId(), profileModel, issuer);
 
+        if (success) {
+            sender.sendMessage(Translation.EVENT_WARN_SUCCESS
+                    .addPlaceholder("victim_name", args[0])
+                    .addPlaceholder("category", category.getName())
+                    .toString()
+            );
+        }
+
         return true;
     }
 

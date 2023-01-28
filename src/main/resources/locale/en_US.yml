@@ -68,6 +68,8 @@ event:
     ban:
         success: '&7Successfully banned &e[victim_name]'
         already: '&e[victim_name] &7is already&c banned'
+    warn:
+        success: '&7Successfully warned &e[victim_name] &7for &a[category]'
 
 menu:
     general:
@@ -304,6 +306,12 @@ menu:
                 - '&7Click to add a new category'
     category:
         title: 'Categories > [name]'
+        insert_name:
+            title: '&bCategory Name'
+            subtitle: '&7Type in a new name'
+        insert_rule_count:
+            title: '&bTemplate rule count'
+            subtitle: '&7Type in a new count'
         info_button:
             title: '&b&l[name]'
             lore:
@@ -317,6 +325,7 @@ menu:
             title: '&b&lCategory rule'
             lore:
                 - '&bLeft click &7to select a template'
+                - '&bRight click &7to update activation count'
                 - '&bPress Q &7to delete'
                 - ' '
                 - '&7Template: &e[template]'

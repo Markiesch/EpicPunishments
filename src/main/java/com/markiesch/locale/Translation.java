@@ -53,6 +53,7 @@ public enum Translation {
     EVENT_MUTE_ALREADY("event.mute.already"),
     EVENT_BAN_SUCCESS("event.ban.success"),
     EVENT_BAN_ALREADY("event.ban.already"),
+    EVENT_WARN_SUCCESS("event.warn.success"),
     BROADCAST_PERMANENTLY("event.broadcast.permanently"),
     BROADCAST_TEMPORARILY("event.broadcast.temporarily"),
 
@@ -179,6 +180,10 @@ public enum Translation {
 
     // Category menu
     MENU_CATEGORY_TITLE("menu.category.title"),
+    MENU_CATEGORY_INSERT_NAME_TITLE("menu.category.insert_name.title"),
+    MENU_CATEGORY_INSERT_NAME_SUBTITLE("menu.category.insert_name.subtitle"),
+    MENU_CATEGORY_INSERT_RULE_COUNT_TITLE("menu.category.insert_rule_count.title"),
+    MENU_CATEGORY_INSERT_RULE_COUNT_SUBTITLE("menu.category.insert_rule_count.subtitle"),
     MENU_CATEGORY_INFO_TITLE("menu.category.info_button.title"),
     MENU_CATEGORY_INFO_LORE("menu.category.info_button.lore"),
     MENU_CATEGORY_RULE_TITLE("menu.category.rule_button.title"),
