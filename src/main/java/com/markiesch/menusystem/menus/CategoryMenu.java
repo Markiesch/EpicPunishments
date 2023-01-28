@@ -1,6 +1,7 @@
 package com.markiesch.menusystem.menus;
 
 import com.markiesch.Permission;
+import com.markiesch.chat.IntegerPlayerChat;
 import com.markiesch.chat.PlayerChat;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
@@ -64,7 +65,7 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
     @Override
     protected void handleModelClick(InventoryClickEvent event, CategoryRuleModel model) {
         if (event.getClick() == ClickType.DROP) {
-            CategoryRuleManager.getInstance().delete(model.getId());
+            CategoryRuleManager.getInstance().delete(model);
             open();
             return;
         }
@@ -73,14 +74,17 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
             new SelectTemplateMenu(plugin, uuid, (template) -> {
                 if (template == null) return;
 
-                CategoryRuleManager.getInstance().update(model.getId(), template.id, model.getCount());
+                CategoryRuleManager.getInstance().update(model.getCategoryId(), model.getId(), template.id, model.getCount());
                 open();
             });
             return;
         }
 
         if (event.getClick() == ClickType.RIGHT) {
-            // TODO promt to change amount/count
+            new IntegerPlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_RULE_COUNT_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_RULE_COUNT_SUBTITLE.toString(), (count) -> {
+                CategoryRuleManager.getInstance().update(model.getCategoryId(), model.getId(), model.getTemplateId(), count);
+                open();
+            });
         }
     }
 
@@ -89,57 +93,60 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
         super.setMenuItems();
 
         if (getModels().isEmpty()) {
-            setButton(
-                    EMPTY_RULES_BUTTON,
-                    ItemUtils.createItem(
-                            Material.PAPER,
-                            Translation.MENU_CATEGORY_EMPTY_TITLE.toString(),
-                            Translation.MENU_CATEGORY_EMPTY_LORE.toList()
-                    )
+            ItemStack emptyButtonItem = ItemUtils.createItem(
+                    Material.PAPER,
+                    Translation.MENU_CATEGORY_EMPTY_TITLE.toString(),
+                    Translation.MENU_CATEGORY_EMPTY_LORE.toList()
             );
+
+            setButton(EMPTY_RULES_BUTTON, emptyButtonItem);
         }
 
-        setButton(
-                MODEL_BUTTON,
-                ItemUtils.createItem(
-                        Material.BOOKSHELF,
-                        Translation.MENU_CATEGORY_INFO_TITLE.addPlaceholder("name", categoryModel.getName()).toString(),
-                        Translation.MENU_CATEGORY_INFO_LORE.toList()
-                ),
-                (event) -> {
-                    new PlayerChat(plugin, getOwner(), "insert a new name", "", (message) -> {
-                        CategoryManager.getInstance().update(categoryModel.getId(), message);
+        final ItemStack categoryButtonItem = ItemUtils.createItem(
+                Material.BOOKSHELF,
+                Translation.MENU_CATEGORY_INFO_TITLE.addPlaceholder("name", categoryModel.getName()).toString(),
+                Translation.MENU_CATEGORY_INFO_LORE.toList()
+        );
+        setButton(MODEL_BUTTON, categoryButtonItem, this::handleCategoryButtonClick);
+
+        final ItemStack backButtonItem = ItemUtils.createItem(
+                Material.OAK_SIGN,
+                Translation.MENU_BACK_BUTTON_TITLE.toString(),
+                Translation.MENU_BACK_BUTTON_LORE.toList()
+        );
+        setButton(BACK_BUTTON, backButtonItem, (event) -> new CategoriesMenu(plugin, uuid));
+
+        final ItemStack addRuleButtonItem = ItemUtils.createItem(
+                Material.EMERALD_BLOCK,
+                Translation.MENU_CATEGORY_CREATE_RULE_TITLE.toString(),
+                Translation.MENU_CATEGORY_CREATE_RULE_LORE.toList()
+        );
+        setButton(ADD_RULE_BUTTON, addRuleButtonItem, this::handleAddRuleButtonClick);
+    }
+
+    private void handleCategoryButtonClick(InventoryClickEvent event) {
+        new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_NAME_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_NAME_SUBTITLE.toString(), (message) -> {
+            CategoryManager.getInstance().update(categoryModel.getId(), message);
+            open();
+        });
+    }
+
+    private void handleAddRuleButtonClick(InventoryClickEvent event) {
+        new SelectTemplateMenu(plugin, uuid, (template) -> {
+            if (template == null) {
+                open();
+                return;
+            }
+
+            new IntegerPlayerChat(
+                    plugin,
+                    getOwner(),
+                    Translation.MENU_CATEGORY_INSERT_RULE_COUNT_TITLE.toString(),
+                    Translation.MENU_CATEGORY_INSERT_RULE_COUNT_SUBTITLE.toString(),
+                    (count) -> {
+                        CategoryRuleManager.getInstance().create(categoryModel.getId(), template.id, count);
                         open();
                     });
-                }
-        );
-        setButton(
-                BACK_BUTTON,
-                ItemUtils.createItem(
-                        Material.OAK_SIGN,
-                        Translation.MENU_BACK_BUTTON_TITLE.toString(),
-                        Translation.MENU_BACK_BUTTON_LORE.toList()
-                ),
-                (event) -> new CategoriesMenu(plugin, uuid)
-        );
-
-        setButton(
-                ADD_RULE_BUTTON,
-                ItemUtils.createItem(
-                        Material.EMERALD_BLOCK,
-                        Translation.MENU_CATEGORY_CREATE_RULE_TITLE.toString(),
-                        Translation.MENU_CATEGORY_CREATE_RULE_LORE.toList()
-                ),
-                (event) -> {
-                    new SelectTemplateMenu(plugin, uuid, (template) -> {
-                        if (template == null) return;
-
-                        new PlayerChat(plugin, getOwner(), "Insert ", "", (message) -> {
-                             CategoryRuleManager.getInstance().create(categoryModel.getId(), template.id, Integer.parseInt(message));
-                            open();
-                        });
-                    });
-                }
-        );
+        });
     }
 }

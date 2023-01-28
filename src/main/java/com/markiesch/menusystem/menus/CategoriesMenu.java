@@ -85,7 +85,7 @@ public class CategoriesMenu extends PaginatedModelMenu<CategoryModel> {
                         Translation.MENU_CATEGORIES_CREATE_LORE.toList()
                 ),
                 (event) -> {
-                    new PlayerChat(plugin, getOwner(), "Insert", "Category name", (message) -> {
+                    new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_NAME_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_NAME_SUBTITLE.toString(), (message) -> {
                         CategoryManager.getInstance().create(message);
                         open();
                     });

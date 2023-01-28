@@ -46,11 +46,26 @@ public class CategoryRuleManager {
         return true;
     }
 
-    public int update(int id, int templateId, int count) {
-        return new CategoryRuleController().update(id, templateId, count);
+    public boolean update(int categoryId, int categoryRuleId, int templateId, int count) {
+        int affectedRows = new CategoryRuleController().update(categoryRuleId, templateId, count);
+        if (affectedRows == 0) return false;
+
+        this.getCategoryRules(categoryId)
+                .stream().filter(categoryRuleModel -> categoryRuleModel.getId() == categoryRuleId).findFirst().ifPresent(categoryRuleModel -> {
+                    categoryRuleModel.setTemplateId(templateId);
+                    categoryRuleModel.setCount(count);
+                });
+
+        return true;
     }
 
-    public int delete(int id) {
-        return new CategoryRuleController().delete(id);
+    public boolean delete(CategoryRuleModel categoryRuleModel) {
+        int affectedRows = new CategoryRuleController().delete(categoryRuleModel.getId());
+        if (affectedRows == 0) return false;
+
+        this.getCategoryRules(categoryRuleModel.getCategoryId())
+                .removeIf(item -> item.getId() == categoryRuleModel.getId());
+
+        return true;
     }
 }

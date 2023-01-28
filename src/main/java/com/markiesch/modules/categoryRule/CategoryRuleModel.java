@@ -6,7 +6,7 @@ import com.markiesch.modules.template.TemplateModel;
 public class CategoryRuleModel {
     private final int id;
     private final int categoryId;
-    private final int templateId;
+    private int templateId;
     private int count;
 
     public CategoryRuleModel(int id, int categoryId, int templateId, int count) {
@@ -33,7 +33,15 @@ public class CategoryRuleModel {
         return template == null ? "-" : template.name;
     }
 
+    public void setTemplateId(int id) {
+        this.templateId = id;
+    }
+
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
