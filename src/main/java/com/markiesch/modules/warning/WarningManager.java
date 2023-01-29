@@ -14,12 +14,6 @@ public class WarningManager {
 
     public void initialize() {
         warnings.addAll(new WarningController().readAll());
-
-        for (WarningModel warning : warnings) {
-            System.out.println("issuer" + warning.getIssuer());
-            System.out.println("victim" + warning.getVictim());
-            System.out.println("id" + warning.getId());
-        }
     }
 
     private static class WarningManagerHolder {

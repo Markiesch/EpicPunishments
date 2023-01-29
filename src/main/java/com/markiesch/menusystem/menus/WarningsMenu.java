@@ -34,9 +34,7 @@ public class WarningsMenu extends PaginatedModelMenu<WarningModel> {
         target = ProfileManager.getInstance().getPlayer(targetUUID);
         if (target == null) return;
 
-        System.out.println(target.uuid);
         models = WarningManager.getInstance().getPlayer(target.uuid);
-        System.out.println(models.size());
         open();
     }
 
