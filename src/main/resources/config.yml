@@ -54,5 +54,7 @@ formats:
         - ""
         - "&7Reason: &f[reason]"
         - "&7Find out more:&e&n www.example.com"
+    warning:
+        - "&c&lWARNING"
 
 # | config generated at version ${project.version}
