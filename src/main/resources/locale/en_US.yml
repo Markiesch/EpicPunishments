@@ -69,7 +69,7 @@ event:
         success: '&7Successfully banned &e[victim_name]'
         already: '&e[victim_name] &7is already&c banned'
     warn:
-        success: '&7Successfully warned &e[victim_name] &7for &a[category]'
+        success: '&7Successfully warned &e[victim_name] &7for &a[reason]'
 
 menu:
     general:
@@ -100,6 +100,10 @@ menu:
         search_players:
             title: '&bFilter by name'
             subtitle: '&7Type in a filter'
+        categories_button:
+            title: '&b&lWarn Categories'
+            lore:
+                - '&7Click to manage warn categories'
         templates_button:
             title: '&b&lTemplates'
             lore:
@@ -309,13 +313,20 @@ menu:
         insert_name:
             title: '&bCategory Name'
             subtitle: '&7Type in a new name'
+        insert_message:
+            title: '&bCategory message'
+            subtitle: '&7Type in a new message'
+            copy: '&7Click here to copy old message'
         insert_rule_count:
             title: '&bTemplate rule count'
             subtitle: '&7Type in a new count'
         info_button:
             title: '&b&l[name]'
             lore:
-                - '&7Click to change the category name'
+                - '&bLeft click &7to change name'
+                - '&bRight click &7to change message'
+                - ''
+                - '&eMessage: &7[message]'
         rules_empty:
             title: '&b&lWelcome to category rules'
             lore:
