@@ -41,22 +41,16 @@ public class CategoryManager {
         return categories;
     }
 
-    public List<String> getCategoryNames() {
+    public List<String> getCategoryNames(String arg) {
         return categories
                 .stream()
                 .map(CategoryModel::getName)
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getCategoryNames(String arg) {
-        return getCategoryNames()
-                .stream()
                 .filter((name) -> name.toLowerCase(Locale.ROOT).contains(arg.toLowerCase(Locale.ROOT)))
                 .collect(Collectors.toList());
     }
 
     public boolean create(String name) {
-        CategoryModel category = new CategoryController().create(name);
+        CategoryModel category = new CategoryController().create(name, null);
 
         if (category != null) {
             categories.add(category);
@@ -65,14 +59,15 @@ public class CategoryManager {
         return category == null;
     }
 
-    public boolean update(int id, String name) {
+    public boolean update(int id, String name, String message) {
         CategoryModel categoryModel = getCategoryById(id);
         if (categoryModel == null) return false;
 
-        boolean success = new CategoryController().update(id, name) == 1;
+        boolean success = new CategoryController().update(id, name, message) == 1;
 
         if (success) {
             categoryModel.setName(name);
+            categoryModel.setMessage(message);
         }
 
         return success;

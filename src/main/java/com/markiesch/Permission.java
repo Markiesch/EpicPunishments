@@ -3,29 +3,32 @@ package com.markiesch;
 import org.jetbrains.annotations.NotNull;
 
 public enum Permission {
+    // Command permissions
+    COMMAND_CLEARCHAT_EXECUTE("clear_chat.execute"),
+    COMMAND_CLEARCHAT_BYPASS("clear_chat.bypass"),
+
+    COMMAND_RANDOMPLAYER_EXECUTE("randomplayer.execute"),
+    COMMAND_RANDOMPLAYER_EXEMPT("randomplayer.exempt"),
+
     ADMIN_RELOAD("admin.reload"),
     ADMIN_HELP("admin.help"),
-
     EXECUTE_INFO("info.execute"),
-
     IM_MUTED_EXECUTE("im_muted.execute"),
-
     CATEGORIES_EXECUTE("categories.execute"),
-
     BROADCAST_RECEIVE("broadcast.receive"),
 
+    // Punishment permissions
     EXECUTE_BAN("ban.execute"),
     REVOKE_BAN("ban.revoke"),
     DELETE_BAN("ban.delete"),
-
     EXECUTE_MUTE("mute.execute"),
     REVOKE_MUTE("mute.revoke"),
     DELETE_MUTE("mute.delete"),
-
     EXECUTE_KICK("kick.execute"),
     DELETE_KICK("kick.delete"),
-
     EXECUTE_WARN("warn.execute"),
+    REVOKE_WARN("warn.revoke"),
+    REVOKE_WARNINGS("warn.revoke.all"),
 
     MANAGE_PLAYERS("manage.players"),
     MANAGE_TEMPLATES("manage.templates"),
@@ -37,12 +40,6 @@ public enum Permission {
     SPY_SIGN_NOTIFY("spy.sign.notify"),
 
     SPY_NEW_NAME_NOTIFY("spy.new_name.notify"),
-
-    RANDOM_PLAYER("randomplayer"),
-    RANDOM_PLAYER_EXEMPT("randomplayer.exempt"),
-
-    CLEAR_CHAT_EXECUTE("clear_chat.execute"),
-    CLEAR_CHAT_BYPASS("clear_chat.bypass"),
 
     HISTORY_COMMAND("history.command"),
     HISTORY_MENU("history.menu"),

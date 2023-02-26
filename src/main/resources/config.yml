@@ -54,7 +54,11 @@ formats:
         - ""
         - "&7Reason: &f[reason]"
         - "&7Find out more:&e&n www.example.com"
-    warning:
+    reason_warning:
         - "&c&lWARNING"
+        - "You have been warned for [reason]"
+    message_warning:
+        - "&c&lWARNING"
+        - "[message]"
 
 # | config generated at version ${project.version}

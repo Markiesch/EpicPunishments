@@ -11,7 +11,8 @@ public class CategoryController extends SqlController<CategoryModel> {
     protected CategoryModel resultSetToModel(ResultSet resultSet) throws SQLException {
         return new CategoryModel(
                 resultSet.getInt("id"),
-                resultSet.getString("category_name")
+                resultSet.getString("name"),
+                resultSet.getString("message")
         );
     }
 
@@ -19,15 +20,15 @@ public class CategoryController extends SqlController<CategoryModel> {
         return executeRead("SELECT * FROM Category;", null);
     }
 
-    public int update(int id, String name) {
-        return executeUpdate("UPDATE Category SET category_name = ? WHERE id = ?;", new Object[]{name, id});
+    public int update(int id, String name, String message) {
+        return executeUpdate("UPDATE Category SET name = ?, message = ? WHERE id = ?;", new Object[]{name, message, id});
     }
 
-    public CategoryModel create(String name) {
-        int affectedRows = executeUpdate("INSERT INTO Category(category_name) VALUES (?);", new Object[]{name});
+    public CategoryModel create(String name, String message) {
+        int affectedRows = executeUpdate("INSERT INTO Category(name, message) VALUES (?, ?);", new Object[]{name});
         if (affectedRows == 0) return null;
 
-        return new CategoryModel(getLastInsertedId("Category"), name);
+        return new CategoryModel(getLastInsertedId("Category"), name, message);
     }
 
     public int delete(int id) {

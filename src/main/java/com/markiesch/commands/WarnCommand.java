@@ -12,13 +12,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class WarnCommand extends CommandBase {
 
     public WarnCommand() {
-        super("warn", Permission.EXECUTE_WARN, "§7Usage: §e/warn <target> <category>", 2, -1, false);
+        super("warn", Permission.EXECUTE_WARN, "§7Usage: §e/warn <target> <category | reason>", 2, -1, false);
     }
 
     @Override
@@ -29,20 +30,26 @@ public class WarnCommand extends CommandBase {
             return true;
         }
 
-        CategoryModel category = CategoryManager.getInstance().getCategoryByName(args[1]);
-        if (category == null) {
-            return false;
-        }
+        List<String> arguments = Arrays.asList(args);
+        String categoryNameInput = String.join(" ", arguments.subList(1, arguments.size()));
+        CategoryModel category = CategoryManager.getInstance().getCategoryByName(categoryNameInput);
+
 
         UUID issuer = sender instanceof Player ? ((Player) sender).getUniqueId() : null;
 
-        boolean success = WarningUtils.createWarning(sender, category.getId(), profileModel, issuer);
+        boolean success;
+
+        if (category == null) {
+            success = WarningUtils.createWarning(sender, null, categoryNameInput, profileModel, issuer);
+        } else {
+            success = WarningUtils.createWarning(sender, category.getId(), null, profileModel, issuer);
+        }
 
         if (success) {
             sender.sendMessage(Translation.EVENT_WARN_SUCCESS
-                    .addPlaceholder("victim_name", args[0])
-                    .addPlaceholder("category", category.getName())
-                    .toString()
+                .addPlaceholder("victim_name", args[0])
+                .addPlaceholder("reason", categoryNameInput)
+                .toString()
             );
         }
 

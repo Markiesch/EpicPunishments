@@ -3,7 +3,6 @@ package com.markiesch.menusystem.menus;
 import com.markiesch.Permission;
 import com.markiesch.locale.Translation;
 import com.markiesch.menusystem.PaginatedModelMenu;
-import com.markiesch.modules.category.CategoryManager;
 import com.markiesch.modules.category.CategoryModel;
 import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.profile.ProfileModel;
@@ -26,7 +25,6 @@ public class WarningsMenu extends PaginatedModelMenu<WarningModel> {
     private final static byte BACK_BUTTON_SLOT = 49;
 
     private final ProfileModel target;
-    private List<WarningModel> models;
 
     public WarningsMenu(Plugin plugin, UUID uuid, UUID targetUUID) {
         super(plugin, uuid, SLOTS, ITEM_SLOTS);
@@ -34,7 +32,6 @@ public class WarningsMenu extends PaginatedModelMenu<WarningModel> {
         target = ProfileManager.getInstance().getPlayer(targetUUID);
         if (target == null) return;
 
-        models = WarningManager.getInstance().getPlayer(target.uuid);
         open();
     }
 
@@ -50,7 +47,7 @@ public class WarningsMenu extends PaginatedModelMenu<WarningModel> {
 
     @Override
     protected ItemStack modelToItemStack(WarningModel warning) {
-        CategoryModel category = CategoryManager.getInstance().getCategoryById(warning.getCategoryId());
+        CategoryModel category = warning.getCategory();
 
         return ItemUtils.createItem(
                 Material.BOOK,
@@ -65,7 +62,7 @@ public class WarningsMenu extends PaginatedModelMenu<WarningModel> {
 
     @Override
     protected @NotNull List<WarningModel> getModels() {
-        return models;
+        return WarningManager.getInstance().getPlayer(target.uuid);
     }
 
     @Override

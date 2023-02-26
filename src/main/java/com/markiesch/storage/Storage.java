@@ -48,7 +48,7 @@ public class Storage {
                         "id           INTEGER           PRIMARY KEY " + autoIncrement + "," +
                         "name         VARCHAR(50)       NOT NULL," +
                         "type         VARCHAR(10)       NOT NULL," +
-                        "reason       VARCHAR(100)," +
+                        "reason       VARCHAR(255)," +
                         "duration     INTEGER" +
                         ");";
 
@@ -58,7 +58,7 @@ public class Storage {
                         "victim       BINARY(16)        NOT NULL," +
                         "issuer       BINARY(16)," +
                         "type         VARCHAR(10)," +
-                        "reason       VARCHAR(100)," +
+                        "reason       VARCHAR(255)," +
                         "duration     INTEGER," +
                         "date         INTEGER           NOT NULL," +
                         "revoked      BIT(1)            NOT NULL" +
@@ -68,15 +68,18 @@ public class Storage {
                 "CREATE TABLE IF NOT EXISTS Warning (" +
                         "id                 INTEGER             PRIMARY KEY " + autoIncrement + "," +
                         "category_id        INTEGER," +
+                        "reason             VARCHAR(255)," +
                         "victim             BINARY(16)          NOT NULL," +
                         "issuer             BINARY(16)," +
-                        "message            VARCHAR(255)" +
+                        "created            INTEGER             NOT NULL," +
+                        "seen               BIT(1)" +
                         ");";
 
         String categoryTableQuery =
                 "CREATE TABLE IF NOT EXISTS Category (" +
-                        "id                 INTEGER           PRIMARY KEY " + autoIncrement + "," +
-                        "category_name      VARCHAR(40)     NOT NULL" +
+                        "id             INTEGER             PRIMARY KEY " + autoIncrement + "," +
+                        "name           VARCHAR(40)         NOT NULL    UNIQUE," +
+                        "message        TEXT" +
                         ");";
 
         String categoryPunishmentTableQuery =

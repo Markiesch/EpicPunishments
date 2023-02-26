@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ClearChatCommand extends CommandBase {
     public ClearChatCommand() {
-        super("ClearChat", Permission.CLEAR_CHAT_EXECUTE, "§7Usage: §e/clearchat", -1, -1, false);
+        super("ClearChat", Permission.COMMAND_CLEARCHAT_EXECUTE, "§7Usage: §e/clearchat", -1, -1, false);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class ClearChatCommand extends CommandBase {
 
         Bukkit.getOnlinePlayers()
                 .forEach(player -> {
-                    if (!player.hasPermission(Permission.CLEAR_CHAT_BYPASS.getNode())) {
+                    if (!player.hasPermission(Permission.COMMAND_CLEARCHAT_BYPASS.getNode())) {
                         player.sendMessage(content);
                     }
 

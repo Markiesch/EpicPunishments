@@ -10,6 +10,8 @@ import com.markiesch.modules.category.CategoryModel;
 import com.markiesch.modules.categoryRule.CategoryRuleManager;
 import com.markiesch.modules.categoryRule.CategoryRuleModel;
 import com.markiesch.utils.ItemUtils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -105,7 +107,9 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
         final ItemStack categoryButtonItem = ItemUtils.createItem(
                 Material.BOOKSHELF,
                 Translation.MENU_CATEGORY_INFO_TITLE.addPlaceholder("name", categoryModel.getName()).toString(),
-                Translation.MENU_CATEGORY_INFO_LORE.toList()
+                Translation.MENU_CATEGORY_INFO_LORE
+                        .addPlaceholder("message", categoryModel.getMessage())
+                        .toList()
         );
         setButton(MODEL_BUTTON, categoryButtonItem, this::handleCategoryButtonClick);
 
@@ -125,10 +129,21 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
     }
 
     private void handleCategoryButtonClick(InventoryClickEvent event) {
-        new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_NAME_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_NAME_SUBTITLE.toString(), (message) -> {
-            CategoryManager.getInstance().update(categoryModel.getId(), message);
-            open();
-        });
+        if (event.getClick() == ClickType.LEFT) {
+            new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_NAME_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_NAME_SUBTITLE.toString(), (message) -> {
+                CategoryManager.getInstance().update(categoryModel.getId(), message, categoryModel.getMessage());
+                open();
+            });
+        } else if (event.getClick() == ClickType.RIGHT) {
+            TextComponent textComponent = new TextComponent(Translation.MENU_CATEGORY_INSERT_MESSAGE_COPY.toString());
+            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, categoryModel.getMessage()));
+            getOwner().spigot().sendMessage(textComponent);
+
+            new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_MESSAGE_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_MESSAGE_SUBTITLE.toString(), (message) -> {
+                CategoryManager.getInstance().update(categoryModel.getId(), categoryModel.getName(), message);
+                open();
+            });
+        }
     }
 
     private void handleAddRuleButtonClick(InventoryClickEvent event) {

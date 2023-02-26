@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class RandomPlayerCommand extends CommandBase {
     public RandomPlayerCommand() {
-        super("randomPlayer", Permission.RANDOM_PLAYER, "§7Usage: §e/randomplayer", -1, -1, true);
+        super("randomPlayer", Permission.COMMAND_RANDOMPLAYER_EXECUTE, "§7Usage: §e/randomplayer", -1, -1, true);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class RandomPlayerCommand extends CommandBase {
 
         List<Player> onlinePlayers = Bukkit.getOnlinePlayers()
                 .stream()
-                .filter(onlinePlayer -> onlinePlayer.getUniqueId() != player.getUniqueId() && !onlinePlayer.hasPermission(Permission.RANDOM_PLAYER_EXEMPT.getNode()))
+                .filter(onlinePlayer -> onlinePlayer.getUniqueId() != player.getUniqueId() && !onlinePlayer.hasPermission(Permission.COMMAND_RANDOMPLAYER_EXEMPT.getNode()))
                 .collect(Collectors.toList());
 
 

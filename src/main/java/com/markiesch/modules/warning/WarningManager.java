@@ -1,5 +1,7 @@
 package com.markiesch.modules.warning;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,13 +32,26 @@ public class WarningManager {
                 .collect(Collectors.toList());
     }
 
-    public boolean createWarning(int categoryId, UUID victim, UUID issuer) {
-        WarningModel warningModel = new WarningController().create(categoryId, victim, issuer);
+    public @Nullable WarningModel createWarning(@Nullable Integer categoryId, @Nullable String reason, UUID victim, UUID issuer, boolean isOnline) {
+        WarningModel warningModel = new WarningController().create(categoryId, reason, victim, issuer, isOnline);
 
-        if (warningModel == null) return false;
+        if (warningModel == null) return null;
 
         warnings.add(warningModel);
-        return true;
+        return warningModel;
+    }
+
+    public void updateWarning(int warningId, boolean seen) {
+        int affectedRows = new WarningController().update(warningId, seen);
+
+        if (affectedRows == 0) return;
+
+        warnings.stream()
+                .filter(warningModel -> warningModel.getId() == warningId)
+                .findFirst()
+                .ifPresent(warningModel -> {
+                    warningModel.setSeen(seen);
+                });
     }
 
     public boolean delete(int id) {

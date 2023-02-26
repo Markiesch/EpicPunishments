@@ -29,6 +29,7 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
     private static final byte FILTER_SLOT = 46;
     private static final byte SEARCH_SLOT = 47;
     private static final byte CLOSE_SLOT = 49;
+    private static final byte CATEGORIES_BUTTON_SLOT = 51;
     private static final byte TEMPLATE_BUTTON_SLOT = 52;
 
     public PlayerSelectorMenu(Plugin plugin, UUID uuid) {
@@ -139,12 +140,12 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
             });
         });
 
-        ItemStack closeButton = ItemUtils.createItem(
-                Material.NETHER_STAR,
-                Translation.MENU_CLOSE_BUTTON_TITLE.toString(),
-                Translation.MENU_CLOSE_BUTTON_LORE.toList()
+        ItemStack categoriesButton = ItemUtils.createItem(
+                Material.BOOKSHELF,
+                Translation.MENU_PLAYERS_CATEGORIES_BUTTON_TITLE.toString(),
+                Translation.MENU_PLAYERS_CATEGORIES_BUTTON_LORE.toList()
         );
-        setButton(CLOSE_SLOT, closeButton, (event) -> getOwner().closeInventory());
+        setButton(CATEGORIES_BUTTON_SLOT, categoriesButton, (event) -> new CategoriesMenu(plugin, uuid));
 
         ItemStack templatesButton = ItemUtils.createItem(
                 Material.ANVIL,
@@ -152,6 +153,13 @@ public class PlayerSelectorMenu extends PaginatedModelMenu<ProfileModel> {
                 Translation.MENU_PLAYERS_TEMPLATES_BUTTON_LORE.toList()
         );
         setButton(TEMPLATE_BUTTON_SLOT, templatesButton, (event) -> new TemplateSelectorMenu(plugin, uuid));
+
+        ItemStack closeButton = ItemUtils.createItem(
+                Material.NETHER_STAR,
+                Translation.MENU_CLOSE_BUTTON_TITLE.toString(),
+                Translation.MENU_CLOSE_BUTTON_LORE.toList()
+        );
+        setButton(CLOSE_SLOT, closeButton, (event) -> getOwner().closeInventory());
     }
 
     public void toggleFilter() {
