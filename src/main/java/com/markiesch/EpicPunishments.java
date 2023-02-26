@@ -73,7 +73,6 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         new TemplatesCommand(this);
         new RandomPlayerCommand();
         new ClearChatCommand();
-        new CategoriesCommand(this);
 
         new BanCommand();
         new UnbanCommand();
@@ -87,7 +86,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
     }
 
     private void registerListeners() {
-        registerEvent(new PlayerJoin());
+        registerEvent(new PlayerJoin(this));
         registerEvent(new MenuListener());
         registerEvent(new ChatListener());
 
