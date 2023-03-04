@@ -35,7 +35,7 @@ public class CategoriesMenu extends PaginatedModelMenu<CategoryModel> {
 
     @Override
     public Permission getRequiredPermission() {
-        return null;
+        return Permission.MANAGE_CATEGORIES;
     }
 
     @Override
