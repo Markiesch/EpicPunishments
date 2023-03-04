@@ -31,7 +31,7 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
     private final CategoryModel categoryModel;
 
     public CategoryMenu(Plugin plugin, UUID uuid, CategoryModel categoryModel) {
-        super(plugin, uuid, 54, new byte[]{19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34});
+        super(plugin, uuid, 54, new byte[] { 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 });
         this.categoryModel = categoryModel;
 
         open();
@@ -50,12 +50,12 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
     @Override
     protected ItemStack modelToItemStack(CategoryRuleModel categoryRule) {
         return ItemUtils.createItem(
-                Material.BOOK,
-                Translation.MENU_CATEGORY_RULE_TITLE.toString(),
-                Translation.MENU_CATEGORY_RULE_LORE
-                        .addPlaceholder("template", categoryRule.getTemplateName())
-                        .addPlaceholder("count", categoryRule.getCount())
-                        .toList()
+            Material.BOOK,
+            Translation.MENU_CATEGORY_RULE_TITLE.toString(),
+            Translation.MENU_CATEGORY_RULE_LORE
+                .addPlaceholder("template", categoryRule.getTemplateName())
+                .addPlaceholder("count", categoryRule.getCount())
+                .toList()
         );
     }
 
@@ -96,34 +96,34 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
 
         if (getModels().isEmpty()) {
             ItemStack emptyButtonItem = ItemUtils.createItem(
-                    Material.PAPER,
-                    Translation.MENU_CATEGORY_EMPTY_TITLE.toString(),
-                    Translation.MENU_CATEGORY_EMPTY_LORE.toList()
+                Material.PAPER,
+                Translation.MENU_CATEGORY_EMPTY_TITLE.toString(),
+                Translation.MENU_CATEGORY_EMPTY_LORE.toList()
             );
 
             setButton(EMPTY_RULES_BUTTON, emptyButtonItem);
         }
 
         final ItemStack categoryButtonItem = ItemUtils.createItem(
-                Material.BOOKSHELF,
-                Translation.MENU_CATEGORY_INFO_TITLE.addPlaceholder("name", categoryModel.getName()).toString(),
-                Translation.MENU_CATEGORY_INFO_LORE
-                        .addPlaceholder("message", categoryModel.getMessage())
-                        .toList()
+            Material.BOOKSHELF,
+            Translation.MENU_CATEGORY_INFO_TITLE.addPlaceholder("name", categoryModel.getName()).toString(),
+            Translation.MENU_CATEGORY_INFO_LORE
+                .addPlaceholder("message", categoryModel.getMessage())
+                .toList()
         );
         setButton(MODEL_BUTTON, categoryButtonItem, this::handleCategoryButtonClick);
 
         final ItemStack backButtonItem = ItemUtils.createItem(
-                Material.OAK_SIGN,
-                Translation.MENU_BACK_BUTTON_TITLE.toString(),
-                Translation.MENU_BACK_BUTTON_LORE.toList()
+            Material.OAK_SIGN,
+            Translation.MENU_BACK_BUTTON_TITLE.toString(),
+            Translation.MENU_BACK_BUTTON_LORE.toList()
         );
         setButton(BACK_BUTTON, backButtonItem, (event) -> new CategoriesMenu(plugin, uuid));
 
         final ItemStack addRuleButtonItem = ItemUtils.createItem(
-                Material.EMERALD_BLOCK,
-                Translation.MENU_CATEGORY_CREATE_RULE_TITLE.toString(),
-                Translation.MENU_CATEGORY_CREATE_RULE_LORE.toList()
+            Material.EMERALD_BLOCK,
+            Translation.MENU_CATEGORY_CREATE_RULE_TITLE.toString(),
+            Translation.MENU_CATEGORY_CREATE_RULE_LORE.toList()
         );
         setButton(ADD_RULE_BUTTON, addRuleButtonItem, this::handleAddRuleButtonClick);
     }
@@ -135,9 +135,16 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
                 open();
             });
         } else if (event.getClick() == ClickType.RIGHT) {
-            TextComponent textComponent = new TextComponent(Translation.MENU_CATEGORY_INSERT_MESSAGE_COPY.toString());
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, categoryModel.getMessage()));
-            getOwner().spigot().sendMessage(textComponent);
+            if (categoryModel.getMessage() != null) {
+                TextComponent textComponent = new TextComponent(
+                    String.join("\n",
+                    Translation.MENU_CATEGORY_INSERT_MESSAGE_COPY
+                        .addPlaceholder("message", categoryModel.getMessage())
+                        .toList())
+                );
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, categoryModel.getMessage()));
+                getOwner().spigot().sendMessage(textComponent);
+            }
 
             new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_MESSAGE_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_MESSAGE_SUBTITLE.toString(), (message) -> {
                 CategoryManager.getInstance().update(categoryModel.getId(), categoryModel.getName(), message);
@@ -154,14 +161,14 @@ public class CategoryMenu extends PaginatedModelMenu<CategoryRuleModel> {
             }
 
             new IntegerPlayerChat(
-                    plugin,
-                    getOwner(),
-                    Translation.MENU_CATEGORY_INSERT_RULE_COUNT_TITLE.toString(),
-                    Translation.MENU_CATEGORY_INSERT_RULE_COUNT_SUBTITLE.toString(),
-                    (count) -> {
-                        CategoryRuleManager.getInstance().create(categoryModel.getId(), template.getId(), count);
-                        open();
-                    });
+                plugin,
+                getOwner(),
+                Translation.MENU_CATEGORY_INSERT_RULE_COUNT_TITLE.toString(),
+                Translation.MENU_CATEGORY_INSERT_RULE_COUNT_SUBTITLE.toString(),
+                (count) -> {
+                    CategoryRuleManager.getInstance().create(categoryModel.getId(), template.getId(), count);
+                    open();
+                });
         });
     }
 }
