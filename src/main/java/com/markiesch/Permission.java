@@ -26,24 +26,20 @@ public enum Permission {
     // Spy permissions
     SPY_COMMAND_BYPASS("spy.command.bypass"),
     SPY_COMMAND_NOTIFY("spy.command.notify"),
-
     SPY_SIGN_BYPASS("spy.sign.bypass"),
     SPY_SIGN_NOTIFY("spy.sign.notify"),
-
+    SPY_NEW_NAME_NOTIFY("spy.new_name.notify"),
 
     ADMIN_RELOAD("admin.reload"),
     ADMIN_HELP("admin.help"),
     EXECUTE_INFO("info.execute"),
-    CATEGORIES_EXECUTE("categories.execute"),
     BROADCAST_RECEIVE("broadcast.receive"),
-
 
     MANAGE_PLAYERS("manage.players"),
     MANAGE_TEMPLATES("manage.templates"),
-    SPY_NEW_NAME_NOTIFY("spy.new_name.notify"),
+    MANAGE_CATEGORIES("manage.categories"),
 
-    HISTORY_MENU("history.menu"),
-    ;
+    HISTORY_MENU("history.menu");
 
     private static final String prefix = "epicpunishments.";
     private final String node;
