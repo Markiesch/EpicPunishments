@@ -25,7 +25,7 @@ public class CategoryController extends SqlController<CategoryModel> {
     }
 
     public CategoryModel create(String name, String message) {
-        int affectedRows = executeUpdate("INSERT INTO Category(name, message) VALUES (?, ?);", new Object[]{name});
+        int affectedRows = executeUpdate("INSERT INTO Category(name, message) VALUES (?, ?);", new Object[]{name, message});
         if (affectedRows == 0) return null;
 
         return new CategoryModel(getLastInsertedId("Category"), name, message);
