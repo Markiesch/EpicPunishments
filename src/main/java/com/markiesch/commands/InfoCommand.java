@@ -15,7 +15,7 @@ import java.util.List;
 
 public class InfoCommand extends CommandBase {
     public InfoCommand() {
-        super("punishinfo", Permission.EXECUTE_INFO, "§7Usage: §e/history <player>", 1, -1, false);
+        super("punishinfo", Permission.EXECUTE_INFO, "§7Usage: §e/punishinfo <player>", 1, -1, false);
     }
 
     @Override
