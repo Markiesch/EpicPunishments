@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class CategoriesMenu extends PaginatedModelMenu<CategoryModel> {
     private static final byte SLOTS = 54;
-    private static final byte[] ITEM_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-    private static final byte CLOSE_SLOT = 49;
+    private static final byte[] ITEM_SLOTS = { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34 };
+    private static final byte BACK_SLOT = 49;
     private static final byte CREATE_SLOT = 52;
 
     public CategoriesMenu(Plugin plugin, UUID uuid) {
@@ -46,9 +46,9 @@ public class CategoriesMenu extends PaginatedModelMenu<CategoryModel> {
     @Override
     protected ItemStack modelToItemStack(CategoryModel model) {
         return ItemUtils.createItem(
-                Material.BOOKSHELF,
-                Translation.MENU_CATEGORIES_MODEL_TITLE.addPlaceholder("name", model.getName()).toString(),
-                Translation.MENU_CATEGORIES_MODEL_LORE.toList()
+            Material.BOOKSHELF,
+            Translation.MENU_CATEGORIES_MODEL_TITLE.addPlaceholder("name", model.getName()).toString(),
+            Translation.MENU_CATEGORIES_MODEL_LORE.toList()
         );
     }
 
@@ -68,28 +68,28 @@ public class CategoriesMenu extends PaginatedModelMenu<CategoryModel> {
         super.setMenuItems();
 
         setButton(
-                CLOSE_SLOT,
-                ItemUtils.createItem(
-                        Material.NETHER_STAR,
-                        Translation.MENU_CLOSE_BUTTON_TITLE.toString(),
-                        Translation.MENU_CLOSE_BUTTON_LORE.toList()
-                ),
-                (event) -> close()
+            BACK_SLOT,
+            ItemUtils.createItem(
+                Material.OAK_SIGN,
+                Translation.MENU_BACK_BUTTON_TITLE.toString(),
+                Translation.MENU_BACK_BUTTON_LORE.toList()
+            ),
+            (event) -> new PlayerSelectorMenu(plugin, uuid)
         );
 
         setButton(
-                CREATE_SLOT,
-                ItemUtils.createItem(
-                        Material.EMERALD_BLOCK,
-                        Translation.MENU_CATEGORIES_CREATE_TITLE.toString(),
-                        Translation.MENU_CATEGORIES_CREATE_LORE.toList()
-                ),
-                (event) -> {
-                    new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_NAME_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_NAME_SUBTITLE.toString(), (message) -> {
-                        CategoryManager.getInstance().create(message);
-                        open();
-                    });
-                }
+            CREATE_SLOT,
+            ItemUtils.createItem(
+                Material.EMERALD_BLOCK,
+                Translation.MENU_CATEGORIES_CREATE_TITLE.toString(),
+                Translation.MENU_CATEGORIES_CREATE_LORE.toList()
+            ),
+            (event) -> {
+                new PlayerChat(plugin, getOwner(), Translation.MENU_CATEGORY_INSERT_NAME_TITLE.toString(), Translation.MENU_CATEGORY_INSERT_NAME_SUBTITLE.toString(), (message) -> {
+                    CategoryManager.getInstance().create(message);
+                    open();
+                });
+            }
         );
     }
 }
