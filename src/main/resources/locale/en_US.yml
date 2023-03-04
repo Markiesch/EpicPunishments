@@ -316,7 +316,11 @@ menu:
         insert_message:
             title: '&bCategory message'
             subtitle: '&7Type in a new message'
-            copy: '&7Click here to copy old message'
+            copy:
+                - '&7Old message:'
+                - '&e[message]'
+                - ' '
+                - '&7Click here to &acopy &7old &emessage'
         insert_rule_count:
             title: '&bTemplate rule count'
             subtitle: '&7Type in a new count'
