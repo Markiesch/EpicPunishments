@@ -298,7 +298,7 @@ menu:
             title: '&bTemplate Duration'
             subtitle: '&7Type in a template duration'
     categories:
-        title: 'Categories'
+        title: 'Warn Categories'
         category_button:
             title: '&b&l[name]'
             lore:
@@ -309,7 +309,7 @@ menu:
             lore:
                 - '&7Click to add a new category'
     category:
-        title: 'Categories > [name]'
+        title: 'Warn Categories > [name]'
         insert_name:
             title: '&bCategory Name'
             subtitle: '&7Type in a new name'
