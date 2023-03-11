@@ -10,6 +10,7 @@ import com.markiesch.modules.profile.ProfileManager;
 import com.markiesch.modules.template.TemplateManager;
 import com.markiesch.modules.warning.WarningManager;
 import com.markiesch.storage.Storage;
+import com.markiesch.utils.UpdateChecker;
 import com.zaxxer.hikari.pool.HikariPool;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 
 public class EpicPunishments extends JavaPlugin implements Listener {
     private static final int BSTATS_PLUGIN_ID = 17132;
+    private static final int SPIGOT_RESOURCE_ID = 98340;
 
     private static LangConfig langConfig;
     private static EpicPunishments instance;
@@ -57,6 +59,10 @@ public class EpicPunishments extends JavaPlugin implements Listener {
 
         registerListeners();
         registerCommands();
+
+        if (getConfig().getBoolean("modules.update_checker")) {
+            new UpdateChecker(this, SPIGOT_RESOURCE_ID).start();
+        }
 
         new Metrics(this, BSTATS_PLUGIN_ID);
         getServer().getConsoleSender().sendMessage("§aEpicPunishments is now enabled");

@@ -10,6 +10,7 @@ my_sql:
 
 # Disabling/enabling modules requires you to restart your whole server, this makes sure all events are (un)registered correctly
 modules:
+    update_checker: true
     sign_spy: true
     command_spy: true
     broadcast: true

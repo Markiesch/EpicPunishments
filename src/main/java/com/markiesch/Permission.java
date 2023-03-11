@@ -31,6 +31,7 @@ public enum Permission {
     SPY_NEW_NAME_NOTIFY("spy.new_name.notify"),
 
     ADMIN_RELOAD("admin.reload"),
+    ADMIN_NOTIFY_NEW_VERSION("admin.new-version.notify"),
     ADMIN_HELP("admin.help"),
     EXECUTE_INFO("info.execute"),
     BROADCAST_RECEIVE("broadcast.receive"),

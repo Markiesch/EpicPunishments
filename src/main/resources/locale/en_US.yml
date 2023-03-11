@@ -71,6 +71,11 @@ event:
     warn:
         success: '&7Successfully warned &e[victim_name] &7for &a[reason]'
 
+    new_version:
+        - "&fThere is a new version of &b&lEpicPunishments&f available!"
+        - "&7[url]"
+        - "&7Latest version: &a[latest_version] &7| Current version: &e[current_version]"
+
 menu:
     general:
         previous: '&b&lPrevious Page'

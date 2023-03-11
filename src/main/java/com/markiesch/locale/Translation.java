@@ -56,6 +56,7 @@ public enum Translation {
     EVENT_WARN_SUCCESS("event.warn.success"),
     BROADCAST_PERMANENTLY("event.broadcast.permanently"),
     BROADCAST_TEMPORARILY("event.broadcast.temporarily"),
+    NEW_VERSION("event.new_version"),
 
     // General menu
     PREVIOUS_PAGE("menu.general.previous"),
