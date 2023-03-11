@@ -89,6 +89,7 @@ public class EpicPunishments extends JavaPlugin implements Listener {
         registerEvent(new PlayerJoin(this));
         registerEvent(new MenuListener());
         registerEvent(new ChatListener());
+        registerEvent(new MuteCommandListener(this));
 
         final boolean commandSpyIsEnabled = getConfig().getBoolean("modules.command_spy");
         final boolean signSpyIsEnabled = getConfig().getBoolean("modules.sign_spy");

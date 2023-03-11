@@ -26,6 +26,29 @@ im_muted:
     # When true a success message will be sent to the issuer (edit this messages in the locales)
     success_message: false
 
+mutes:
+    # A list of all commands that should be blocked when a player is muted
+    # send commands containing ":", for example: "/minecraft:tell" will be seen as "/tell",
+    # so if this list contains "me" the commands: "me", "minecraft:me" and "any-other-prefix:me" will be blocked
+    command_blacklist:
+        - 'me'
+        - 'say'
+        - 'tell'
+        - 'whisper'
+        - 'reply'
+        - 'pm'
+        - 'message'
+        - 'msg'
+        - 'emsg'
+        - 'epm'
+        - 'etell'
+        - 'ewhisper'
+        - 'w'
+        - 'm'
+        - 't'
+        - 'r'
+        - 'mail send'
+
 formats:
     kick:
         - "&cYou have been kicked!"
